@@ -23,8 +23,20 @@ This section explains how to get a local copy of the project up and running for 
 
 1.  **Clone the repository:**
     ```bash
-    git clone [your-repository-url]
-    cd [your-project-folder]
+    git clone https://github.com/Software-Engineering-Concepts-2026/se-sec1-team-06.git
+    cd se-sec1-team-06
+    git checkout -b ประเภทงาน/เนื้อหางานที่ทำ
+
+    Update Branch
+    git add .
+    git commit -m "ข้อความอธิบายการเปลี่ยนแปลง"
+    git push -u origin branch-name
+
+    Update Main
+    ไป Pull Request
+    คลิก Files changed
+    คลิก Review changed
+    เลือก Approve แล้วกด Submit
     ```
 
 2.  **Run the services:**
