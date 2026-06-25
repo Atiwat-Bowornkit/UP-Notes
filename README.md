@@ -1,3 +1,58 @@
+# Project: [UP-Notes]
+_A brief, one-sentence description of what your project does._
+
+## Team: [CS-Sheet-67]
+- [นาย อธิวัฒน์ บวรกิจ], GitHub: `[@Atiwat-Bowornkit]`
+- [นาย ถิรวัฒน์ วงค์ทอง], GitHub: `[@Thararee]`
+- [นาย นนทกร สิงห์ทอน], GitHub: `[@nonthakorn2006]`
+- [นาวสาว ธนวรรณ สมแก้ว], GitHub: `[@Tanawan28]`
+
+---
+
+## 🚀 Getting Started
+
+This section explains how to get a local copy of the project up and running for development and testing purposes.
+
+### Prerequisites
+
+- Git
+- Python 3.10+
+- Docker & Docker Compose
+
+### Running the Application (with Docker)
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [your-repository-url]
+    cd [your-project-folder]
+    ```
+
+2.  **Run the services:**
+    *(This section will be updated in later weeks when using Docker Compose)*
+    ```bash
+    # Example for a single service
+    cd services/stats-service
+    docker build -t your-team/stats-service .
+    docker run -p 5001:5000 your-team/stats-service
+    ```
+
+---
+
+## 🏛️ Architecture & Design
+
+Key architectural decisions and diagrams are documented in the `/docs/architecture` directory.
+
+- **[C4 Models & Tech Stack](./docs/architecture/README.md)**
+- **[Architectural Decision Records (ADRs)](./docs/architecture/adr/)**
+
+## 👥 Requirements
+
+User personas and key scenarios that drive our development are located in the `/docs/requirements` directory.
+
+- **[User Personas](./docs/requirements/personas/)**
+- **[Main User Scenario](./docs/requirements/main_scenario.md)**
+
+
 #UP-Summary: Team Working Agreements
 
 เอกสารฉบับนี้คือ "ข้อตกลงในการทำงานร่วมกัน" ของทีมพัฒนา UP-Summary เพื่อให้การสื่อสารราบรื่น โค้ดมีคุณภาพ และทุกคนสามารถทำงานร่วมกันได้อย่างมีประสิทธิภาพ
