@@ -1,0 +1,22 @@
+# Persona:Dr. Natthawut
+
+> "I don't want to see students miss out on exam scores simply because they read inaccurate summaries that are being shared. What we need isn't just a place to store files, but a space where they can share and help verify the accuracy of knowledge together."
+
+![Persona: Dr. Natthawut](professor.png)
+
+
+---
+
+### Bio & Background
+Dr. Natthawut "Nat" Promsri is a 42-year-old lecturer at the School of Information and Communication Technology at the University of Phayao. After completing his postgraduate studies in Bangkok, he returned to Northern Thailand with a passion for elevating local education. For the past ten years, he has been teaching foundational and advanced technical courses, witnessing firsthand the struggles students face when transitioning to rigorous university-level coursework. Natthawut is deeply invested in the academic ecosystem of his faculty, viewing his role not just as an instructor, but as a facilitator of a broader learning community.
+
+For a stock photo representation, envision a candid, warmly lit shot of a Thai man in his early 40s wearing a smart-casual, short-sleeved button-down shirt. He is standing at the front of a modern university lecture hall, leaning slightly against a wooden podium. His expression is welcoming and engaged as he converses with a small group of students lingering after class. The background features a softly blurred whiteboard filled with architectural diagrams, emphasizing his approachability and academic environment.
+
+### Goals & Motivations
+Natthawut is fundamentally driven by a desire to see his students succeed and master complex material. He wants to foster a collaborative, self-sustaining academic community at the university where peer-to-peer knowledge sharing is normalized and celebrated. In his professional life, his primary goal is to bridge the comprehension gap that often occurs between his lectures and the students' independent study time. He is highly motivated to identify and endorse high-quality, student-generated study materials, as this empowers top-performing students while simultaneously providing reliable safety nets for those who are struggling. Ultimately, he wants to cultivate a culture of academic excellence where students actively support one another's learning journeys.
+
+### Frustrations & Pain Points
+One of Natthawut’s biggest daily frustrations is watching students fail exams simply because they are relying on fragmented, inaccurate, or outdated study materials. He is keenly aware that students constantly share notes through chaotic, unmoderated Line groups or disorganized Google Drive folders, making it impossible for him to monitor the accuracy of what they are learning. He feels exasperated when a widely circulated, heavily flawed summary leads a large portion of the class to misunderstand a core concept. Furthermore, he lacks a centralized way to point students toward genuinely excellent study aids created by their peers. He desperately needs a reliable, fast-loading hub where the quality of study materials is immediately visible and democratically vetted through metrics like high "Likes," ensuring his students aren't being misled by poor resources just days before an exam.
+
+### Tech-savviness & Habits
+When it comes to technology, Natthawut is a pragmatic adapter rather than a bleeding-edge early adopter. He is highly comfortable with the digital tools required for modern academia but is deeply hesitant to adopt software that feels clunky or adds unnecessary administrative overhead. His daily digital ecosystem revolves around an iPad Pro, which he uses constantly for annotating student PDFs and presenting slides, alongside a reliable laptop for heavier course management tasks. He relies on Microsoft Teams for official faculty communication, Line for immediate, informal student queries, and the university's learning management system for distributing his own official materials. He is very open to integrating a new platform like UP-Notes into his teaching strategy, provided it is exceptionally fast, intuitive, and allows him to effortlessly search for and review the most highly-rated student summaries without a steep learning curve.
