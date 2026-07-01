@@ -1,0 +1,19 @@
+# Persona:Nattanon
+
+> "I don't want to waste half the day searching for old summary sheets in LINE groups or guessing if the content my friends shared is accurate... I just need a platform that opens instantly, loads quickly, and is reliable in quality, so I can focus my remaining time on coding and working on my projects."
+
+ใส่รูป Persona
+
+---
+
+### Bio & Background
+Meet Nattanon, a 20-year-old sophomore majoring in Computer Science at the University of Phayao. Nattanon lives in a bustling dormitory just off the Mae Ka campus, navigating a heavy academic workload alongside an active social life and personal coding projects. He often finds himself acting as the informal academic hub for his friend group, compiling lecture notes and breaking down complex algorithms into digestible study sheets before midterms. For his persona profile image, envision a candid stock photo of a young Thai university student sitting at a vibrant, well-lit local café. He is casually dressed in a relaxed UP student uniform, leaning intently over a heavily stickered laptop. Next to his laptop sits an iced coffee and a smartphone screen glowing with chat notifications, perfectly capturing the busy, multitasking reality of his daily campus life.
+
+### Goals & Motivations
+Nattanon’s primary goal is to maximize his academic performance without sacrificing the time he dedicates to his extracurricular passions, such as local hackathons and hardware tinkering. He is deeply motivated by efficiency and community collaboration. In the context of the Community Connector project, he wants to effortlessly access high-yield, reliable study materials so he can spend less time organizing disorganized lecture slides and more time actually learning. Furthermore, Nattanon is driven by peer recognition; he takes pride in his own well-structured notes and is highly motivated by the idea of contributing his summaries to a broader university ecosystem where his hard work can be validated, liked, and utilized by fellow students navigating the same challenging coursework.
+
+### Frustrations & Pain Points
+The most significant daily challenge Nattanon faces is the chaotic fragmentation of academic resources across the university. Currently, study materials are scattered across transient Line group chats, outdated Facebook pages, and disorganized, restricted-access Google Drive folders. When exam week approaches, he wastes hours just trying to locate the right summary for the current semester’s curriculum. Even when he finds a shared document, he is deeply frustrated by the inability to verify its quality or accuracy, often second-guessing whether the notes are missing critical lecture points. Additionally, Nattanon struggles with the poor technical performance of existing university forums; attempting to load heavy, unoptimized PDFs on a spotty mobile data connection while walking to his next class is a constant source of friction that disrupts his on-the-go study habits.
+
+### Tech-savviness & Habits
+As an unapologetic power user and early adopter, Nattanon’s relationship with technology is highly hands-on and sophisticated. He eschews out-of-the-box setups in favor of deeply customized environments, relying on a Linux laptop configured with a tiling window manager for maximum productivity. On a daily basis, he juggles development frameworks like Next.js and Flutter, while also experimenting with running local AI models to help summarize dense academic PDFs. Because he understands how software should be built, he has zero tolerance for clunky, slow-loading web applications. He expects digital products to be lightning-fast, responsive, and intuitively designed. If a platform like UP-Notes can deliver a seamless, high-performance search experience with instantaneous load times, it will easily integrate into his daily workflow alongside his heavy usage of Discord, GitHub, and various developer tools.
