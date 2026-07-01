@@ -2,7 +2,7 @@
 
 > "I don't want to see students miss out on exam scores simply because they read inaccurate summaries that are being shared. What we need isn't just a place to store files, but a space where they can share and help verify the accuracy of knowledge together."
 
-![Alt text](docs/requirements/professor.png)
+![Persona: Dr. Natthawut](professor.png)
 
 
 ---
