@@ -2,7 +2,7 @@
 
 > "I don't want to waste half the day searching for old summary sheets in LINE groups or guessing if the content my friends shared is accurate... I just need a platform that opens instantly, loads quickly, and is reliable in quality, so I can focus my remaining time on coding and working on my projects."
 
-ใส่รูป Persona
+![Alt text](docs/requirements/student.png)
 
 ---
 
