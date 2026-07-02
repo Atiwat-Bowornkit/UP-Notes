@@ -1,112 +1,199 @@
-# Project: [UP-Notes]
-_A brief, one-sentence description of what your project does._
+<p align="center">
+  <img src="./docs/assets/up_notes_logo.jpg" alt="UP-Notes Logo" width="200" style="border-radius: 20%;" />
+</p>
 
-## Team: [CS-Sheet-67]
-- [นาย อธิวัฒน์ บวรกิจ], GitHub: `[@Atiwat-Bowornkit]`
-- [นาย ถิรวัฒน์ วงค์ทอง], GitHub: `[@Thararee]`
-- [นาย นนทกร สิงห์ทอน], GitHub: `[@nonthakorn2006]`
-- [นาวสาว ธนวรรณ สมแก้ว], GitHub: `[@Tanawan28]`
+<h1 align="center">📚 UP-Notes (UP-Summary)</h1>
 
----
+<p align="center">
+  <strong>คลังปันสรุปบทเรียนและโน้ตย่อสำหรับนิสิต มหาวิทยาลัยพะเยา</strong>
+</p>
 
-## 🚀 Getting Started
+<p align="center">
+  <a href="#-features"><img src="https://img.shields.io/badge/Status-Development-orange?style=flat-square" alt="Status"/></a>
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"/>
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License"/>
+</p>
 
-This section explains how to get a local copy of the project up and running for development and testing purposes.
-
-### Prerequisites
-
-- Git
-- Python 3.10+
-- Docker & Docker Compose
-
-### Running the Application (with Docker)
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/Software-Engineering-Concepts-2026/se-sec1-team-06.git
-    cd se-sec1-team-06
-    git checkout -b ประเภทงาน/เนื้อหางานที่ทำ
-
-    Update Branch
-    git add .
-    git commit -m "ข้อความอธิบายการเปลี่ยนแปลง"
-    git push -u origin branch-name
-
-    Update Main
-    ไป Pull Request
-    คลิก Files changed
-    คลิก Review changed
-    เลือก Approve แล้วกด Submit
-    ```
-
-2.  **Run the services:**
-    *(This section will be updated in later weeks when using Docker Compose)*
-    ```bash
-    # Example for a single service
-    cd services/stats-service
-    docker build -t your-team/stats-service .
-    docker run -p 5001:5000 your-team/stats-service
-    ```
+<p align="center">
+  <strong>UP-Notes</strong> คือแพลตฟอร์มศูนย์กลางสำหรับการแบ่งปันโน้ตและสรุปบทเรียนสำหรับนิสิตมหาวิทยาลัยพะเยา (UP) ช่วยให้นิสิตสามารถอัปโหลด ค้นหา ดาวน์โหลด และกดถูกใจสรุปการเรียน (ไฟล์ PDF หรือรูปภาพ) โดยจัดหมวดหมู่ตามรหัสวิชา ปีการศึกษา และหมวดหมู่ต่าง ๆ อย่างเป็นระบบ
+</p>
 
 ---
 
-## 🏛️ Architecture & Design
+## 🧭 สารบัญ (Table of Contents)
+1. [👥 สมาชิกทีมพัฒนา (Team Members)](#-สมาชิกทีมพัฒนา-team-members)
+2. [🛠️ เทคโนโลยีที่ใช้ (Tech Stack)](#-เทคโนโลยีที่ใช้-tech-stack)
+3. [🚀 การเริ่มต้นใช้งาน (Getting Started)](#-การเริ่มต้นใช้งาน-getting-started)
+4. [🏛️ สถาปัตยกรรมและการออกแบบ (Architecture & Design)](#%EF%B8%8F-สถาปัตยกรรมและการออกแบบ-architecture--design)
+5. [👥 ความต้องการของระบบ (Requirements)](#-ความต้องการของระบบ-requirements)
+6. [🤝 ข้อตกลงในการทำงานร่วมกัน (Team Working Agreements)](#-ข้อตกลงในการทำงานร่วมกัน-team-working-agreements)
 
-Key architectural decisions and diagrams are documented in the `/docs/architecture` directory.
+---
 
-- **[C4 Models & Tech Stack](./docs/architecture/README.md)**
-- **[Architectural Decision Records (ADRs)](./docs/architecture/adr/)**
+## 👥 สมาชิกทีมพัฒนา (Team Members)
+### 🏛️ ทีม CS-Sheet-67
 
-## 👥 Requirements
+| รายชื่อสมาชิก | บทบาทการทำงาน (GitHub) |
+| :--- | :--- |
+| **นาย อธิวัฒน์ บวรกิจ** | [@Atiwat-Bowornkit](https://github.com/Atiwat-Bowornkit) |
+| **นาย ถิรวัฒน์ วงค์ทอง** | [@Thararee](https://github.com/Thararee) |
+| **นาย นนทกร สิงห์ทอน** | [@nonthakorn2006](https://github.com/nonthakorn2006) |
+| **นางสาว ธนวรรณ สมแก้ว** | [@Tanawan28](https://github.com/Tanawan28) |
 
-User personas and key scenarios that drive our development are located in the `/docs/requirements` directory.
+---
 
-- **[Requirements Overview](./docs/requirements/README.md)**
-- **[User Personas](./docs/requirements/personas/README.md)**
-- **[Main User Scenario](./docs/requirements/main_scenario.md)**
+## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
 
+เราพัฒนาโปรเจกต์นี้ด้วยเทคโนโลยีที่ทันสมัยและเป็นมาตรฐานอุตสาหกรรม:
 
-#UP-Summary: Team Working Agreements
+| Category | Technology | Badges |
+| :--- | :--- | :--- |
+| **Frontend & Backend** | Next.js 14+ (App Router) & TypeScript | ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white) |
+| **Styling** | Tailwind CSS & shadcn/ui & Lucide React | ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white) |
+| **Database & ORM** | PostgreSQL & Prisma ORM | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat-square&logo=postgresql&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white) |
+| **Auth & Storage** | Supabase (Auth & Object Storage) | ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white) |
+| **Containerization**| Docker & Docker Compose | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) |
 
-เอกสารฉบับนี้คือ "ข้อตกลงในการทำงานร่วมกัน" ของทีมพัฒนา UP-Summary เพื่อให้การสื่อสารราบรื่น โค้ดมีคุณภาพ และทุกคนสามารถทำงานร่วมกันได้อย่างมีประสิทธิภาพ
+---
 
-#1.ความถี่ในการประชุม (Meeting Rhythms)
-เนื่องจากสมาชิกในทีมมีตารางเรียน เราจะเน้นการประชุมที่กระชับและใช้เวลาให้เกิดประสิทธิภาพสูงสุด:
-*   **Sprint Planning (วางแผนรอบการทำงาน):** 
-    *   **ความถี่:** ทุกๆ 1 สัปดาห์ (ช่วงสุดสัปดาห์ หรือวันที่ทุกคนว่างกัน)
+## 🚀 การเริ่มต้นใช้งาน (Getting Started)
+
+ส่วนนี้อธิบายขั้นตอนการติดตั้งและรันโปรเจกต์เพื่อนำไปใช้งานบนเครื่องคอมพิวเตอร์ของคุณ
+
+### 📋 Prerequisites (สิ่งที่ต้องเตรียมไว้ก่อน)
+- **Git**
+- **Python 3.10+**
+- **Docker & Docker Compose**
+
+---
+
+### 💻 การติดตั้งและรันแอปพลิเคชัน (ด้วย Docker)
+
+#### 1. Clone the repository:
+```bash
+# โคลนคลังเก็บซอร์สโค้ด
+git clone https://github.com/Software-Engineering-Concepts-2026/se-sec1-team-06.git
+cd se-sec1-team-06
+
+# สร้างสาขางาน (Branch) ใหม่เพื่อเริ่มพัฒนา
+git checkout -b ประเภทงาน/เนื้อหางานที่ทำ
+```
+
+##### 🔄 สำหรับการบันทึกงานและส่งการเปลี่ยนแปลง (Git Flow)
+```bash
+# เตรียมบันทึกการแก้ไข
+git add .
+
+# บันทึกประวัติการเปลี่ยนแปลง
+git commit -m "ข้อความอธิบายการเปลี่ยนแปลง"
+
+# อัปโหลดสาขางานขึ้น GitHub
+git push -u origin branch-name
+```
+
+##### 🔀 ขั้นตอนการอัปเดตกิ่งหลัก (Merge to Main)
+1. ไปที่หน้า **Pull Request** บน GitHub
+2. คลิกแท็บ **Files changed** เพื่อรีวิวโค้ด
+3. คลิก **Review changes**
+4. เลือก **Approve** แล้วกด **Submit**
+
+#### 2. Run the services:
+> [!NOTE]
+> หัวข้อนี้จะได้รับการอัปเดตเพิ่มเติมเมื่อเริ่มต้นใช้งาน Docker Compose ในช่วงสัปดาห์ถัดไป
+
+ตัวอย่างคำสั่งการ Build และ Run บริการแต่ละส่วน (เช่น `stats-service`):
+```bash
+# เดินทางไปยังโฟลเดอร์ของบริการที่ต้องการ
+cd services/stats-service
+
+# ทำการ Build Docker Image
+docker build -t your-team/stats-service .
+
+# สั่งรัน Container
+docker run -p 5001:5000 your-team/stats-service
+```
+
+---
+
+## 🏛️ สถาปัตยกรรมและการออกแบบ (Architecture & Design)
+
+รายละเอียดการตัดสินใจเชิงเทคนิคและแผนผังระบบมีบันทึกไว้อย่างชัดเจนในโฟลเดอร์ `/docs/architecture`:
+
+- 🗺️ **[C4 Models & Tech Stack](./docs/architecture/README.md)** - แผนภาพโครงสร้างระบบแต่ละระดับ
+- 📝 **[Architectural Decision Records (ADRs)](./docs/architecture/adr/)** - เอกสารบันทึกการตัดสินใจการเลือกใช้สถาปัตยกรรม
+
+---
+
+## 👥 ความต้องการของระบบ (Requirements)
+
+ข้อมูลผู้ใช้จำลอง (User Personas) และสถานการณ์การใช้งานหลักที่เป็นตัวขับเคลื่อนการพัฒนา:
+
+- 📊 **[Requirements Overview (SRS)](./docs/requirements/srs.md)** - ภาพรวมความต้องการระบบ (SRS)
+- 👤 **[User Personas](./docs/requirements/personas/)** - ข้อมูลจำลองของกลุ่มเป้าหมายผู้ใช้งาน
+- 🎬 **[Main User Scenario](./docs/requirements/main_scenario.md)** - ลำดับเหตุการณ์หลักที่ผู้ใช้งานโต้ตอบกับแอปพลิเคชัน
+
+---
+
+## 🤝 ข้อตกลงในการทำงานร่วมกัน (Team Working Agreements)
+
+> เอกสารฉบับนี้คือข้อตกลงในการทำงานร่วมกันเพื่อช่วยให้สมาชิกทุกคนสื่อสารกันได้อย่างมีประสิทธิภาพ มีโค้ดที่มีคุณภาพ และลดปัญหาความขัดแย้งในทีม
+
+### 📅 1. ความถี่ในการประชุม (Meeting Rhythms)
+เราให้ความสำคัญกับการประชุมที่กระชับและไม่รบกวนตารางเรียนของเพื่อนร่วมงาน:
+
+*   **Sprint Planning (วางแผนรอบการทำงาน):**
+    *   **ความถี่:** ทุกสัปดาห์ (ช่วงสุดสัปดาห์ หรือวันเวลาที่ทุกคนตกลงร่วมกัน)
     *   **ระยะเวลา:** 30 - 60 นาที
-    *   **เป้าหมาย:** เลือกงานจาก Backlog ที่จะทำใน Sprint นี้และแบ่งงานให้ชัดเจน
-*   **Daily Sync (อัปเดตงานประจำวัน):** 
-    *   **ความถี่:** ทุกวันที่เจอกัน (แบบ Asynchronous)
-    *   **รูปแบบ:** พิมพ์อัปเดตสั้นๆ ในช่องแชทหลักของทีม โดยตอบ 3 คำถาม: *เมื่อวานทำอะไร? วันนี้จะทำอะไร? ติดปัญหาอะไรไหม?*
+    *   **เป้าหมาย:** เลือกงานจาก Backlog จัดลำดับความสำคัญ และแบ่งงานให้สมาชิกอย่างชัดเจน
+*   **Daily Sync (การอัปเดตความคืบหน้า):**
+    *   **ความถี่:** ทุกวัน (แบบออฟไลน์/Asynchronous)
+    *   **รูปแบบ:** พิมพ์สรุปความคืบหน้าสั้น ๆ ในกลุ่มแชทของทีมโดยตอบคำถาม 3 ข้อ:
+        1. *เมื่อวานนี้ทำอะไรไปแล้วบ้าง?*
+        2. *วันนี้วางแผนจะทำอะไรต่อ?*
+        3. *มีอุปสรรคหรือต้องการความช่วยเหลือในจุดใดหรือไม่?*
 *   **Sprint Review & Retrospective (ตรวจรับงานและประเมินผล):**
-    *   **ความถี่:** ทุกสิ้นสุด Sprint (สามารถทำติดกับ Sprint Planning ของรอบถัดไปได้เลย)
+    *   **ความถี่:** ทุกสิ้นรอบการทำงาน (สามารถทำต่อเนื่องกับการประชุม Planning รอบถัดไป)
     *   **ระยะเวลา:** 30 - 45 นาที
-    *   **เป้าหมาย:** โชว์ผลงาน (เช่น โชว์หน้าเว็บ Next.js ที่อัปเดตใหม่) และพูดคุยว่าอะไรทำได้ดี อะไรควรปรับปรุงใน Sprint หน้า
+    *   **เป้าหมาย:** การสาธิตผลงาน (Demo) และสะท้อนมุมมองการทำงานร่วมกันว่ามีจุดใดที่ทำได้ดี และจุดใดที่ต้องแก้ไขในรอบถัดไป
 
-## 2.กฎการสื่อสาร (Communication Rules)
-เพื่อไม่ให้ข้อมูลสำคัญตกหล่นหรือกระจัดกระจาย:
+---
 
-*   **Public Over Private:** การพูดคุยเรื่องโปรเจกต์ การตัดสินใจ หรือการสอบถามปัญหาทางเทคนิค ให้พิมพ์ใน **"ช่องทางสาธารณะของทีม"** เสมอ เพื่อให้ทุกคนเห็นบริบทตรงกัน (หลีกเลี่ยงการ Direct Message หรือ DM เว้นแต่เป็นเรื่องส่วนตัวจริงๆ)
-*   **เวลาในการตอบกลับ (SLA):** เราเข้าใจว่าทุกคนมีเรียน ดังนั้นเราคาดหวังให้สมาชิกตอบกลับข้อความหรือแท็กสำคัญภายใน **12-24 ชั่วโมง**
-*   **การแท็ก (Mentions):** ใช้ `@ชื่อ` เมื่อต้องการให้เพื่อนคนนั้น อ่านหรือตรวจสอบด่วน และใช้  `@everyone` เฉพาะเรื่องฉุกเฉินระดับโปรเจกต์เท่านั้น
+### 💬 2. กฎการสื่อสาร (Communication Rules)
+เพื่อความโปร่งใสและข้อมูลที่ตรงกันของทุกคนในทีม:
 
-## 3.เวิร์กโฟลว์ Git (Git & Code Workflow)
-เราจะใช้กระบวนการที่เรียบง่ายแต่ป้องกันไม่ให้โค้ดพังเมื่อนำไปรวมกัน (GitHub Flow):
+*   📢 **Public Over Private:** การหารือเรื่องโปรเจกต์ ปัญหาเทคนิค หรือการปรับเปลี่ยนใด ๆ ให้พูดคุยใน **"กลุ่มแชทสาธารณะของทีม"** เพื่อให้เกิดความเข้าใจตรงกันและย้อนกลับมาอ่านข้อมูลได้ (หลีกเลี่ยงการ Direct Message คุยกันส่วนตัว ยกเว้นเรื่องส่วนบุคคลจริง ๆ)
+*   ⏳ **เวลาในการตอบกลับ (SLA):** คาดหวังให้สมาชิกตอบกลับข้อความสำคัญหรือการแท็กสอบถามภายใน **12 - 24 ชั่วโมง**
+*   🏷️ **การแท็กเรียก (Mentions):** ใช้ `@ชื่อเพื่อน` เมื่อต้องการให้เข้ามาช่วยดูหรือตอบคำถามด่วน และโปรดระมัดระวังการใช้ `@everyone` เฉพาะเหตุฉุกเฉินระดับร้ายแรงเท่านั้น
 
-*   **Branching Naming Convention:** 
-    *   ห้าม Push โค้ดตรงเข้า `main` เด็ดขาด
-    *   สร้าง Branch ใหม่จาก `main` เสมอ โดยใช้รูปแบบ: `ประเภท/ชื่องาน`
-    *   *ตัวอย่าง:* `feat/upload-pdf`, `fix/login-button`, `docs/update-readme`
-*   **Commit Messages:** เขียนให้รู้ว่าทำอะไรไปบ้าง (Conventional Commits)
-    *   *ตัวอย่าง:* `feat: add Tailwind styling to subject cards` หรือ `fix: resolve PostgreSQL connection issue`
-*   **Pull Requests (PR) & Code Reviews:**
-    *   เมื่อทำงานเสร็จ ให้เปิด PR กลับมาที่ `main` พร้อมเขียนอธิบายสั้นๆ ว่า PR นี้แก้ปัญหาอะไร
-    *   **กฎเหล็ก:** ต้องมีสมาชิกในทีม **อย่างน้อย 1 คน** เข้ามาอ่านโค้ดและกด **Approve** ก่อน จึงจะสามารถ Merge โค้ดเข้า `main` ได้
+---
 
-## 4. ⚖️ การตัดสินใจ (Decision Making)
-เมื่อมีความคิดเห็นไม่ตรงกันเรื่องสถาปัตยกรรมระบบหรือแนวทางการออกแบบ:
+### 💻 3. เวิร์กโฟลว์การจัดการซอร์สโค้ด (Git & Code Workflow)
+เราปฏิบัติตามมาตรฐาน GitHub Flow เพื่อความสะอาดและป้องกันปัญหาโค้ดพังบน Production:
 
-*   **หลีกเลี่ยงการเถียงกันลอยๆ:** หากถกเถียงกันเกิน 15 นาที ให้หยุดพักและใช้เวลาทำ **Timeboxed Spike** (ใช้เวลา 1-2 ชั่วโมงลองเขียนโค้ดต้นแบบ หรือหาข้อมูลเปรียบเทียบข้อดีข้อเสียจริงๆ มาคุยกัน)
-*   **ฉันทามติและการโหวต (Consensus & Voting):** เมื่อข้อมูลพร้อม ให้ทีมโหวตเพื่อหาทางออกร่วมกัน
-*   **Tie-breaker (ผู้ชี้ขาด):** หากเสียงแตกและตกลงกันไม่ได้ ให้สิทธิ์การตัดสินใจขั้นเด็ดขาดแก่ **ผู้นำรับผิดชอบในส่วนนั้น** (เช่น หากเป็นปัญหาเรื่อง UI ให้คนที่เป็น Lead Frontend ตัดสินใจ, หากเป็นเรื่อง Database ให้ Lead Backend เป็นคนเคาะ) เพื่อให้โปรเจกต์เดินหน้าต่อได้
+#### 📂 การตั้งชื่อสาขางาน (Branch Naming)
+> [!CAUTION]
+> ห้ามทำการ Push โค้ดลงสู่กิ่ง `main` โดยตรงอย่างเด็ดขาด!
+
+สร้าง Branch ใหม่แยกจากกิ่งล่าสุดของ `main` เสมอ โดยใช้รูปแบบ `ประเภทงาน/รายละเอียดชื่องาน` เช่น:
+*   `feat/upload-pdf` - เมื่อมีการเพิ่มฟังก์ชันใหม่
+*   `fix/login-button` - เมื่อแก้ไขจุดบกพร่อง (Bug)
+*   `docs/update-readme` - เมื่อมีการปรับปรุงเอกสารอธิบายระบบ
+
+#### ✍️ Commit Messages
+เขียนอธิบายสิ่งที่แก้ไขให้กระชับและเข้าใจได้ทันที โดยยึดตาม **Conventional Commits**:
+*   *ตัวอย่าง:* `feat: add Tailwind styling to subject cards`
+*   *ตัวอย่าง:* `fix: resolve PostgreSQL connection issue`
+
+#### 🔍 Pull Requests (PR) & Code Reviews
+1. เมื่อดำเนินการแก้ไขเสร็จสิ้น ให้เปิด Pull Request กลับไปยัง `main`
+2. เขียนสรุปรายละเอียดสั้น ๆ ใน PR ว่าแก้ไขส่วนใดและแก้ไขอย่างไร
+3. **กฎการอนุมัติ (Approval Rule):** ต้องได้รับการยืนยันและกด **Approve** อย่างน้อย **1 คน** จากเพื่อนร่วมทีมหลังจากรีวิวโค้ดแล้ว จึงจะอนุญาตให้ทำการ Merge โค้ดเข้าสู่กิ่งหลัก `main` ได้
+
+---
+
+### ⚖️ 4. การตัดสินใจร่วมกัน (Decision Making)
+เมื่อสมาชิกมีความเห็นไม่ตรงกันในเรื่องสถาปัตยกรรมระบบหรือดีไซน์การออกแบบ:
+
+1.  ⏱️ **Timeboxed Spike:** หากการประชุมถกเถียงกันเกิน 15 นาที ให้หยุดคุยก่อน และแยกย้ายไปทดลองเขียนโค้ดตัวอย่าง (Spike) หรือค้นหาข้อมูลอ้างอิงและเปรียบเทียบข้อดี/ข้อเสีย เป็นเวลาประมาณ 1-2 ชั่วโมงแล้วนำมาเสนอกันใหม่
+2.  🗳️ **Consensus & Voting:** เมื่อข้อมูลครบถ้วน ให้ทำการลงมติเลือกแนวทางร่วมกันในทีม
+3.  👑 **Tie-breaker (ผู้ตัดสินใจขั้นสุดท้าย):** หากผลโหวตยังคงเท่ากันหรือหาข้อสรุปไม่ได้ ให้สิทธิ์การตัดสินใจขั้นสูงสุดแก่ **ผู้รับผิดชอบหลักในส่วนงานนั้น** (เช่น ถ้าเป็นเรื่องหน้าตาของ UI ให้สิทธิ์ Frontend Lead ตัดสินใจ หรือถ้าเป็นเรื่องความปลอดภัยระบบและการจัดการ DB ให้สิทธิ์ Backend Lead เคาะ) เพื่อประหยัดเวลาและให้โปรเจกต์สามารถเดินหน้าต่อไปได้
