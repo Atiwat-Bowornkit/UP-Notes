@@ -2,7 +2,7 @@
   <img src="./docs/assets/up_notes_logo.jpg" alt="UP-Notes Logo" width="200" style="border-radius: 20%;" />
 </p>
 
-<h1 align="center">📚 UP-Notes (UP-Summary)</h1>
+<h1 align="center">📚 UP-Notes (TEAM:CS-Sheet-67)</h1>
 
 <p align="center">
   <strong>คลังปันสรุปบทเรียนและโน้ตย่อสำหรับนิสิต มหาวิทยาลัยพะเยา</strong>
