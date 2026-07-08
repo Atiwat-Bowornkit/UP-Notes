@@ -56,6 +56,18 @@
 
 ---
 
+## ภาพร่าง (Wireframe)
+
+User Login:
+User Dashboard:https://excalidraw.com/#json=T6C7Ppcm2HmcHCRq6Hl0_,RTbzfau-9iAXoNA52Mlalw
+Notes Upload:https://excalidraw.com/#json=xd7RRHR56sFW2iNtNQXRo,hqFNWx163J_oMUZ2iGwlFg
+Admin Dashboard:https://excalidraw.com/#json=XdPyCNGxwbz37hamCW4fO,wf-8IQA2v-Vs0iR_jclvOw
+
+
+---
+
+---
+
 ## 🚀 การเริ่มต้นใช้งาน (Getting Started)
 
 ส่วนนี้อธิบายขั้นตอนการติดตั้งและรันโปรเจกต์เพื่อนำไปใช้งานบนเครื่องคอมพิวเตอร์ของคุณ
