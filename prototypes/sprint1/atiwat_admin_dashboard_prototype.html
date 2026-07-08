@@ -1,0 +1,229 @@
+<!--
+  Admin Dashboard Layout using Tailwind CSS.
+  Based on the provided wireframe "image_be90a2.jpg".
+
+  Layout Structure: A full-screen flex container with a Sidebar on the left and Main Content on the right.
+
+  1. Sidebar (Left column, fixed width, bordered):
+     - Vertical navigation menu containing 5 buttons/links:
+       1. Dashboard
+       2. Note Management
+       3. User Management
+       4. Admin Management
+       5. Admin Profile
+
+  2. Main Content Area (Right column, flex-1):
+     - Top Header Flexbox: 
+       - Left side: A bordered title reading "User Statistics".
+       - Right side: Text reading "Admin" next to a circular "(logo)" placeholder.
+     
+     - Main Grid Layout (2 columns for the statistics area):
+       - Left Grid Column:
+         - Top: A large bordered container acting as a placeholder for a Line Chart.
+         - Bottom: A flexbox containing two summary cards side-by-side:
+           - Card 1: Displaying text "User: 12", "Offline: 20", "Online: 67".
+           - Card 2: Displaying text "Notes: 10", "Report: 4".
+       
+       - Right Grid Column:
+         - A bordered data table with 3 columns.
+         - Table Headers: "No.", "Name", "Timestamp".
+         - Table Body with 5 rows of dummy data:
+           - 001 | Atiwat  | 12:23:12
+           - 002 | Vishaya | 12:41:55
+           - 003 | Narong  | 13:12:42
+           - 004 | somchai | 16:56:34
+           - 005 | sompong | 19:23:32
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - User Statistics</title>
+  <link rel="stylesheet" href="atiwat_admin_dashboard_style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Control Panel</div>
+      <nav class="nav-menu">
+        <a href="#" class="nav-link active">Dashboard</a>
+        <a href="#" class="nav-link">Note Management</a>
+        <a href="#" class="nav-link">User Management</a>
+        <a href="#" class="nav-link">Admin Management</a>
+        <a href="#" class="nav-link">Admin Profile</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="header">
+        <div class="header-title-box">
+          <h1 class="header-title">User Statistics</h1>
+        </div>
+        <div class="header-user">
+          <span class="admin-label">Admin</span>
+          <div class="avatar-placeholder" title="Admin Logo">logo</div>
+        </div>
+      </header>
+
+      <!-- Main Grid Layout -->
+      <div class="dashboard-grid">
+        <!-- Left Grid Column -->
+        <div class="left-column">
+          <!-- Line Chart Container -->
+          <section class="chart-container">
+            <div class="chart-header">
+              <h2 class="chart-title">User Activity Trend</h2>
+            </div>
+            <!-- SVG Line Chart representation -->
+            <svg viewBox="0 0 500 200" class="line-chart-svg">
+              <defs>
+                <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--accent-color)" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="var(--accent-color)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Grid lines -->
+              <line x1="0" y1="50" x2="500" y2="50" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+              <line x1="0" y1="100" x2="500" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+              <line x1="0" y1="150" x2="500" y2="150" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+              
+              <!-- Gradient Area -->
+              <path d="M 0 150 Q 50 110 100 130 T 200 80 T 300 120 T 400 60 T 500 80 L 500 200 L 0 200 Z" fill="url(#chart-grad)" />
+              
+              <!-- Line -->
+              <path d="M 0 150 Q 50 110 100 130 T 200 80 T 300 120 T 400 60 T 500 80" fill="none" stroke="var(--accent-color)" stroke-width="3" stroke-linecap="round" />
+              
+              <!-- Interactive dots -->
+              <circle cx="100" cy="130" r="5" fill="var(--accent-color)" stroke="var(--bg-color)" stroke-width="2" />
+              <circle cx="200" cy="80" r="5" fill="var(--accent-color)" stroke="var(--bg-color)" stroke-width="2" />
+              <circle cx="300" cy="120" r="5" fill="var(--accent-color)" stroke="var(--bg-color)" stroke-width="2" />
+              <circle cx="400" cy="60" r="5" fill="var(--accent-color)" stroke="var(--bg-color)" stroke-width="2" />
+            </svg>
+          </section>
+
+          <!-- Summary Cards Container -->
+          <div class="cards-container">
+            <!-- Card 1 -->
+            <div class="stat-card">
+              <h3 class="stat-card-title">User Summary</h3>
+              <ul class="stat-list">
+                <li class="stat-item">
+                  <span>User:</span>
+                  <span class="stat-value">12</span>
+                </li>
+                <li class="stat-item">
+                  <span>Offline:</span>
+                  <span class="stat-value text-danger">20</span>
+                </li>
+                <li class="stat-item">
+                  <span>Online:</span>
+                  <span class="stat-value text-success">67</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="stat-card">
+              <h3 class="stat-card-title">Content Summary</h3>
+              <ul class="stat-list">
+                <li class="stat-item">
+                  <span>Notes:</span>
+                  <span class="stat-value">10</span>
+                </li>
+                <li class="stat-item">
+                  <span>Report:</span>
+                  <span class="stat-value text-warning">4</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Grid Column (Data Table) -->
+        <section class="table-container">
+          <h2 class="table-title">Recent Access Log</h2>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>001</td>
+                <td>Atiwat</td>
+                <td>12:23:12</td>
+              </tr>
+              <tr>
+                <td>002</td>
+                <td>Vishaya</td>
+                <td>12:41:55</td>
+              </tr>
+              <tr>
+                <td>003</td>
+                <td>Narong</td>
+                <td>13:12:42</td>
+              </tr>
+              <tr>
+                <td>004</td>
+                <td>somchai</td>
+                <td>16:56:34</td>
+              </tr>
+              <tr>
+                <td>005</td>
+                <td>sompong</td>
+                <td>19:23:32</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('signUpButton').addEventListener('click', function(event) {
+  // 1. Prevent the default form submission
+  event.preventDefault();
+
+  // Grab all input fields within your form (assuming the form has an id="registrationForm")
+  // You can adjust the selector if your form doesn't have this ID
+  const allInputs = document.querySelectorAll('input'); 
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+
+  // 4. Check if any of the input fields are empty
+  let hasEmptyField = false;
+  for (let input of allInputs) {
+    if (input.value.trim() === '') {
+      hasEmptyField = true;
+      break; 
+    }
+  }
+
+  if (hasEmptyField) {
+    alert("Please fill in all fields.");
+    return; // Stop further execution
+  }
+
+  // 2 & 3. Check if passwords match
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return; // Stop further execution
+  }
+
+  // 5. If all checks pass
+  alert("Registration successful! (This is a prototype)");
+});
+  </script>
+</body>
+</html>
