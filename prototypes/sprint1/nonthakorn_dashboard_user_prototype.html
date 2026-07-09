@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bottle2Cash — Search</title>
+    <style>
+        :root{--bg:#f5f7fb;--card:#fff;--muted:#6b7280;--accent:#0ea5a4}
+        body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:0;background:var(--bg);color:#111}
+        .header{display:flex;align-items:center;gap:16px;padding:14px 20px;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+        .icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:linear-gradient(180deg,#eef2f7,#fff);color:var(--muted)}
+        .search-wrap{flex:1;display:flex;align-items:center;justify-content:center}
+        .search{width:100%;max-width:720px;display:flex;align-items:center;background:var(--bg);border-radius:10px;padding:8px 12px;border:1px solid #e6edf3}
+        .search input{flex:1;border:0;background:transparent;padding:8px 10px;font-size:15px;outline:none}
+        .profile{width:40px;height:40px;border-radius:50%;background:linear-gradient(180deg,#06b6d4,#0891b2);display:inline-block}
+
+        .container{padding:20px;max-width:1100px;margin:0 auto}
+        
+        /* สไตล์สำหรับ Form */
+        .reg-form { background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; border: 1px solid #e6edf3; }
+        .reg-form input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; flex: 1; min-width: 200px; }
+        .reg-form button { padding: 10px 20px; background: var(--accent); color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+
+        .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+        .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 1px 2px rgba(16,24,40,.04);display:flex;flex-direction:column;gap:10px}
+        .thumb{height:140px;border-radius:8px;background:linear-gradient(135deg,#eef2ff,#fff);display:flex;align-items:center;justify-content:center;color:#94a3b8;font-weight:600}
+        .title-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+        .title{font-weight:600;font-size:15px}
+        .badge{font-size:12px;padding:6px 8px;border-radius:999px;background:#f1f5f9;color:#0f172a}
+        .meta{color:var(--muted);font-size:13px}
+        .price{font-weight:700;color:var(--accent)}
+
+        @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+        @media (max-width:520px){.grid{grid-template-columns:1fr}.header{padding:10px}.search{max-width:100%}}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="icon" aria-hidden>☰</div>
+        <div class="search-wrap">
+            <div class="search" role="search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="margin-right:8px;opacity:.6"><path d="M21 21l-4.35-4.35" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <input type="search" placeholder="Search bottles, shops or codes" aria-label="Search">
+            </div>
+        </div>
+        <div class="icon" title="Profile"><span class="profile" aria-hidden></span></div>
+    </header>
+
+    <main class="container">
+        <!-- Registration Form -->
+        <form id="registrationForm" class="reg-form">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password">
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <h2 style="margin:6px 0 0 2px;font-size:18px">Search results</h2>
+        <p style="margin:4px 0 12px;color:var(--muted);font-size:14px">Showing popular products</p>
+
+        <section class="grid" aria-label="Products">
+            <article class="card">
+                <div class="thumb">Image</div>
+                <div class="title-row">
+                    <div class="title">Reusable Bottle A</div>
+                    <button class="badge" aria-pressed="false">New</button>
+                </div>
+                <div class="meta">500 ml • PET • Green</div>
+                <div class="price">฿12.00</div>
+            </article>
+
+            <article class="card">
+                <div class="thumb">Image</div>
+                <div class="title-row">
+                    <div class="title">Glass Bottle X</div>
+                    <button class="badge" aria-pressed="false">Top</button>
+                </div>
+                <div class="meta">750 ml • Glass • Clear</div>
+                <div class="price">฿20.00</div>
+            </article>
+
+            <article class="card">
+                <div class="thumb">Image</div>
+                <div class="title-row">
+                    <div class="title">Bottle Cap Kit</div>
+                    <button class="badge" aria-pressed="false">1 left</button>
+                </div>
+                <div class="meta">Pack of 10 • Plastic</div>
+                <div class="price">฿45.00</div>
+            </article>
+
+            <article class="card">
+                <div class="thumb">Image</div>
+                <div class="title-row">
+                    <div class="title">Recycled PET</div>
+                    <button class="badge" aria-pressed="false">Eco</button>
+                </div>
+                <div class="meta">1 kg • Flakes</div>
+                <div class="price">฿150.00</div>
+            </article>
+
+            <article class="card">
+                <div class="thumb">Image</div>
+                <div class="title-row">
+                    <div class="title">Return Box</div>
+                    <button class="badge" aria-pressed="false">Box</button>
+                </div>
+                <div class="meta">Storage box for returns</div>
+                <div class="price">฿85.00</div>
+            </article>
+
+            <article class="card">
+                <div class="thumb">Image</div>
+                <div class="title-row">
+                    <div class="title">Deposit Voucher</div>
+                    <button class="badge" aria-pressed="false">Gift</button>
+                </div>
+                <div class="meta">Voucher code for deposits</div>
+                <div class="price">฿0.00</div>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            // 1. ป้องกันการส่งฟอร์มตามปกติ
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // 4. ตรวจสอบว่าช่องว่างหรือไม่
+            if (!username || !password || !confirmPassword) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // 2 & 3. ตรวจสอบว่ารหัสผ่านตรงกันไหม
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            // 5. แจ้งเตือนเมื่อสำเร็จ
+            alert("Registration successful! (This is a prototype)");
+        });
+    </script>
+</body>
+</html>
+
+```
