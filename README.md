@@ -56,6 +56,18 @@
 
 ---
 
+## ภาพร่าง (Wireframe)
+
+User Login:https://excalidraw.com/?fbclid=IwY2xjawS6iQVleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5EL9YQ3fTCGxdeNSQsH6eJdumUYHwnJbe8YB3ak_VsjL5xGvaU_EThAjk_Jw_aem_D3xBH3eZyJyHjmW9qspw_w#json=gMRNI5_PVeTxma-WvyrWg,Ulb6MG328SlBWJF2ulT-0g
+User Dashboard:https://excalidraw.com/#json=T6C7Ppcm2HmcHCRq6Hl0_,RTbzfau-9iAXoNA52Mlalw
+Notes Upload:https://excalidraw.com/#json=xd7RRHR56sFW2iNtNQXRo,hqFNWx163J_oMUZ2iGwlFg
+Admin Dashboard:https://excalidraw.com/#json=XdPyCNGxwbz37hamCW4fO,wf-8IQA2v-Vs0iR_jclvOw
+
+
+---
+
+---
+
 ## 🚀 การเริ่มต้นใช้งาน (Getting Started)
 
 ส่วนนี้อธิบายขั้นตอนการติดตั้งและรันโปรเจกต์เพื่อนำไปใช้งานบนเครื่องคอมพิวเตอร์ของคุณ
