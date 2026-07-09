@@ -1,0 +1,103 @@
+/* Body styling: light gray background and centered layout */
+body {
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Card container: white background with rounded corners */
+.login-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Title styling: prominent and centered */
+.login-card h1 {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    color: #333333;
+    margin: 0 0 30px 0;
+}
+
+/* Form group container */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Labels: lowercase, positioned above inputs */
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555555;
+    margin-bottom: 8px;
+    text-transform: lowercase;
+}
+
+/* Input fields: clear borders and full width */
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 4px rgba(0, 102, 204, 0.3);
+}
+
+/* Forgot Password link: right-aligned below password field */
+.forgot-password {
+    text-align: right;
+    margin-top: 8px;
+}
+
+.forgot-password a {
+    font-size: 13px;
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Submit button: full width, distinct styling */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #0066cc;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0052a3;
+    cursor: pointer;
+}
+
+.submit-btn:active {
+    background-color: #003d7a;
+}
