@@ -1,0 +1,205 @@
+<!--
+  An upload form page layout for adding a new study note to the system.
+  It should contain:
+  - A top navigation header with a logo/system name, a search bar ("ค้นหาโน้ต..."), a notification icon, and a profile section.
+  - A breadcrumb trail navigation showing: "หน้าแรก / คลังโน้ต / อัปโหลดโน้ตใหม่".
+  - A main center-aligned section header: "เพิ่มโน้ตใหม่เข้าสู่ระบบ".
+  - A large upload container featuring:
+    * An upload icon.
+    * Draggable area text: "ลากและวางไฟล์ของคุณที่นี่ หรือ เลือกไฟล์จากเครื่อง".
+    * Formats and size limitation hint: "(รองรับไฟล์: PDF, JPG, PNG ขนาดไม่เกิน 50MB)".
+  - A detailed form section under "ข้อมูลรายละเอียดโน้ต" with:
+    * A required text input field for "ชื่อหัวข้อโน้ต:" (placeholder: "กรอกชื่อหัวข้อ").
+    * A required dropdown select menu for "วิชา / หมวดหมู่:" (placeholder: "เลือกหมวดหมู่").
+    * A tag section with tags (#เคมี, #ปี1, #สรุปสูตร) equipped with delete options, and a "+ เพิ่มแท็ก" button.
+    * A textarea for "รายละเอียดเพิ่มเติม (Description):" (placeholder: "เขียนคำอธิบายสั้นๆ เกี่ยวกับเนื้อหาในโน้ตนี้...").
+    * A privacy settings radio group with options for "สาธารณะ (ทุกคนสามารถอ่านได้)" and "ส่วนตัว (ดูได้แค่ฉันคนเดียว)".
+  - A primary footer section separated by a horizontal line containing:
+    * A secondary cancel button: "ยกเลิก".
+    * A primary form submit button: "บันทึกและอัปโหลด".
+-->
+    <!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>อัปโหลดโน้ตใหม่ - ระบบคลังโน้ต</title>
+    <!-- เชื่อมโยงกับไฟล์ CSS ของคุณ -->
+    <link rel="stylesheet" href="thirawat_uploadnote_style.css">
+    
+    <!-- ดึง Font และ Icon มาใช้ตกแต่งหน้าตาฟอร์ม -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- 1. Top Navigation Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <i class="fa-solid fa-book-open logo-icon"></i>
+                <span class="system-name">NoteShare</span>
+            </div>
+            
+            <div class="search-section">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="ค้นหาโน้ต...">
+            </div>
+            
+            <div class="user-section">
+                <div class="notification-icon">
+                    <i class="fa-regular fa-bell"></i>
+                </div>
+                <div class="profile-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Thirawat+W&background=0D8ABC&color=fff" alt="User Profile">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+        
+        <!-- 2. Breadcrumb Trail Navigation -->
+        <nav class="breadcrumb">
+            <a href="#">หน้าแรก</a>
+            <span class="divider">/</span>
+            <a href="#">คลังโน้ต</a>
+            <span class="divider">/</span>
+            <span class="current">อัปโหลดโน้ตใหม่</span>
+        </nav>
+
+        <!-- 3. Main Center-aligned Section Header -->
+        <header class="page-title-section">
+            <h1>เพิ่มโน้ตใหม่เข้าสู่ระบบ</h1>
+        </header>
+
+        <!-- Form Wrap -->
+        <form class="upload-form">
+
+            <!-- 4. Large Upload Container -->
+            <div class="upload-container">
+                <div class="upload-dropzone">
+                    <i class="fa-solid fa-cloud-arrow-up upload-main-icon"></i>
+                    <p class="dropzone-text">ลากและวางไฟล์ของคุณที่นี่ หรือ <span class="highlight">เลือกไฟล์จากเครื่อง</span></p>
+                    <p class="dropzone-hint">(รองรับไฟล์: PDF, JPG, PNG ขนาดไม่เกิน 50MB)</p>
+                    <input type="file" id="fileInput" hidden accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+            </div>
+
+            <!-- 5. Detailed Form Section -->
+            <section class="form-details-section">
+                <h2 class="section-subtitle"><i class="fa-solid fa-file-pen"></i> ข้อมูลรายละเอียดโน้ต</h2>
+                
+                <div class="form-group">
+                    <label for="noteTitle" class="required-label">ชื่อหัวข้อโน้ต:</label>
+                    <input type="text" id="noteTitle" placeholder="กรอกชื่อหัวข้อ" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="noteCategory" class="required-label">วิชา / หมวดหมู่:</label>
+                    <select id="noteCategory" required>
+                        <option value="" disabled selected>เลือกหมวดหมู่</option>
+                        <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+                        <option value="Database Systems">Database Systems</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                        <option value="Artificial Intelligence">Artificial Intelligence (AI)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>แท็ก:</label>
+                    <div class="tags-container">
+                        <span class="tag">#เคมี <i class="fa-solid fa-xmark tag-delete"></i></span>
+                        <span class="tag">#ปี1 <i class="fa-solid fa-xmark tag-delete"></i></span>
+                        <span class="tag">#สรุปสูตร <i class="fa-solid fa-xmark tag-delete"></i></span>
+                        <button type="button" class="btn-add-tag"><i class="fa-solid fa-plus"></i> เพิ่มแท็ก</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="noteDescription">รายละเอียดเพิ่มเติม (Description):</label>
+                    <textarea id="noteDescription" placeholder="เขียนคำอธิบายสั้นๆ เกี่ยวกับเนื้อหาในโน้ตนี้..." rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>การตั้งค่าความเป็นส่วนตัว:</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="privacy" value="public" checked>
+                            <div class="radio-text">
+                                <span class="radio-title">สาธารณะ</span>
+                                <span class="radio-desc">(ทุกคนสามารถอ่านได้)</span>
+                            </div>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="privacy" value="private">
+                            <div class="radio-text">
+                                <span class="radio-title">ส่วนตัว</span>
+                                <span class="radio-desc">(ดูได้แค่ฉันคนเดียว)</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Action buttons at the bottom -->
+            <footer class="form-footer">
+                <button type="button" class="btn-secondary">
+                    <i class="fa-solid fa-xmark"></i> ยกเลิก
+                </button>
+                <button type="submit" class="btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> บันทึกและอัปโหลด
+                </button>
+            </footer>
+
+        </form>
+    </main>
+
+    <!-- 7. JavaScript ระบบตรวจสอบและปุ่มยกเลิก (Client-side Validation) -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.upload-form');
+        const btnCancel = document.querySelector('.btn-secondary');
+
+        // ระบบตรวจจับเมื่อกดส่งข้อมูล (บันทึกและอัปโหลด)
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // ป้องกันไม่ให้หน้าเว็บรีเฟรชเอง
+
+            const noteTitle = document.getElementById('noteTitle').value.trim();
+            const noteCategory = document.getElementById('noteCategory').value;
+
+            // ตรวจสอบข้อมูลบังคับกรอก
+            if (!noteTitle || !noteCategory) {
+                alert('กรุณากรอกข้อมูลในช่องที่จำเป็นให้ครบถ้วน (ชื่อหัวข้อโน้ต และ วิชา/หมวดหมู่)');
+                return;
+            }
+
+            alert('บันทึกและอัปโหลดโน้ตสำเร็จ! (This is a prototype)');
+        });
+
+        // ระบบตรวจจับเมื่อกดปุ่มยกเลิก (Reset Form)
+        if (btnCancel) {
+            btnCancel.addEventListener('click', function () {
+                if (confirm('คุณต้องการยกเลิกการกรอกข้อมูลและล้างฟอร์มใช่หรือไม่?')) {
+                    form.reset(); // เคลียร์ค่าข้อมูลทั้งหมดในฟอร์มกลับเป็นค่าเริ่มต้น
+                    alert('ยกเลิกการทำงานและล้างข้อมูลเรียบร้อยแล้ว (Form Reset Prototype)');
+                }
+            });
+        }
+
+        // ระบบจำลองการคลิกบริเวณลากวางไฟล์
+        const dropzone = document.querySelector('.upload-dropzone');
+        if (dropzone) {
+            dropzone.addEventListener('click', function() {
+                alert('ระบบจำลองการเปิดหน้าต่างเลือกไฟล์ (File Selection Prototype)');
+            });
+        }
+    });
+    </script>
+
+</body>
+</html>
