@@ -1,87 +1,71 @@
-<!--
-  An upload form page layout for adding a new study note to the system.
-  It should contain:
-  - A top navigation header with a logo/system name, a search bar ("ค้นหาโน้ต..."), a notification icon, and a profile section.
-  - A breadcrumb trail navigation showing: "หน้าแรก / คลังโน้ต / อัปโหลดโน้ตใหม่".
-  - A main center-aligned section header: "เพิ่มโน้ตใหม่เข้าสู่ระบบ".
-  - A large upload container featuring:
-    * An upload icon.
-    * Draggable area text: "ลากและวางไฟล์ของคุณที่นี่ หรือ เลือกไฟล์จากเครื่อง".
-    * Formats and size limitation hint: "(รองรับไฟล์: PDF, JPG, PNG ขนาดไม่เกิน 50MB)".
-  - A detailed form section under "ข้อมูลรายละเอียดโน้ต" with:
-    * A required text input field for "ชื่อหัวข้อโน้ต:" (placeholder: "กรอกชื่อหัวข้อ").
-    * A required dropdown select menu for "วิชา / หมวดหมู่:" (placeholder: "เลือกหมวดหมู่").
-    * A tag section with tags (#เคมี, #ปี1, #สรุปสูตร) equipped with delete options, and a "+ เพิ่มแท็ก" button.
-    * A textarea for "รายละเอียดเพิ่มเติม (Description):" (placeholder: "เขียนคำอธิบายสั้นๆ เกี่ยวกับเนื้อหาในโน้ตนี้...").
-    * A privacy settings radio group with options for "สาธารณะ (ทุกคนสามารถอ่านได้)" and "ส่วนตัว (ดูได้แค่ฉันคนเดียว)".
-  - A primary footer section separated by a horizontal line containing:
-    * A secondary cancel button: "ยกเลิก".
-    * A primary form submit button: "บันทึกและอัปโหลด".
--->
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>อัปโหลดโน้ตใหม่ - ระบบคลังโน้ต</title>
-    <!-- เชื่อมโยงกับไฟล์ CSS ของคุณ -->
+    <title>อัปโหลดโน้ตใหม่ | NoteShare (ม.พะเยา)</title>
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="thirawat_uploadnote_style.css">
-    
-    <!-- ดึง Font และ Icon มาใช้ตกแต่งหน้าตาฟอร์ม -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- 1. Top Navigation Header -->
+    <!-- Header Navigation Bar -->
     <header class="main-header">
         <div class="header-container">
-            <div class="logo-section">
-                <i class="fa-solid fa-book-open logo-icon"></i>
+            <a href="nonthakorn_dashboard_user_prototype.html" class="logo-section">
+                <div class="logo-badge">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
                 <span class="system-name">NoteShare</span>
-            </div>
+            </a>
             
             <div class="search-section">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" placeholder="ค้นหาโน้ต...">
             </div>
             
+            <ul class="nav-links">
+                <li><a href="nonthakorn_dashboard_user_prototype.html"><i class="fa-solid fa-house"></i> หน้าแรก</a></li>
+                <li><a href="thirawat_uploadnote_prototype.html" class="active"><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดโน้ต</a></li>
+                <li><a href="atiwat_admin_dashboard_prototype.html"><i class="fa-solid fa-user-shield"></i> Admin</a></li>
+            </ul>
+
             <div class="user-section">
-                <div class="notification-icon">
+                <a href="#" class="icon-btn" title="แจ้งเตือน">
                     <i class="fa-regular fa-bell"></i>
-                </div>
-                <div class="profile-avatar">
-                    <img src="https://ui-avatars.com/api/?name=Thirawat+W&background=0D8ABC&color=fff" alt="User Profile">
-                </div>
+                    <span class="notification-badge"></span>
+                </a>
+                <a href="Tanawan_Login_prototype.html" class="profile-avatar" title="โปรไฟล์">
+                    <img src="https://ui-avatars.com/api/?name=Thirawat+W&background=6366f1&color=fff" alt="User Profile">
+                </a>
             </div>
         </div>
     </header>
 
     <!-- Main Content Container -->
-    <main class="main-content">
+    <main class="upload-main-content">
         
-        <!-- 2. Breadcrumb Trail Navigation -->
+        <!-- Breadcrumb Navigation -->
         <nav class="breadcrumb">
-            <a href="#">หน้าแรก</a>
-            <span class="divider">/</span>
-            <a href="#">คลังโน้ต</a>
-            <span class="divider">/</span>
+            <a href="nonthakorn_dashboard_user_prototype.html">หน้าแรก</a>
+            <span class="divider"><i class="fa-solid fa-chevron-right"></i></span>
+            <a href="nonthakorn_dashboard_user_prototype.html">คลังโน้ต ม.พะเยา</a>
+            <span class="divider"><i class="fa-solid fa-chevron-right"></i></span>
             <span class="current">อัปโหลดโน้ตใหม่</span>
         </nav>
 
-        <!-- 3. Main Center-aligned Section Header -->
+        <!-- Section Header -->
         <header class="page-title-section">
-            <h1>เพิ่มโน้ตใหม่เข้าสู่ระบบ</h1>
+            <h1>เพิ่มโน้ตใหม่เข้าสู่ระบบ (สำหรับนิสิต ม.พะเยา)</h1>
         </header>
 
-        <!-- Form Wrap -->
+        <!-- Form Container -->
         <form class="upload-form">
 
-            <!-- 4. Large Upload Container -->
+            <!-- Drag & Drop Upload Dropzone -->
             <div class="upload-container">
-                <div class="upload-dropzone">
+                <div class="upload-dropzone" id="dropzone">
                     <i class="fa-solid fa-cloud-arrow-up upload-main-icon"></i>
                     <p class="dropzone-text">ลากและวางไฟล์ของคุณที่นี่ หรือ <span class="highlight">เลือกไฟล์จากเครื่อง</span></p>
                     <p class="dropzone-hint">(รองรับไฟล์: PDF, JPG, PNG ขนาดไม่เกิน 50MB)</p>
@@ -89,66 +73,93 @@
                 </div>
             </div>
 
-            <!-- 5. Detailed Form Section -->
+            <!-- Note Details Form -->
             <section class="form-details-section">
                 <h2 class="section-subtitle"><i class="fa-solid fa-file-pen"></i> ข้อมูลรายละเอียดโน้ต</h2>
                 
+                <!-- 1. คณะ (Faculty) -->
                 <div class="form-group">
-                    <label for="noteTitle" class="required-label">ชื่อหัวข้อโน้ต:</label>
-                    <input type="text" id="noteTitle" placeholder="กรอกชื่อหัวข้อ" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="noteCategory" class="required-label">วิชา / หมวดหมู่:</label>
-                    <select id="noteCategory" required>
-                        <option value="" disabled selected>เลือกหมวดหมู่</option>
-                        <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
-                        <option value="Database Systems">Database Systems</option>
-                        <option value="Web Development">Web Development</option>
-                        <option value="Software Engineering">Software Engineering</option>
-                        <option value="Artificial Intelligence">Artificial Intelligence (AI)</option>
+                    <label for="facultySelect" class="required-label"><i class="fa-solid fa-landmark-flag"></i> คณะ (ม.พะเยา):</label>
+                    <select id="facultySelect" class="form-control" onchange="onFacultyChange(this.value)" required>
+                        <option value="" disabled selected>-- เลือกคณะสังกัด --</option>
+                        <option value="ict">คณะเทคโนโลยีสารสนเทศและการสื่อสาร (ICT)</option>
+                        <option value="engr">คณะวิศวกรรมศาสตร์ (Engineering)</option>
+                        <option value="sci">คณะวิทยาศาสตร์ (Science)</option>
+                        <option value="med">คณะแพทยศาสตร์ / พยาบาลศาสตร์ / เภสัชศาสตร์</option>
+                        <option value="bca">คณะบริหารธุรกิจและนิเทศศาสตร์ (BCA)</option>
+                        <option value="law">คณะนิติศาสตร์และรัฐศาสตร์</option>
                     </select>
                 </div>
 
+                <!-- 2. สาขาวิชา (Major/Department) -->
                 <div class="form-group">
-                    <label>แท็ก:</label>
-                    <div class="tags-container">
-                        <span class="tag">#เคมี <i class="fa-solid fa-xmark tag-delete"></i></span>
-                        <span class="tag">#ปี1 <i class="fa-solid fa-xmark tag-delete"></i></span>
-                        <span class="tag">#สรุปสูตร <i class="fa-solid fa-xmark tag-delete"></i></span>
-                        <button type="button" class="btn-add-tag"><i class="fa-solid fa-plus"></i> เพิ่มแท็ก</button>
+                    <label for="majorSelect" class="required-label"><i class="fa-solid fa-graduation-cap"></i> สาขาวิชา:</label>
+                    <select id="majorSelect" class="form-control" onchange="onMajorChange(this.value)" required disabled>
+                        <option value="" disabled selected>-- กรุณาเลือกคณะก่อน --</option>
+                    </select>
+                </div>
+
+                <!-- 3. วิชา / รหัสวิชา (Subject Code & Name) -->
+                <div class="form-group">
+                    <label for="subjectSelect" class="required-label"><i class="fa-solid fa-book"></i> รหัสวิชา / ชื่อวิชา:</label>
+                    <select id="subjectSelect" class="form-control" onchange="onSubjectSelect(this.value)" required disabled>
+                        <option value="" disabled selected>-- กรุณาเลือกสาขาวิชาก่อน --</option>
+                    </select>
+                </div>
+
+                <!-- Custom Subject Input if selected "custom" -->
+                <div class="form-group" id="customSubjectGroup" style="display: none;">
+                    <label for="customSubjectInput" class="required-label">ระบุชื่อวิชาเพิ่มเติม:</label>
+                    <input type="text" id="customSubjectInput" class="form-control" placeholder="เช่น 222102 Object-Oriented Programming">
+                </div>
+
+                <!-- 4. ชื่อหัวข้อโน้ต / สรุปเนื้อหา (Note Title) -->
+                <div class="form-group">
+                    <label for="noteTitle" class="required-label"><i class="fa-solid fa-heading"></i> หัวข้อโน้ต / สรุปเนื้อหา:</label>
+                    <input type="text" id="noteTitle" class="form-control" placeholder="เช่น สรุปเตรียมสอบมิดเทอม บทที่ 1-5" required>
+                </div>
+
+                <!-- Tags -->
+                <div class="form-group">
+                    <label><i class="fa-solid fa-tags"></i> แท็ก (Tags):</label>
+                    <div class="tags-container" id="tagsContainer">
+                        <span class="tag">#มพะเยา <i class="fa-solid fa-xmark tag-delete" onclick="removeTag(this)"></i></span>
+                        <span class="tag">#สรุปสอบ <i class="fa-solid fa-xmark tag-delete" onclick="removeTag(this)"></i></span>
+                        <button type="button" class="btn-add-tag" onclick="addTagPrompt()"><i class="fa-solid fa-plus"></i> เพิ่มแท็ก</button>
                     </div>
                 </div>
 
+                <!-- Description -->
                 <div class="form-group">
-                    <label for="noteDescription">รายละเอียดเพิ่มเติม (Description):</label>
-                    <textarea id="noteDescription" placeholder="เขียนคำอธิบายสั้นๆ เกี่ยวกับเนื้อหาในโน้ตนี้..." rows="4"></textarea>
+                    <label for="noteDescription"><i class="fa-solid fa-align-left"></i> รายละเอียดเพิ่มเติม (Description):</label>
+                    <textarea id="noteDescription" class="form-control" placeholder="เขียนคำอธิบายสั้นๆ เกี่ยวกับเนื้อหาในโน้ตนี้ เช่น มีแนวข้อสอบปีเก่า พร้อมเฉลย..." rows="4"></textarea>
                 </div>
 
+                <!-- Privacy Settings -->
                 <div class="form-group">
-                    <label>การตั้งค่าความเป็นส่วนตัว:</label>
+                    <label><i class="fa-solid fa-user-lock"></i> การตั้งค่าความเป็นส่วนตัว:</label>
                     <div class="radio-group">
                         <label class="radio-label">
                             <input type="radio" name="privacy" value="public" checked>
                             <div class="radio-text">
-                                <span class="radio-title">สาธารณะ</span>
-                                <span class="radio-desc">(ทุกคนสามารถอ่านได้)</span>
+                                <span class="radio-title"><i class="fa-solid fa-globe"></i> สาธารณะ</span>
+                                <span class="radio-desc">(นิสิต ม.พะเยา ทุกคนสามารถอ่านและดาวน์โหลดได้)</span>
                             </div>
                         </label>
                         <label class="radio-label">
                             <input type="radio" name="privacy" value="private">
                             <div class="radio-text">
-                                <span class="radio-title">ส่วนตัว</span>
-                                <span class="radio-desc">(ดูได้แค่ฉันคนเดียว)</span>
+                                <span class="radio-title"><i class="fa-solid fa-lock"></i> ส่วนตัว</span>
+                                <span class="radio-desc">(ดูได้แค่ฉันคนเดียวเท่านั้น)</span>
                             </div>
                         </label>
                     </div>
                 </div>
             </section>
 
-            <!-- 6. Action buttons at the bottom -->
+            <!-- Form Actions Footer -->
             <footer class="form-footer">
-                <button type="button" class="btn-secondary">
+                <button type="button" class="btn-secondary btn-cancel">
                     <i class="fa-solid fa-xmark"></i> ยกเลิก
                 </button>
                 <button type="submit" class="btn-primary">
@@ -159,46 +170,266 @@
         </form>
     </main>
 
-    <!-- 7. JavaScript ระบบตรวจสอบและปุ่มยกเลิก (Client-side Validation) -->
+    <!-- Client-side Cascading Dropdown Script -->
     <script>
+    // Faculty -> Major -> Subjects Mapping Data
+    const upData = {
+        ict: {
+            name: "คณะเทคโนโลยีสารสนเทศและการสื่อสาร (ICT)",
+            majors: {
+                "วิทยาการคอมพิวเตอร์": [
+                    "222101 Data Structures & Algorithms",
+                    "222102 Object-Oriented Programming",
+                    "222201 Operating Systems",
+                    "222301 Artificial Intelligence"
+                ],
+                "วิศวกรรมซอฟต์แวร์": [
+                    "224201 Software Engineering Principles",
+                    "224202 Software Architecture & Design",
+                    "224301 Software Testing & Quality Assurance"
+                ],
+                "เทคโนโลยีสารสนเทศ": [
+                    "223101 Information Technology Fundamentals",
+                    "223201 Database Management Systems",
+                    "223301 Computer Networks & Security"
+                ],
+                "การจัดการธุรกิจดิจิทัล": [
+                    "225101 Digital Business Concepts",
+                    "225201 E-Commerce & Digital Marketing"
+                ],
+                "CG & Interactive Media": [
+                    "226101 Computer Graphics Fundamentals",
+                    "226201 3D Modeling & Animation"
+                ]
+            }
+        },
+        engr: {
+            name: "คณะวิศวกรรมศาสตร์ (Engineering)",
+            majors: {
+                "วิศวกรรมเครื่องกล": [
+                    "101201 Engineering Mechanics (Statics)",
+                    "101202 Thermodynamics",
+                    "101301 Fluid Mechanics"
+                ],
+                "วิศวกรรมโยธา": [
+                    "102201 Surveying Engineering",
+                    "102202 Structural Analysis"
+                ],
+                "วิศวกรรมไฟฟ้า": [
+                    "103201 Circuit Analysis",
+                    "103202 Electromagnetic Fields"
+                ],
+                "วิศวกรรมอุตสาหการ": [
+                    "104201 Operations Research",
+                    "104202 Quality Control"
+                ]
+            }
+        },
+        sci: {
+            name: "คณะวิทยาศาสตร์ (Science)",
+            majors: {
+                "คณิตศาสตร์": [
+                    "105101 Calculus 1",
+                    "105102 Calculus 2",
+                    "105201 Linear Algebra"
+                ],
+                "ฟิสิกส์": [
+                    "106101 General Physics 1",
+                    "106102 General Physics 2"
+                ],
+                "เคมี": [
+                    "107101 General Chemistry",
+                    "107201 Organic Chemistry 1"
+                ],
+                "ชีววิทยา": [
+                    "108101 General Biology",
+                    "108201 Genetics"
+                ]
+            }
+        },
+        med: {
+            name: "คณะแพทยศาสตร์ / พยาบาลศาสตร์ / เภสัชศาสตร์",
+            majors: {
+                "แพทยศาสตร์": [
+                    "301201 Gross Anatomy",
+                    "301202 Medical Physiology",
+                    "301301 Pathology"
+                ],
+                "พยาบาลศาสตร์": [
+                    "302201 Fundamentals of Nursing",
+                    "302202 Pharmacology for Nurses"
+                ],
+                "เภสัชศาสตร์": [
+                    "303201 Pharmaceutical Chemistry",
+                    "303202 Pharmacognosy"
+                ],
+                "สาธารณสุขศาสตร์": [
+                    "304101 Community Health",
+                    "304201 Epidemiology"
+                ]
+            }
+        },
+        bca: {
+            name: "คณะบริหารธุรกิจและนิเทศศาสตร์ (BCA)",
+            majors: {
+                "การตลาดดิจิทัล": [
+                    "401101 Principles of Marketing",
+                    "401201 Digital Consumer Behavior"
+                ],
+                "การบัญชี": [
+                    "402101 Financial Accounting 1",
+                    "402201 Managerial Accounting"
+                ],
+                "นิเทศศาสตร์": [
+                    "403101 Introduction to Communication Arts",
+                    "403201 Digital Media Production"
+                ]
+            }
+        },
+        law: {
+            name: "คณะนิติศาสตร์และรัฐศาสตร์",
+            majors: {
+                "นิติศาสตร์": [
+                    "501101 กฎหมายแพ่งและพาณิชย์: บรรพ 1",
+                    "501201 ประมวลกฎหมายอาญา"
+                ],
+                "รัฐศาสตร์": [
+                    "502101 การเมืองการปกครองไทย",
+                    "502201 ความสัมพันธ์ระหว่างประเทศ"
+                ]
+            }
+        }
+    };
+
+    function onFacultyChange(facultyId) {
+        const majorSelect = document.getElementById('majorSelect');
+        const subjectSelect = document.getElementById('subjectSelect');
+        const customGroup = document.getElementById('customSubjectGroup');
+
+        majorSelect.innerHTML = '<option value="" disabled selected>-- เลือกสาขาวิชา --</option>';
+        subjectSelect.innerHTML = '<option value="" disabled selected>-- เลือกวิชาก่อน --</option>';
+        subjectSelect.disabled = true;
+        customGroup.style.display = 'none';
+
+        if (!facultyId || !upData[facultyId]) {
+            majorSelect.disabled = true;
+            return;
+        }
+
+        const facultyInfo = upData[facultyId];
+        Object.keys(facultyInfo.majors).forEach(major => {
+            const opt = document.createElement('option');
+            opt.value = major;
+            opt.textContent = major;
+            majorSelect.appendChild(opt);
+        });
+
+        majorSelect.disabled = false;
+    }
+
+    function onMajorChange(majorName) {
+        const facultyId = document.getElementById('facultySelect').value;
+        const subjectSelect = document.getElementById('subjectSelect');
+        const customGroup = document.getElementById('customSubjectGroup');
+
+        subjectSelect.innerHTML = '<option value="" disabled selected>-- เลือกวิชา / รหัสวิชา --</option>';
+        customGroup.style.display = 'none';
+
+        if (!facultyId || !majorName || !upData[facultyId] || !upData[facultyId].majors[majorName]) {
+            subjectSelect.disabled = true;
+            return;
+        }
+
+        const subjects = upData[facultyId].majors[majorName];
+        subjects.forEach(subj => {
+            const opt = document.createElement('option');
+            opt.value = subj;
+            opt.textContent = subj;
+            subjectSelect.appendChild(opt);
+        });
+
+        // Add custom subject option
+        const customOpt = document.createElement('option');
+        customOpt.value = "custom";
+        customOpt.textContent = "+ ระบุวิชาอื่นๆ ด้วยตนเอง";
+        subjectSelect.appendChild(customOpt);
+
+        subjectSelect.disabled = false;
+    }
+
+    function onSubjectSelect(val) {
+        const customGroup = document.getElementById('customSubjectGroup');
+        const customInput = document.getElementById('customSubjectInput');
+        if (val === 'custom') {
+            customGroup.style.display = 'block';
+            customInput.required = true;
+            customInput.focus();
+        } else {
+            customGroup.style.display = 'none';
+            customInput.required = false;
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.querySelector('.upload-form');
-        const btnCancel = document.querySelector('.btn-secondary');
+        const btnCancel = document.querySelector('.btn-cancel');
+        const dropzone = document.getElementById('dropzone');
 
-        // ระบบตรวจจับเมื่อกดส่งข้อมูล (บันทึกและอัปโหลด)
         form.addEventListener('submit', function (event) {
-            event.preventDefault(); // ป้องกันไม่ให้หน้าเว็บรีเฟรชเอง
+            event.preventDefault();
 
+            const faculty = document.getElementById('facultySelect').value;
+            const major = document.getElementById('majorSelect').value;
+            const subject = document.getElementById('subjectSelect').value;
             const noteTitle = document.getElementById('noteTitle').value.trim();
-            const noteCategory = document.getElementById('noteCategory').value;
 
-            // ตรวจสอบข้อมูลบังคับกรอก
-            if (!noteTitle || !noteCategory) {
-                alert('กรุณากรอกข้อมูลในช่องที่จำเป็นให้ครบถ้วน (ชื่อหัวข้อโน้ต และ วิชา/หมวดหมู่)');
+            if (!faculty || !major || !subject || !noteTitle) {
+                alert('กรุณากรอกข้อมูลในช่องที่จำเป็นให้ครบถ้วน (คณะ, สาขาวิชา, วิชา และ หัวข้อโน้ต)');
                 return;
             }
 
-            alert('บันทึกและอัปโหลดโน้ตสำเร็จ! (This is a prototype)');
+            alert('บันทึกและอัปโหลดโน้ตเข้าสู่คลัง ม.พะเยา เรียบร้อยแล้ว!');
+            window.location.href = 'nonthakorn_dashboard_user_prototype.html';
         });
 
-        // ระบบตรวจจับเมื่อกดปุ่มยกเลิก (Reset Form)
         if (btnCancel) {
             btnCancel.addEventListener('click', function () {
                 if (confirm('คุณต้องการยกเลิกการกรอกข้อมูลและล้างฟอร์มใช่หรือไม่?')) {
-                    form.reset(); // เคลียร์ค่าข้อมูลทั้งหมดในฟอร์มกลับเป็นค่าเริ่มต้น
-                    alert('ยกเลิกการทำงานและล้างข้อมูลเรียบร้อยแล้ว (Form Reset Prototype)');
+                    form.reset();
+                    document.getElementById('majorSelect').disabled = true;
+                    document.getElementById('subjectSelect').disabled = true;
+                    document.getElementById('customSubjectGroup').style.display = 'none';
+                    alert('ยกเลิกการทำงานเรียบร้อยแล้ว');
                 }
             });
         }
 
-        // ระบบจำลองการคลิกบริเวณลากวางไฟล์
-        const dropzone = document.querySelector('.upload-dropzone');
         if (dropzone) {
             dropzone.addEventListener('click', function() {
                 alert('ระบบจำลองการเปิดหน้าต่างเลือกไฟล์ (File Selection Prototype)');
             });
         }
     });
+
+    function removeTag(element) {
+        const tagSpan = element.parentElement;
+        tagSpan.remove();
+    }
+
+    function addTagPrompt() {
+        const newTag = prompt('กรอกชื่อแท็กใหม่ (เช่น #วิทยาการคอม):');
+        if (newTag && newTag.trim()) {
+            const formattedTag = newTag.startsWith('#') ? newTag.trim() : '#' + newTag.trim();
+            const tagsContainer = document.getElementById('tagsContainer');
+            const addBtn = tagsContainer.querySelector('.btn-add-tag');
+            
+            const tagSpan = document.createElement('span');
+            tagSpan.className = 'tag';
+            tagSpan.innerHTML = `${formattedTag} <i class="fa-solid fa-xmark tag-delete" onclick="removeTag(this)"></i>`;
+            
+            tagsContainer.insertBefore(tagSpan, addBtn);
+        }
+    }
     </script>
 
 </body>

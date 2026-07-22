@@ -1,30 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('theme.css');
 
-:root {
-  --bg-color: #0b0f17;
-  --panel-bg: #111827;
-  --panel-border: #1f2937;
-  --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --accent-color: #6366f1;
-  --accent-hover: #4f46e5;
-  --accent-light: rgba(99, 102, 241, 0.1);
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --danger-color: #ef4444;
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
+.admin-body {
   height: 100vh;
   margin: 0;
-  overflow-x: hidden;
+  overflow: hidden;
   background-color: var(--bg-color);
   color: var(--text-primary);
   font-family: var(--font-sans);
@@ -37,19 +16,13 @@ body {
   overflow: hidden;
 }
 
- /*
- * Sidebar Navigation Styles
- * - Set a fixed width (e.g., 260px) with a solid border on the right side.
- * - Add padding inside the sidebar for spacing.
- * - Style the navigation buttons: full-width, centered text, solid thin border, and padding.
- * - Add a subtle background color change when hovering over navigation buttons.
- */
+/* Sidebar Navigation */
 .sidebar {
   width: 260px;
   min-width: 260px;
   height: 100%;
   border-right: 1px solid var(--panel-border);
-  padding: 24px;
+  padding: 1.75rem 1.25rem;
   display: flex;
   flex-direction: column;
   background-color: var(--panel-bg);
@@ -58,26 +31,34 @@ body {
 .sidebar-title {
   font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 24px;
-  text-align: center;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   color: var(--text-primary);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.sidebar-title .logo-badge {
+  width: 32px;
+  height: 32px;
+  font-size: 0.9rem;
 }
 
 .nav-menu {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.6rem;
 }
 
 .nav-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   width: 100%;
-  text-align: center;
-  border: 1px solid var(--panel-border);
-  padding: 12px;
-  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
@@ -85,41 +66,54 @@ body {
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
 }
 
 .nav-link:hover, .nav-link.active {
   background-color: var(--accent-light);
-  border-color: var(--accent-color);
+  border-color: var(--panel-border-hover);
   color: var(--text-primary);
 }
 
- /*
- * Top Header Area
- * - Use flexbox with 'justify-content: space-between' and vertical centering.
- * - Style the "User Statistics" title box with a distinct border and padding.
- * - Create a circular placeholder style for the "(logo)" element (e.g., width/height 40px, rounded-full, solid border).
- */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--panel-border);
+}
+
+.nav-link-exit {
+  color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.nav-link-exit:hover {
+  background: var(--danger-color);
+  color: #fff;
+}
+
+/* Main Content Area */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow-y: auto;
-  padding: 32px;
+  padding: 2rem 2.5rem;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .header-title-box {
-  border: 2px solid var(--accent-color);
-  padding: 8px 16px;
-  border-radius: 6px;
-  background-color: rgba(99, 102, 241, 0.05);
+  border: 1px solid var(--accent-color);
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-md);
+  background-color: var(--accent-light);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
 .header-title {
@@ -131,91 +125,93 @@ body {
 .header-user {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 1rem;
 }
 
 .admin-label {
   font-weight: 600;
   color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--panel-border);
+  font-size: 0.85rem;
 }
 
 .avatar-placeholder {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  border: 1px solid var(--panel-border);
+  border: 2px solid var(--accent-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  background-color: var(--panel-bg);
-  font-weight: 600;
+  font-size: 0.8rem;
+  color: #fff;
+  background: var(--accent-gradient);
+  font-weight: 700;
   text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
 }
 
- /*
- * Statistics & Chart Area Styles
- * - Create a 2-column CSS Grid layout to separate the left stats area from the right data table.
- * - Chart Placeholder Box: Set a minimum height of 250px, a solid border, and relative positioning.
- * - Summary Cards Container: Use flexbox to display the two lower stat cards side-by-side with a gap.
- * - Style individual stat cards: solid borders, padding, and bold font for numbers.
- */
+/* Dashboard Grid Layout */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  gap: 24px;
+  gap: 1.5rem;
   align-items: start;
 }
 
 .left-column {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.5rem;
 }
 
 .chart-container {
-  min-height: 250px;
+  min-height: 260px;
   border: 1px solid var(--panel-border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background-color: var(--panel-bg);
   position: relative;
-  padding: 20px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: var(--shadow-sm);
 }
 
 .chart-header {
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
 }
 
 .chart-title {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .line-chart-svg {
   width: 100%;
-  height: 180px;
+  height: 190px;
   margin-top: 10px;
 }
 
 .cards-container {
   display: flex;
-  gap: 16px;
+  gap: 1.25rem;
 }
 
 .stat-card {
   flex: 1;
   border: 1px solid var(--panel-border);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
   background-color: var(--panel-bg);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .stat-card-title {
@@ -224,14 +220,14 @@ body {
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 6px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 0.5rem;
 }
 
 .stat-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.75rem;
   list-style: none;
 }
 
@@ -259,37 +255,34 @@ body {
   color: var(--warning-color) !important;
 }
 
- /*
- * Moderation Queue Data Table Styles
- * - Make the table take 100% width of its grid column with collapsed borders.
- * - Add solid borders to all table headers (th) and table data cells (td).
- * - Add vertical and horizontal padding inside cells for readability.
- * - Center-align text for "No." and "Timestamp" columns; left-align text for the "Name" column.
- * - Add a subtle background color to the table header row.
- */
+/* Moderation Queue Data Table */
 .table-container {
   border: 1px solid var(--panel-border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background-color: var(--panel-bg);
-  padding: 20px;
+  padding: 1.5rem;
   overflow-x: auto;
+  box-shadow: var(--shadow-sm);
 }
 
 .table-title {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 16px;
+  margin-bottom: 1.25rem;
 }
 
 .data-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .data-table th, .data-table td {
-  border: 1px solid var(--panel-border);
-  padding: 12px 14px;
+  border-bottom: 1px solid var(--panel-border);
+  padding: 0.9rem 1rem;
   font-size: 0.95rem;
 }
 
@@ -297,11 +290,14 @@ body {
   background-color: rgba(255, 255, 255, 0.03);
   color: var(--text-secondary);
   font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
 }
 
 .data-table th:nth-child(1), .data-table td:nth-child(1) {
   text-align: center;
-  width: 60px;
+  width: 70px;
 }
 
 .data-table th:nth-child(2), .data-table td:nth-child(2) {
@@ -310,7 +306,7 @@ body {
 
 .data-table th:nth-child(3), .data-table td:nth-child(3) {
   text-align: center;
-  width: 110px;
+  width: 120px;
 }
 
 .data-table tbody tr {
@@ -318,5 +314,5 @@ body {
 }
 
 .data-table tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.01);
+  background-color: rgba(99, 102, 241, 0.08);
 }

@@ -1,83 +1,427 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="th">
 <head>
-    <meta charset="utf-8">
-    <title>test Dashboard</title>
-    <style>
-        :root { --bg: #f5f7fb; --primary: #0ea5a4; --text: #111; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; }
-        
-        /* Header ปรับปรุงให้มีช่องค้นหา */
-        header { display: flex; align-items: center; justify-content: space-between; padding: 15px 30px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .search-bar { padding: 8px; width: 300px; border: 1px solid #ddd; border-radius: 5px; }
-        
-        .container { padding: 20px; max-width: 1200px; margin: auto; }
-        
-        /* Grid 6 ช่อง */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
-        .card { background: #fff; border-radius: 12px; padding: 15px; border: 1px solid #eee; }
-        
-        /* เพิ่มพื้นที่รูปภาพ */
-        .card-img { width: 100%; height: 150px; background: #eef2f7; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; color: #999; }
-        
-        .btn { cursor: pointer; border: none; background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-top: 10px; }
-        #commentModal { display: none; position: fixed; top: 20%; left: 30%; width: 40%; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังโน้ตเรียน มหาวิทยาลัยพะเยา | NoteShare</title>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="nonthakorn_dashboard_user_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <header>
-        <h2 style="color:var(--primary)">test Dashboard</h2>
-        <input type="text" class="search-bar" placeholder="ค้นหาวิชาเรียน..." onkeyup="filterSheets(this.value)">
-        <div onclick="window.location.href='profile.html'" style="cursor:pointer; font-weight:bold;">👤 โปรไฟล์</div>
+    <!-- Header Navigation Bar -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="nonthakorn_dashboard_user_prototype.html" class="logo-section">
+                <div class="logo-badge">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <span class="system-name">NoteShare</span>
+            </a>
+
+            <div class="search-section">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" placeholder="ค้นหาคณะ, สาขา, วิชา หรือ หัวข้อโน้ต..." onkeyup="handleSearch(this.value)">
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="nonthakorn_dashboard_user_prototype.html" class="active"><i class="fa-solid fa-house"></i> หน้าแรก</a></li>
+                <li><a href="thirawat_uploadnote_prototype.html"><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดโน้ต</a></li>
+                <li><a href="atiwat_admin_dashboard_prototype.html"><i class="fa-solid fa-user-shield"></i> Admin</a></li>
+            </ul>
+
+            <div class="user-section">
+                <a href="#" class="icon-btn" title="แจ้งเตือน">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-badge"></span>
+                </a>
+                <a href="Tanawan_Login_prototype.html" class="profile-avatar" title="เข้าสู่ระบบ / โปรไฟล์">
+                    <img src="https://ui-avatars.com/api/?name=UP+Student&background=6366f1&color=fff" alt="User Profile">
+                </a>
+            </div>
+        </div>
     </header>
 
-    <main class="container">
-        <section class="grid" id="sheetGrid"></section>
+    <!-- Main Container -->
+    <main class="dashboard-container">
+        
+        <!-- Hero Banner -->
+        <section class="hero-banner">
+            <div class="hero-content">
+                <h1><i class="fa-solid fa-building-columns"></i> คลังชีทสรุป มหาวิทยาลัยพะเยา</h1>
+                <p>โน้ตสรุปผ่านการตรวจสอบความถูกต้องโดยอาจารย์ประจำวิชา เพื่อการอ่านสอบที่มีคุณภาพที่สุด</p>
+            </div>
+            <a href="thirawat_uploadnote_prototype.html" class="btn-primary">
+                <i class="fa-solid fa-plus"></i> อัปโหลดโน้ตของคุณ
+            </a>
+        </section>
+
+        <!-- Section 1: Faculties of University of Phayao -->
+        <section class="faculties-section">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2 class="section-title"><i class="fa-solid fa-landmark-flag"></i> คณะในมหาวิทยาลัยพะเยา</h2>
+                    <span class="section-subtitle-badge" id="facultyCountBadge">6 คณะ</span>
+                </div>
+            </div>
+
+            <!-- Faculty Cards Grid -->
+            <div class="faculty-grid" id="facultyGrid"></div>
+        </section>
+
+        <!-- Section 2: Major Filter Bar (Drill-down Inside Selected Faculty) -->
+        <section class="major-filter-container" id="majorFilterContainer">
+            <div class="major-filter-header">
+                <span class="major-filter-title" id="activeFilterLabel">
+                    <i class="fa-solid fa-filter"></i> เลือกสาขาวิชาใน: <strong style="color: var(--accent-color)" id="selectedFacultyName">ทั้งหมดทุกคณะ</strong>
+                </span>
+                <button class="reset-filter-btn" onclick="resetFilters()">
+                    <i class="fa-solid fa-rotate-left"></i> แสดงทุกคณะ/สาขา
+                </button>
+            </div>
+
+            <div class="major-pills" id="majorPills"></div>
+        </section>
+
+        <!-- Section 3: Note Cards Grid -->
+        <section>
+            <div class="section-header" style="margin-bottom: 1rem;">
+                <h3 class="section-title" style="font-size: 1.1rem;"><i class="fa-solid fa-book"></i> รายการชีทสรุปในระบบ (<span id="noteCount">0</span> ชีท)</h3>
+            </div>
+
+            <div class="grid" id="sheetGrid"></div>
+        </section>
+
     </main>
 
-    <div id="commentModal">
-        <h3>แสดงความคิดเห็น</h3>
-        <textarea id="commentInput" style="width:100%; height:80px;"></textarea><br>
-        <button class="btn" onclick="closeModal()">ปิด</button>
-    </div>
-
     <script>
-        const sheets = [
-            { id: 1, title: "Calculus 1", likes: 120 }, { id: 2, title: "Physics 1", likes: 85 },
-            { id: 3, title: "Chemistry", likes: 45 }, { id: 4, title: "Biology", likes: 90 },
-            { id: 5, title: "Programming", likes: 200 }, { id: 6, title: "History", likes: 30 }
+        // University of Phayao Faculties Data with Majors
+        const faculties = [
+            {
+                id: "ict",
+                name: "คณะเทคโนโลยีสารสนเทศและการสื่อสาร (ICT)",
+                icon: "fa-laptop-code",
+                majors: ["วิทยาการคอมพิวเตอร์", "วิศวกรรมซอฟต์แวร์", "เทคโนโลยีสารสนเทศ", "การจัดการธุรกิจดิจิทัล", "CG & Interactive Media"]
+            },
+            {
+                id: "engr",
+                name: "คณะวิศวกรรมศาสตร์ (Engineering)",
+                icon: "fa-gear",
+                majors: ["วิศวกรรมโยธา", "วิศวกรรมไฟฟ้า", "วิศวกรรมเครื่องกล", "วิศวกรรมอุตสาหการ"]
+            },
+            {
+                id: "sci",
+                name: "คณะวิทยาศาสตร์ (Science)",
+                icon: "fa-flask-vial",
+                majors: ["คณิตศาสตร์", "ฟิสิกส์", "เคมี", "ชีววิทยา"]
+            },
+            {
+                id: "med",
+                name: "คณะแพทยศาสตร์ / พยาบาลศาสตร์ / เภสัชศาสตร์",
+                icon: "fa-notes-medical",
+                majors: ["แพทยศาสตร์", "พยาบาลศาสตร์", "เภสัชศาสตร์", "สาธารณสุขศาสตร์"]
+            },
+            {
+                id: "bca",
+                name: "คณะบริหารธุรกิจและนิเทศศาสตร์ (BCA)",
+                icon: "fa-chart-line",
+                majors: ["การตลาดดิจิทัล", "การบัญชี", "นิเทศศาสตร์"]
+            },
+            {
+                id: "law",
+                name: "คณะนิติศาสตร์และรัฐศาสตร์",
+                icon: "fa-scale-balanced",
+                majors: ["นิติศาสตร์", "รัฐศาสตร์"]
+            }
         ];
 
-        function render(data) {
-            document.getElementById('sheetGrid').innerHTML = data.map(s => `
+        // Study Notes Data with Teacher Verification Status
+        const sheets = [
+            { 
+                id: 1, 
+                title: "Data Structures & Algorithms", 
+                facultyId: "ict", 
+                facultyName: "ICT", 
+                major: "วิทยาการคอมพิวเตอร์", 
+                icon: "fa-code", 
+                gradient: "linear-gradient(135deg, #06b6d4, #3b82f6)", 
+                likes: 200, 
+                author: "Thirawat (นิสิต CS ปี 3)",
+                teacherVerified: true,
+                verifiedBy: "ผศ.ดร.วิชาญ (อาจารย์ประจำวิชา)"
+            },
+            { 
+                id: 2, 
+                title: "Software Engineering Principles", 
+                facultyId: "ict", 
+                facultyName: "ICT", 
+                major: "วิศวกรรมซอฟต์แวร์", 
+                icon: "fa-cubes", 
+                gradient: "linear-gradient(135deg, #6366f1, #8b5cf6)", 
+                likes: 185, 
+                author: "Somchai (นิสิต SE ปี 3)",
+                teacherVerified: true,
+                verifiedBy: "ดร.ณัฐพล (อาจารย์ประจำวิชา)"
+            },
+            { 
+                id: 3, 
+                title: "Calculus 1 สำหรับนิสิตวิทยาศาสตร์", 
+                facultyId: "sci", 
+                facultyName: "วิทยาศาสตร์", 
+                major: "คณิตศาสตร์", 
+                icon: "fa-calculator", 
+                gradient: "linear-gradient(135deg, #3b82f6, #1d4ed8)", 
+                likes: 120, 
+                author: "Kanya (นิสิต MATH ปี 2)",
+                teacherVerified: false,
+                verifiedBy: "รอการตรวจสอบจากอาจารย์"
+            },
+            { 
+                id: 4, 
+                title: "General Physics 1 สรุปสูตรไฟนอล", 
+                facultyId: "sci", 
+                facultyName: "วิทยาศาสตร์", 
+                major: "ฟิสิกส์", 
+                icon: "fa-atom", 
+                gradient: "linear-gradient(135deg, #ec4899, #8b5cf6)", 
+                likes: 95, 
+                author: "Anan (นิสิต PHYS ปี 1)",
+                teacherVerified: true,
+                verifiedBy: "ผศ.สมศักดิ์ (อาจารย์ประจำวิชา)"
+            },
+            { 
+                id: 5, 
+                title: "Engineering Mechanics (Statics)", 
+                facultyId: "engr", 
+                facultyName: "วิศวกรรมศาสตร์", 
+                major: "วิศวกรรมเครื่องกล", 
+                icon: "fa-wrench", 
+                gradient: "linear-gradient(135deg, #f59e0b, #d97706)", 
+                likes: 140, 
+                author: "Nattawut (นิสิต MECH ปี 2)",
+                teacherVerified: false,
+                verifiedBy: "รอการตรวจสอบจากอาจารย์"
+            },
+            { 
+                id: 6, 
+                title: "Organic Chemistry 1 สรุปปฏิกิริยา", 
+                facultyId: "sci", 
+                facultyName: "วิทยาศาสตร์", 
+                major: "เคมี", 
+                icon: "fa-flask", 
+                gradient: "linear-gradient(135deg, #10b981, #059669)", 
+                likes: 110, 
+                author: "Ploy (นิสิต CHEM ปี 2)",
+                teacherVerified: true,
+                verifiedBy: "รศ.ดร.พรพิมล (อาจารย์ประจำวิชา)"
+            },
+            { 
+                id: 7, 
+                title: "Gross Anatomy ระบบกล้ามเนื้อ", 
+                facultyId: "med", 
+                facultyName: "แพทยศาสตร์", 
+                major: "แพทยศาสตร์", 
+                icon: "fa-heart-pulse", 
+                gradient: "linear-gradient(135deg, #ef4444, #b91c1c)", 
+                likes: 230, 
+                author: "Dr. Sompong (นิสิต MED ปี 2)",
+                teacherVerified: true,
+                verifiedBy: "นพ.อนันต์ (อาจารย์ประจำวิชา)"
+            },
+            { 
+                id: 8, 
+                title: "Digital Marketing & Social Media", 
+                facultyId: "bca", 
+                facultyName: "BCA", 
+                major: "การตลาดดิจิทัล", 
+                icon: "fa-bullhorn", 
+                gradient: "linear-gradient(135deg, #8b5cf6, #d946ef)", 
+                likes: 75, 
+                author: "Nisa (นิสิต BCA ปี 3)",
+                teacherVerified: false,
+                verifiedBy: "รอการตรวจสอบจากอาจารย์"
+            },
+            { 
+                id: 9, 
+                title: "ประมวลกฎหมายอาญา ภาคสารบัญญัติ", 
+                facultyId: "law", 
+                facultyName: "นิติศาสตร์", 
+                major: "นิติศาสตร์", 
+                icon: "fa-gavel", 
+                gradient: "linear-gradient(135deg, #64748b, #334155)", 
+                likes: 160, 
+                author: "Worawat (นิสิต LAW ปี 4)",
+                teacherVerified: true,
+                verifiedBy: "อ.กฤษฎา (อาจารย์ประจำวิชา)"
+            }
+        ];
+
+        let selectedFacultyId = 'all';
+        let selectedMajor = 'all';
+        let searchQuery = '';
+
+        // Render Faculty Cards
+        function renderFaculties() {
+            const container = document.getElementById('facultyGrid');
+            container.innerHTML = faculties.map(f => {
+                const isSelected = selectedFacultyId === f.id;
+                const noteCountInFaculty = sheets.filter(s => s.facultyId === f.id).length;
+                return `
+                    <div class="faculty-card ${isSelected ? 'active' : ''}" onclick="selectFaculty('${f.id}')">
+                        <div class="faculty-top">
+                            <div class="faculty-icon-box">
+                                <i class="fa-solid ${f.icon}"></i>
+                            </div>
+                            <div class="faculty-info">
+                                <h3>${f.name}</h3>
+                                <p><i class="fa-solid fa-file-lines"></i> ${noteCountInFaculty} ชีทสรุปในระบบ</p>
+                            </div>
+                        </div>
+                        <div class="majors-list-preview">
+                            ${f.majors.map(m => `<span class="major-badge-mini">${m}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Major Pills for Sub-filtering
+        function renderMajorPills() {
+            const pillsContainer = document.getElementById('majorPills');
+            const facultyLabel = document.getElementById('selectedFacultyName');
+
+            let availableMajors = [];
+            if (selectedFacultyId === 'all') {
+                facultyLabel.innerText = "ทั้งหมดทุกคณะ";
+                faculties.forEach(f => availableMajors.push(...f.majors));
+                availableMajors = Array.from(new Set(availableMajors));
+            } else {
+                const fac = faculties.find(f => f.id === selectedFacultyId);
+                facultyLabel.innerText = fac ? fac.name : "ทั้งหมด";
+                availableMajors = fac ? fac.majors : [];
+            }
+
+            pillsContainer.innerHTML = `
+                <button class="major-pill ${selectedMajor === 'all' ? 'active' : ''}" onclick="selectMajor('all')">
+                    สาขาทั้งหมดในคลัง (${getFilteredNotesCount('all')})
+                </button>
+                ${availableMajors.map(m => `
+                    <button class="major-pill ${selectedMajor === m ? 'active' : ''}" onclick="selectMajor('${m}')">
+                        ${m} (${getFilteredNotesCount(m)})
+                    </button>
+                `).join('')}
+            `;
+        }
+
+        function getFilteredNotesCount(majorName) {
+            return sheets.filter(s => {
+                const matchesFaculty = selectedFacultyId === 'all' || s.facultyId === selectedFacultyId;
+                const matchesMajor = majorName === 'all' || s.major === majorName;
+                return matchesFaculty && matchesMajor;
+            }).length;
+        }
+
+        // Render Note Cards Grid
+        function renderNotes() {
+            const gridContainer = document.getElementById('sheetGrid');
+            const noteCountEl = document.getElementById('noteCount');
+
+            const filtered = sheets.filter(s => {
+                const matchesFaculty = selectedFacultyId === 'all' || s.facultyId === selectedFacultyId;
+                const matchesMajor = selectedMajor === 'all' || s.major === selectedMajor;
+                const matchesSearch = !searchQuery || 
+                    s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    s.facultyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    s.major.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    s.author.toLowerCase().includes(searchQuery.toLowerCase());
+
+                return matchesFaculty && matchesMajor && matchesSearch;
+            });
+
+            noteCountEl.innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                gridContainer.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 4rem 1rem; background: var(--panel-bg-glass); border-radius: var(--radius-lg); border: 1px dashed var(--panel-border);">
+                        <i class="fa-solid fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; color: var(--text-muted);"></i>
+                        <p style="font-size: 1.1rem;">ไม่พบชีทสรุปในคณะ/สาขาที่คุณเลือก</p>
+                        <button class="btn-secondary" style="margin-top: 1rem;" onclick="resetFilters()">ดูชีทสรุปทั้งหมด</button>
+                    </div>
+                `;
+                return;
+            }
+
+            gridContainer.innerHTML = filtered.map(s => `
                 <article class="card">
-                    <div class="card-img">รูปภาพชีท ${s.title}</div>
-                    <h3>${s.title}</h3>
-                    <button class="btn" onclick="like(${s.id})">❤️ <span id="like-${s.id}">${s.likes}</span> ถูกใจ</button>
-                    <button class="btn" onclick="openModal()">💬 แสดงความคิดเห็น</button>
+                    <div class="card-img-wrapper" style="background: ${s.gradient}">
+                        <span class="card-badge">${s.facultyName}</span>
+                        <span class="card-major-badge">${s.major}</span>
+                        <i class="fa-solid ${s.icon} card-icon"></i>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${s.title}</h3>
+                        <p class="card-author"><i class="fa-solid fa-user-graduate"></i> โดย ${s.author}</p>
+                        
+                        <!-- Teacher Verification Status -->
+                        ${s.teacherVerified ? `
+                            <div class="teacher-verify-status verified">
+                                <i class="fa-solid fa-circle-check"></i> ตรวจสอบแล้ว: ${s.verifiedBy}
+                            </div>
+                        ` : `
+                            <div class="teacher-verify-status pending">
+                                <i class="fa-regular fa-clock"></i> ${s.verifiedBy}
+                            </div>
+                        `}
+
+                        <div class="card-actions">
+                            <div class="stat-likes-display" title="จำนวนถูกใจ">
+                                <i class="fa-solid fa-heart"></i> <span>${s.likes} ถูกใจ</span>
+                            </div>
+                        </div>
+                    </div>
                 </article>
             `).join('');
         }
 
-        function filterSheets(val) {
-            const filtered = sheets.filter(s => s.title.toLowerCase().includes(val.toLowerCase()));
-            render(filtered);
+        // Selection Event Handlers
+        function selectFaculty(facultyId) {
+            if (selectedFacultyId === facultyId) {
+                selectedFacultyId = 'all';
+            } else {
+                selectedFacultyId = facultyId;
+            }
+            selectedMajor = 'all';
+            renderFaculties();
+            renderMajorPills();
+            renderNotes();
         }
 
-        function like(id) {
-            const sheet = sheets.find(s => s.id === id);
-            sheet.likes += 1;
-            document.getElementById(`like-${id}`).innerText = sheet.likes;
+        function selectMajor(majorName) {
+            selectedMajor = majorName;
+            renderMajorPills();
+            renderNotes();
         }
 
-        function openModal() { document.getElementById('commentModal').style.display = 'block'; }
-        function closeModal() { document.getElementById('commentModal').style.display = 'none'; }
+        function handleSearch(val) {
+            searchQuery = val.trim();
+            renderNotes();
+        }
 
-        render(sheets);
+        function resetFilters() {
+            selectedFacultyId = 'all';
+            selectedMajor = 'all';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            renderFaculties();
+            renderMajorPills();
+            renderNotes();
+        }
+
+        // Initial Render
+        renderFaculties();
+        renderMajorPills();
+        renderNotes();
     </script>
 </body>
-
 </html>
-
-
