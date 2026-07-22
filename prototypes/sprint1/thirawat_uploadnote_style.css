@@ -1,0 +1,252 @@
+@import url('theme.css');
+
+/* Upload Note Specific Styling */
+.upload-main-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem 1.5rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumb a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb .divider {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.breadcrumb .current {
+  color: var(--text-secondary);
+}
+
+.page-title-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-title-section h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.upload-form {
+  background: var(--panel-bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 2.25rem;
+}
+
+.upload-container {
+  margin-bottom: 2rem;
+}
+
+.upload-dropzone {
+  border: 2px dashed var(--accent-color);
+  border-radius: var(--radius-lg);
+  padding: 3rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.8rem;
+  background: var(--accent-light);
+  transition: all 0.2s ease-in-out;
+}
+
+.upload-dropzone:hover {
+  background: rgba(99, 102, 241, 0.22);
+  border-color: #8b5cf6;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.upload-main-icon {
+  font-size: 3.2rem;
+  color: var(--accent-color);
+  filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.4));
+}
+
+.dropzone-text {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.dropzone-text .highlight {
+  color: var(--accent-color);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.dropzone-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.form-details-section {
+  margin-bottom: 2rem;
+}
+
+.section-subtitle {
+  font-size: 1.15rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 0.75rem;
+}
+
+.section-subtitle i {
+  color: var(--accent-color);
+}
+
+.required-label::after {
+  content: " *";
+  color: var(--danger-color);
+}
+
+.form-control:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: rgba(15, 23, 42, 0.3);
+  border-style: dashed;
+}
+
+.form-control option {
+  background-color: var(--panel-bg);
+  color: var(--text-primary);
+  padding: 0.5rem;
+}
+
+/* Tag Components */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.4rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--accent-light);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.tag-delete {
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.15s;
+}
+
+.tag-delete:hover {
+  color: var(--danger-color);
+}
+
+.btn-add-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed var(--accent-color);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  color: var(--accent-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-add-tag:hover {
+  background: var(--accent-color);
+  color: #ffffff;
+}
+
+/* Privacy Radio Cards */
+.radio-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.radio-label:hover {
+  border-color: var(--panel-border-hover);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.radio-label input[type="radio"] {
+  margin-top: 0.2rem;
+  accent-color: var(--accent-color);
+  transform: scale(1.1);
+}
+
+.radio-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.radio-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.form-footer {
+  border-top: 1px solid var(--panel-border);
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}

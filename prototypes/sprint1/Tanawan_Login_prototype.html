@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ | NoteShare (นิสิตมหาวิทยาลัยพะเยา)</title>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="Tanawan_Login_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-body">
+    <div class="background-glow glow-1"></div>
+    <div class="background-glow glow-2"></div>
+
+    <div class="login-container">
+        <div class="brand-header">
+            <div class="logo-badge">
+                <i class="fa-solid fa-book-open"></i>
+            </div>
+            <h1 class="brand-title">NoteShare</h1>
+            <p class="brand-subtitle">ระบบคลังชีทสรุปสำหรับนิสิตมหาวิทยาลัยพะเยา</p>
+        </div>
+
+        <div class="login-card">
+            <!-- UP Student Identity Verification Feature Banner -->
+            <div class="up-verify-banner">
+                <div class="up-badge-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="up-badge-text">
+                    <span class="up-badge-title">ยืนยันตัวตนสิทธิ์นิสิต ม.พะเยา</span>
+                    <span class="up-badge-desc">เฉพาะอีเมลสถาบัน <code class="domain-tag">@up.ac.th</code> หรือ <code class="domain-tag">@g.up.ac.th</code> เท่านั้น</span>
+                </div>
+            </div>
+
+            <h2>เข้าสู่ระบบระบบนิสิต</h2>
+
+            <!-- Quick UP SSO Login Button -->
+            <button type="button" id="upSsoBtn" class="btn-up-sso">
+                <i class="fa-solid fa-shield-halved"></i> เข้าสู่ระบบด้วย UP Mail (SSO)
+            </button>
+
+            <div class="divider-text">
+                <span>หรือกรอกข้อมูลเข้าสู่ระบบ</span>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">อีเมลนิสิต (UP Student Email)</label>
+                    <div class="input-with-icon">
+                        <i class="fa-regular fa-envelope input-icon"></i>
+                        <input type="email" id="email" class="form-control" placeholder="รหัสนิสิต@up.ac.th" required autocomplete="email">
+                        <span id="emailVerifyStatus" class="verify-indicator"></span>
+                    </div>
+
+                    <!-- Domain Helper Pills -->
+                    <div class="domain-pills">
+                        <span class="domain-pill-label">ต่อท้ายอีเมลเร็ว:</span>
+                        <button type="button" class="domain-pill" onclick="appendDomain('@up.ac.th')">@up.ac.th</button>
+                        <button type="button" class="domain-pill" onclick="appendDomain('@g.up.ac.th')">@g.up.ac.th</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="password">รหัสผ่าน (Password)</label>
+                        <a href="#forgot" class="forgot-link">ลืมรหัสผ่าน?</a>
+                    </div>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary submit-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> ยืนยันตัวตนและเข้าสู่ระบบ
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>ยังไม่มีบัญชีนิสิต? <a href="#">ลงทะเบียนนิสิตใหม่</a></p>
+                <div class="prototype-links">
+                    <span class="quick-nav-label">ทางลัดสลับหน้า Prototype:</span>
+                    <div class="nav-pills">
+                        <a href="nonthakorn_dashboard_user_prototype.html" class="pill"><i class="fa-solid fa-user"></i> User Dashboard</a>
+                        <a href="thirawat_uploadnote_prototype.html" class="pill"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Note</a>
+                        <a href="atiwat_admin_dashboard_prototype.html" class="pill"><i class="fa-solid fa-user-shield"></i> Admin Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="Tanawan_Login.js"></script>
+</body>
+</html>
