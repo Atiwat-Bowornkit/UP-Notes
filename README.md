@@ -2,7 +2,7 @@
   <img src="./docs/assets/up_notes_logo.jpg" alt="UP-Notes Logo" width="200" style="border-radius: 20%;" />
 </p>
 
-<h1 align="center">📚 UP-Notes (UP-Summary)</h1>
+<h1 align="center">📚 UP-Notes (TEAM:CS-Sheet-67)</h1>
 
 <p align="center">
   <strong>คลังปันสรุปบทเรียนและโน้ตย่อสำหรับนิสิต มหาวิทยาลัยพะเยา</strong>
@@ -53,6 +53,18 @@
 | **Database & ORM** | PostgreSQL & Prisma ORM | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat-square&logo=postgresql&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white) |
 | **Auth & Storage** | Supabase (Auth & Object Storage) | ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white) |
 | **Containerization**| Docker & Docker Compose | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) |
+
+---
+
+## ภาพร่าง (Wireframe)
+
+User Login:https://excalidraw.com/?fbclid=IwY2xjawS6iQVleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5EL9YQ3fTCGxdeNSQsH6eJdumUYHwnJbe8YB3ak_VsjL5xGvaU_EThAjk_Jw_aem_D3xBH3eZyJyHjmW9qspw_w#json=gMRNI5_PVeTxma-WvyrWg,Ulb6MG328SlBWJF2ulT-0g
+User Dashboard:https://excalidraw.com/#json=T6C7Ppcm2HmcHCRq6Hl0_,RTbzfau-9iAXoNA52Mlalw
+Notes Upload:https://excalidraw.com/#json=xd7RRHR56sFW2iNtNQXRo,hqFNWx163J_oMUZ2iGwlFg
+Admin Dashboard:https://excalidraw.com/#json=XdPyCNGxwbz37hamCW4fO,wf-8IQA2v-Vs0iR_jclvOw
+
+
+---
 
 ---
 
