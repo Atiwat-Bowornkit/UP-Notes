@@ -30,15 +30,19 @@
 * **เครื่องมือ GenAI ที่ใช้:** Antigravity AI / GitHub Copilot
 * **สัดส่วนการเขียนโค้ด:** ทีมงานเขียนโค้ด ปรับแก้ UX/UI สไตล์ CSS และควบคุมสถาปัตยกรรมอีเวนต์ด้วยตนเอง **≥ 60%**, ใช้ AI ช่วยสร้าง HTML/CSS Layout Skeleton **~40%**
 
-#### ตัวอย่าง Prompts ที่ใช้ตามหลัก Five S’s (SCG Ch.4):
-1. **Prompt 1 (HTML/CSS Layout):**
-   > *"สร้างโค้ด HTML5 Semantic และ Vanilla CSS สำหรับหน้าพอร์ทัลคลังสรุปบทเรียน 'UP-Notes' ที่มี: (1) Navigation Bar โลโก้และเมนูหลัก, (2) Hero Banner สีม่วงพร้อมช่องค้นหาตรงกลาง, (3) Grid แสดงการ์ดชีทสรุป 6 รายการ พร้อมปุ่มพรีวิวและปุ่มกดไลก์หัวใจ โดยใช้ Plain CSS ไม่ต้องใช้ Framework ใดๆ"*
-2. **Prompt 2 (JS Modal & State Management):**
-   > *"เขียน Vanilla JavaScript สำหรับจัดการ Event บนหน้าพอร์ทัล: (1) ฟังก์ชันค้นหาและกรองการ์ดสรุปตามรหัสวิชา (เช่น 225311), (2) ฟังก์ชันกดปุ่มหัวใจเพื่อเพิ่ม/ลดจำนวนไลก์พร้อมสลับคลาส CSS `.liked`, (3) ฟังก์ชันเปิด-ปิด Modal ตัวอย่างพรีวิวเอกสาร และแสดง Toast Notification เมื่อทำรายการ"*
+### Lab 5: Architectural Artifacts (Tech Stack + C4 Diagrams + ADR)
+* **เครื่องมือ GenAI ที่ใช้:** Antigravity AI / Claude
+* **สัดส่วนผลงาน:** ทีมงานวิเคราะห์ Trade-offs สรุปบริบทข้อจำกัด และตัดสินใจเลือกสถาปัตยกรรมด้วยตนเอง **100%**, ใช้ AI ช่วยตรวจสอบไวยากรณ์ Mermaid Diagram Syntax (`C4Context` / `C4Container`) และ Challenge ผลกระทบใน ADR 0001
+
+#### ตัวอย่าง Prompts ที่ใช้สำหรับสถาปัตยกรรม (Lab 5):
+1. **Prompt 1 (Mermaid C4 Diagram Syntax):**
+   > *"ช่วยสร้าง Mermaid Code Syntax สำหรับ C4 Container Diagram (Level 2) ของแอปพลิเคชัน UP-Notes โดยมี Web App (Next.js 14), REST API (Route Handlers), Database (PostgreSQL), Storage (Supabase Storage) และ External Email System พร้อมระบุโปรโตคอลการสื่อสาร (HTTPS, SQL) ชัดเจน"*
+2. **Prompt 2 (ADR Challenge & Review):**
+   > *"ช่วยประเมินข้อดีข้อเสีย (Consequences) และทางเลือก (Alternatives) ของ ADR 0001 หากทีมขนาด 4 คนเลือกใช้สถาปัตยกรรมแบบ Modular Monolith แทน Microservices สำหรับเว็บแอปรวบรวมชีทสรุปบทเรียน"*
 
 ---
 
 ## 🛡️ การปฏิบัติตามนโยบายความปลอดภัยและจริยธรรม
-- ✅ **ไม่มีการให้ AI ตัดสิน Theme/Persona:** การตัดสินใจเลือก Theme และ Persona มาจากข้อตกลงของทีม 100%
+- ✅ **ไม่มีการให้ AI ตัดสิน Tech Stack/Architecture แทนทีม:** การตัดสินใจเลือก Monolith vs Microservices และ Tech Stack มาจากข้อตกลงและบริบทของทีม 100%
 - ✅ **ไม่มีการนำข้อมูลส่วนบุคคลของผู้อื่นเข้าสู่ AI:** ไม่มีการอัปโหลดรหัสนิสิต ข้อมูลลับ หรือข้อมูลส่วนตัวของเพื่อนเข้าสู่ AI Chat
-- ✅ **ไม่มีการ Copy-paste โค้ดทั้งหมดจาก AI:** โค้ด Prototype ทุกบรรทัดถูกทบทวน ปรับแต่ง และทดสอบโดยทีมงานด้วยตนเอง
+- ✅ **ไม่มีการ Copy-paste โค้ดทั้งหมดจาก AI:** แผนภาพ C4 และเอกสาร ADR ทุกฉบับถูกทบทวน ปรับแต่ง และตรวจสอบโดยทีมงานด้วยตนเอง
