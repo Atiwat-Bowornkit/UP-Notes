@@ -20,9 +20,15 @@
 | **นาย อธิวัฒน์ บวรกิจ** | Antigravity AI | ช่วย Brainstorm หัวข้อฟีเจอร์สำหรับ MoSCoW priorities และช่วยเรียบเรียงร่าง Acceptance Criteria ของ User Stories | ทีมตัดสินใจเลือก Theme/Persona และตรวจสอบเงื่อนไขทุกข้อด้วยตนเอง |
 | **สมาชิกทีม CS-Sheet-67** | Antigravity AI | ช่วยร่างโครงสร้างเอกสาร `docs/project-proposal.md` และ `docs/definition-of-done.md` ให้สอดคล้องกับมาตรฐาน Scrum | ตรวจทาน ปรับปรุงเนื้อหาให้ตรงกับบริบทจริงของทีมและผ่าน Code Review ก่อน Merge |
 
+### Lab 3: Requirements Documents (Personas, Scenarios, User Stories, NFR)
+| สมาชิกทีม | เครื่องมือ AI ที่ใช้ | วัตถุประสงค์การใช้งาน | การเปิดเผยและตรวจสอบ |
+| :--- | :--- | :--- | :--- |
+| **นาย อธิวัฒน์ บวรกิจ** | Antigravity AI | ช่วยร่างโครงเรื่อง Scenarios (Narrative) และจัดรูปแบบ Given/When/Then ของ Acceptance Criteria | ทีมตรวจสอบตัวอย่างสถานการณ์จริงใน มพ. และปรับแก้เงื่อนไข AC ให้ตรงกับโดเมน |
+| **สมาชิกทีม CS-Sheet-67** | Antigravity AI | ช่วยแปลคำอธิบายข้อกำหนด NFR ทั่วไปให้กลายเป็นดัชนีวัดผลเชิงตัวเลข (Measurable Metrics) | ตรวจทานดัชนีวัดผลและปรับค่าเป้าหมายให้สมจริงตามขอบเขตโปรเจกต์ |
+
 ---
 
 ## 🛡️ การปฏิบัติตามนโยบายความปลอดภัยและจริยธรรม
 - ✅ **ไม่มีการให้ AI ตัดสิน Theme/Persona:** การตัดสินใจเลือก Theme และ Persona มาจากข้อตกลงของทีม 100%
 - ✅ **ไม่มีการนำข้อมูลส่วนบุคคลของผู้อื่นเข้าสู่ AI:** ไม่มีการอัปโหลดรหัสนิสิต ข้อมูลลับ หรือข้อมูลส่วนตัวของเพื่อนเข้าสู่ AI Chat
-- ✅ **ไม่มีการ Copy-paste ผลงานผู้อื่น:** เอกสาร Proposal, DoD และ User Stories ถูกเขียนขึ้นสอดคล้องกับระบบ UP-Notes
+- ✅ **ไม่มีการ Copy-paste ผลงานผู้อื่น:** เอกสาร Proposal, DoD, Personas, Scenarios, User Stories และ NFR ถูกเขียนขึ้นสอดคล้องกับระบบ UP-Notes
