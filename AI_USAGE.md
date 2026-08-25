@@ -38,15 +38,21 @@
 * **เครื่องมือ GenAI ที่ใช้:** Antigravity AI / GitHub Copilot
 * **สัดส่วนผลงาน:** ทีมงานกำหนดนโยบาย Security (Non-root user), เลือก Base Image (`node:20-alpine`) และทดสอบการรัน Container ด้วยตนเอง **≥ 70%**, ใช้ AI ช่วยร่างเค้าโครง Multi-stage Build **~30%**
 
-#### ตัวอย่าง Prompts ที่ใช้สำหรับ Docker (Lab 6):
-1. **Prompt 1 (Multi-stage Dockerfile Generation):**
-   > *"เขียน Multi-stage Dockerfile สำหรับแอปพลิเคชัน Next.js/Node.js ที่ใช้ Base Image `node:20-alpine` โดย Stage 1 ทำการสกัดเฉพาะ Production Dependencies และ Stage 2 รันแอปพลิเคชันด้วย Non-root User (`USER nextjs`) พร้อมกำหนด EXPOSE 3000 และ HEALTHCHECK"*
-2. **Prompt 2 (Dockerignore Best Practices):**
-   > *"แนะนำรายการในไฟล์ `.dockerignore` สำหรับโปรเจกต์ Node.js/Next.js ที่มีไฟล์เอกสาร Markdown และโฟลเดอร์ใบงาน เพื่อให้แน่ใจว่าไฟล์ความลับและไฟล์เอกสารจะไม่ถูก COPY เข้าไปใน Docker Image"*
+### Lab 7: Refactoring Commit & Milestone 1 Checkpoint
+* **เครื่องมือ GenAI ที่ใช้:** Antigravity AI / GitHub Copilot
+* **สัดส่วนการเขียนโค้ด:** ทีมงานวิเคราะห์ Code Smells เขียนย้ายโค้ด Refactor และเขียน Unit Test ใน `tests/notes.test.js` ด้วยตนเอง **≥ 75%**, ใช้ AI ช่วยสแกนหาจุด Duplicated Logic **~25%**
+
+#### ตัวอย่าง Prompts ที่ใช้สำหรับ Refactoring (Lab 7):
+1. **Prompt 1 (List Code Smells - SCG Ch.7 Workflow):**
+   > *"วิเคราะห์ซอร์สโค้ดในโปรเจกต์ UP-Notes แล้วช่วยระบุตำแหน่ง Code Smell 2 จุดหลักที่มีความซ้ำซ้อนของลอจิก (DRY Violations) และการใช้ Magic Numbers พร้อมเสนอแนวทางแก้ไข"*
+2. **Prompt 2 (Propose Refactor Strategy):**
+   > *"เสนอแนวทางการสกัดฟังก์ชันค้นหากรองโน้ตย่อและตรวจสอบขนาดไฟล์อัปโหลดออกมาเป็น Pure Utility Functions ในไฟล์ `src/utils/notesHelper.js` โดยไม่มีการดัดแปลง Behavior เดิม"*
+3. **Prompt 3 (Unit Test Cases Suggestion):**
+   > *"ช่วยแนะนำโครงสร้าง Unit Test Cases สำหรับทดสอบฟังก์ชัน `validateUploadFile` และ `filterNotesBySearch` ด้วย Node.js Native Test Runner (`node:test`)"*
 
 ---
 
 ## 🛡️ การปฏิบัติตามนโยบายความปลอดภัยและจริยธรรม
-- ✅ **ไม่มีการนำ Secret หรือไฟล์ `.env` เข้าไปใน Image:** ปฏิบัติตามหลักความปลอดภัยสกัดกั้นไฟล์ความลับด้วย `.dockerignore` 100%
+- ✅ **ไม่มีการแก้ Test เพื่อให้ผ่าน (No Test Tampering):** เขียน Unit Test เพื่อตรวจสอบพฤติกรรมจริงของฟังก์ชัน 100%
 - ✅ **ไม่มีการนำข้อมูลส่วนบุคคลของผู้อื่นเข้าสู่ AI:** ไม่มีการอัปโหลดรหัสนิสิต ข้อมูลลับ หรือข้อมูลส่วนตัวของเพื่อนเข้าสู่ AI Chat
-- ✅ **ไม่มีการ Copy-paste โค้ดทั้งหมดจาก AI:** ไฟล์ Dockerfile, `.dockerignore` และคู่มือ Docker README ถูกทบทวน ปรับแต่ง และทดสอบโดยทีมงานด้วยตนเอง
+- ✅ **ไม่มีการ Copy-paste โค้ดทั้งหมดจาก AI:** โค้ด Refactor และ Unit Test ทุกบรรทัดถูกทบทวน ปรับแต่ง และทดสอบโดยทีมงานด้วยตนเอง
