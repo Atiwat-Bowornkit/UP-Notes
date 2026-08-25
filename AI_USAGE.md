@@ -34,15 +34,19 @@
 * **เครื่องมือ GenAI ที่ใช้:** Antigravity AI / Claude
 * **สัดส่วนผลงาน:** ทีมงานวิเคราะห์ Trade-offs สรุปบริบทข้อจำกัด และตัดสินใจเลือกสถาปัตยกรรมด้วยตนเอง **100%**, ใช้ AI ช่วยตรวจสอบไวยากรณ์ Mermaid Diagram Syntax (`C4Context` / `C4Container`) และ Challenge ผลกระทบใน ADR 0001
 
-#### ตัวอย่าง Prompts ที่ใช้สำหรับสถาปัตยกรรม (Lab 5):
-1. **Prompt 1 (Mermaid C4 Diagram Syntax):**
-   > *"ช่วยสร้าง Mermaid Code Syntax สำหรับ C4 Container Diagram (Level 2) ของแอปพลิเคชัน UP-Notes โดยมี Web App (Next.js 14), REST API (Route Handlers), Database (PostgreSQL), Storage (Supabase Storage) และ External Email System พร้อมระบุโปรโตคอลการสื่อสาร (HTTPS, SQL) ชัดเจน"*
-2. **Prompt 2 (ADR Challenge & Review):**
-   > *"ช่วยประเมินข้อดีข้อเสีย (Consequences) และทางเลือก (Alternatives) ของ ADR 0001 หากทีมขนาด 4 คนเลือกใช้สถาปัตยกรรมแบบ Modular Monolith แทน Microservices สำหรับเว็บแอปรวบรวมชีทสรุปบทเรียน"*
+### Lab 6: First Container (Dockerfile + Build + Push)
+* **เครื่องมือ GenAI ที่ใช้:** Antigravity AI / GitHub Copilot
+* **สัดส่วนผลงาน:** ทีมงานกำหนดนโยบาย Security (Non-root user), เลือก Base Image (`node:20-alpine`) และทดสอบการรัน Container ด้วยตนเอง **≥ 70%**, ใช้ AI ช่วยร่างเค้าโครง Multi-stage Build **~30%**
+
+#### ตัวอย่าง Prompts ที่ใช้สำหรับ Docker (Lab 6):
+1. **Prompt 1 (Multi-stage Dockerfile Generation):**
+   > *"เขียน Multi-stage Dockerfile สำหรับแอปพลิเคชัน Next.js/Node.js ที่ใช้ Base Image `node:20-alpine` โดย Stage 1 ทำการสกัดเฉพาะ Production Dependencies และ Stage 2 รันแอปพลิเคชันด้วย Non-root User (`USER nextjs`) พร้อมกำหนด EXPOSE 3000 และ HEALTHCHECK"*
+2. **Prompt 2 (Dockerignore Best Practices):**
+   > *"แนะนำรายการในไฟล์ `.dockerignore` สำหรับโปรเจกต์ Node.js/Next.js ที่มีไฟล์เอกสาร Markdown และโฟลเดอร์ใบงาน เพื่อให้แน่ใจว่าไฟล์ความลับและไฟล์เอกสารจะไม่ถูก COPY เข้าไปใน Docker Image"*
 
 ---
 
 ## 🛡️ การปฏิบัติตามนโยบายความปลอดภัยและจริยธรรม
-- ✅ **ไม่มีการให้ AI ตัดสิน Tech Stack/Architecture แทนทีม:** การตัดสินใจเลือก Monolith vs Microservices และ Tech Stack มาจากข้อตกลงและบริบทของทีม 100%
+- ✅ **ไม่มีการนำ Secret หรือไฟล์ `.env` เข้าไปใน Image:** ปฏิบัติตามหลักความปลอดภัยสกัดกั้นไฟล์ความลับด้วย `.dockerignore` 100%
 - ✅ **ไม่มีการนำข้อมูลส่วนบุคคลของผู้อื่นเข้าสู่ AI:** ไม่มีการอัปโหลดรหัสนิสิต ข้อมูลลับ หรือข้อมูลส่วนตัวของเพื่อนเข้าสู่ AI Chat
-- ✅ **ไม่มีการ Copy-paste โค้ดทั้งหมดจาก AI:** แผนภาพ C4 และเอกสาร ADR ทุกฉบับถูกทบทวน ปรับแต่ง และตรวจสอบโดยทีมงานด้วยตนเอง
+- ✅ **ไม่มีการ Copy-paste โค้ดทั้งหมดจาก AI:** ไฟล์ Dockerfile, `.dockerignore` และคู่มือ Docker README ถูกทบทวน ปรับแต่ง และทดสอบโดยทีมงานด้วยตนเอง
