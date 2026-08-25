@@ -32,13 +32,14 @@
 
 ## 👥 สมาชิกทีมพัฒนา (Team Members)
 ### 🏛️ ทีม CS-Sheet-67
+**Project Theme:** คลังปันสรุปบทเรียนและโน้ตย่อสำหรับนิสิต มหาวิทยาลัยพะเยา (Student Learning Resources & Knowledge Base Platform)
 
-| รายชื่อสมาชิก | บทบาทการทำงาน (GitHub) |
-| :--- | :--- |
-| **นาย อธิวัฒน์ บวรกิจ** | [@Atiwat-Bowornkit](https://github.com/Atiwat-Bowornkit) |
-| **นาย ถิรวัฒน์ วงค์ทอง** | [@Thararee](https://github.com/Thararee) |
-| **นาย นนทกร สิงห์ทอน** | [@nonthakorn2006](https://github.com/nonthakorn2006) |
-| **นางสาว ธนวรรณ สมแก้ว** | [@Tanawan28](https://github.com/Tanawan28) |
+| รายชื่อสมาชิก | บทบาทการทำงาน (GitHub) | เอกสารการสะท้อนคิด (Team Intro) |
+| :--- | :--- | :--- |
+| **นาย อธิวัฒน์ บวรกิจ** | [@Atiwat-Bowornkit](https://github.com/Atiwat-Bowornkit) | [team/Atiwat.md](./team/Atiwat.md) |
+| **นาย ถิรวัฒน์ วงค์ทอง** | [@Thararee](https://github.com/Thararee) | [team/Thirawat.md](./team/Thirawat.md) |
+| **นาย นนทกร สิงห์ทอน** | [@nonthakorn2006](https://github.com/nonthakorn2006) | [team/Nonthakorn.md](./team/Nonthakorn.md) |
+| **นางสาว ธนวรรณ สมแก้ว** | [@Tanawan28](https://github.com/Tanawan28) | [team/Tanawan.md](./team/Tanawan.md) |
 
 ---
 
