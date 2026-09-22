@@ -52,6 +52,27 @@
 
 ---
 
+### Lab 9: Unit Test + TDD + Property-Based Test + GitHub Actions CI
+| สมาชิกทีม | เครื่องมือ AI ที่ใช้ | วัตถุประสงค์การใช้งาน | การเปิดเผยและตรวจสอบ |
+| :--- | :--- | :--- | :--- |
+| **นาย อธิวัฒน์ บวรกิจ** | Claude Code (Claude Sonnet 5) | ร่าง Unit Test (Equivalence Partitioning + Boundary), TDD kata FizzBuzz (Red-Green-Refactor), Property-Based Test (`fast-check`), GitHub Actions workflow, และ Mutation Testing setup (Stryker) ตาม branch `feature/lab9-testing` | ทีมต้อง**อ่านและทำความเข้าใจทุกไฟล์ก่อน merge** — ดู "หมายเหตุสำคัญ" ด้านล่าง |
+
+#### Prompts ที่ใช้ (Lab 9):
+1. **Prompt 1 (Generate test cases):**
+   > *"อ่านไฟล์ Lab9.md แล้ววางแผนการทำงานกับโปรเจคนี้"* — ตามด้วยการยืนยันแผนทีละขั้น (เฟรมเวิร์กทดสอบ node:test + fast-check, ฟังก์ชันเป้าหมาย `validateUploadFile` / `calculatePopularityScore`) แล้วให้ AI เขียน Unit Test, TDD kata, และ Property-Based Test ตามแผนที่ตกลงกัน
+2. **Prompt 2 (Identify gaps — ใช้เครื่องมือแทน prompt ข้อความ):**
+   > รัน `npx stryker run` (Mutation Testing) เพื่อให้เครื่องมือระบุจุดที่ test ยังไม่ครอบคลุม behavior จริง — รอบแรกพบ 19 mutants ที่ "survived" ใน `filterNotesBySearch` (การเทียบ category, การ trim query, การจับคู่ตัวพิมพ์เล็ก-ใหญ่)
+3. **Prompt 3 (Review quality via Saboteur Testing):**
+   > จงใจแก้ `validateUploadFile` จาก `>` เป็น `>=` แล้วรัน test suite เพื่อตรวจสอบว่า test ที่มีอยู่จับ behavior ผิดพลาดได้จริงหรือไม่ (ไม่ใช่แค่ผ่านเฉยๆ) — ผลลัพธ์บันทึกไว้ใน `docs/saboteur-journal.md`
+
+#### ⚠️ หมายเหตุสำคัญ (Important caveat — ต้องอ่านก่อน merge):
+เนื่องจาก Lab 9 นี้ทำร่วมกับ Claude Code ในเซสชันเดียวแบบ end-to-end (จากการวางแผนถึงเขียนไฟล์จริง) โค้ด test **เกือบทั้งหมดถูก AI เขียนร่างแรกให้** ซึ่ง**ยังไม่เป็นไปตามนโยบาย "ห้ามปล่อยให้ test เขียนเอง < 50%"** ของวิชา ก่อนส่งงานจริง ทีมต้อง:
+1. อ่านทุกไฟล์ทดสอบ (`tests/test_unit.test.js`, `tests/test_fizzbuzz.test.js`, `tests/test_property.test.js`, `tests/test_mutation_regression.test.js`) และทำความเข้าใจว่าแต่ละเทสตรวจ behavior อะไร
+2. แก้ไข/เพิ่มเทสด้วยคำพูดและมุมมองของทีมเอง อย่างน้อยให้สัดส่วนงานที่ทีมแก้ไขเองมากกว่า 50%
+3. ยืนยันว่า `reflect.md` (Post-quiz 9) เป็นคำตอบจริงของทีม ไม่ใช่ placeholder ที่ AI ร่างไว้
+
+---
+
 ## 🛡️ การปฏิบัติตามนโยบายความปลอดภัยและจริยธรรม
 - ✅ **ไม่มีการแก้ Test เพื่อให้ผ่าน (No Test Tampering):** เขียน Unit Test เพื่อตรวจสอบพฤติกรรมจริงของฟังก์ชัน 100%
 - ✅ **ไม่มีการนำข้อมูลส่วนบุคคลของผู้อื่นเข้าสู่ AI:** ไม่มีการอัปโหลดรหัสนิสิต ข้อมูลลับ หรือข้อมูลส่วนตัวของเพื่อนเข้าสู่ AI Chat
