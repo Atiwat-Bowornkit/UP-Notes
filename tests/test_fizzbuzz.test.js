@@ -28,3 +28,14 @@ test('fizzbuzz(1) returns "1"', () => {
     // Assert
     assert.strictEqual(result, '1');
 });
+
+test('fizzbuzz(5) returns "Buzz"', () => {
+    // Arrange
+    const input = 5;
+
+    // Act
+    const result = fizzbuzz(input);
+
+    // Assert
+    assert.strictEqual(result, 'Buzz');
+});
