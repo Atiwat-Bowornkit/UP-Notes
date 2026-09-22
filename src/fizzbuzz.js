@@ -8,6 +8,9 @@ function is_multiple(n, factor) {
 }
 
 function fizzbuzz(n) {
+    if (typeof n !== 'number' || !Number.isInteger(n) || n < 1) {
+        throw new Error('Input must be a positive integer');
+    }
     if (is_multiple(n, 15)) return 'FizzBuzz';
     if (is_multiple(n, 3)) return 'Fizz';
     if (is_multiple(n, 5)) return 'Buzz';
