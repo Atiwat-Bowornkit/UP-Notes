@@ -1,10 +1,6 @@
 /**
  * Lab 9 — Step 5B: Mutation Testing (Stryker)
  * Target function: filterNotesBySearch (src/utils/notesHelper.js)
- *
- * These tests were added specifically to kill mutants that survived the
- * first `npx stryker run` (see stryker.conf.json / reports/mutation).
- * Each test below is annotated with the mutant(s) it kills.
  */
 
 const test = require('node:test');
@@ -15,109 +11,91 @@ const notes = [
     { id: 1, code: 'CS101', title: 'Intro to Testing', author: 'Alice', category: 'CS' },
     { id: 2, code: 'CS102', title: 'Advanced Testing', author: 'Bob', category: 'CS' },
     { id: 3, code: 'MA201', title: 'Calculus Notes', author: 'Carol', category: 'MATH' },
-    { id: 4, category: 'CS' } // no title/code/author on purpose
+    { id: 4, category: 'CS' } // ตั้งใจให้ข้อมูลแหว่งเพื่อเทสต์ edge case
 ];
 
-// Kills: MethodExpression (query.trim() removal) at line 44
-test('filterNotesBySearch - kills trim() mutant: surrounding whitespace in query is ignored', () => {
-    // Arrange & Act
+// Kill: query.trim() removal
+test('filterNotesBySearch - ignores surrounding whitespace in query', () => {
     const result = filterNotesBySearch(notes, '  cs101  ', 'all');
-
-    // Assert
     assert.strictEqual(result.length, 1);
     assert.strictEqual(result[0].id, 1);
 });
 
-// Kills: ConditionalExpression "matchesCategory = (true)" and the
-// note.category === category Conditional/EqualityOperator mutants at line 47
-test('filterNotesBySearch - kills matchesCategory mutants: category filter matches via note.category only', () => {
-    // Arrange & Act
+// Kill: category match logic / mutants
+test('filterNotesBySearch - filters by exact category', () => {
     const result = filterNotesBySearch(notes, '', 'MATH');
-
-    // Assert: only the MATH note should match — an always-true or
-    // negated category mutant would include CS notes too (or exclude MATH).
     assert.strictEqual(result.length, 1);
     assert.strictEqual(result[0].id, 3);
 });
 
-// Kills: note.code === category EqualityOperator/ConditionalExpression mutants at line 47
-test('filterNotesBySearch - kills note.code === category mutants: category filter matches via note.code', () => {
-    // Arrange & Act — 'CS102' matches note 2's code but not its category ('CS')
+// Kill: note.code === category mutants
+test('filterNotesBySearch - falls back to matching category via note.code', () => {
     const result = filterNotesBySearch(notes, '', 'CS102');
-
-    // Assert
     assert.strictEqual(result.length, 1);
     assert.strictEqual(result[0].id, 2);
 });
 
-// Kills: ConditionalExpression/LogicalOperator mutants on the "!cleanQuery" term at line 48
-test('filterNotesBySearch - kills !cleanQuery mutants: empty query returns notes with no searchable fields too', () => {
-    // Arrange & Act
+// Kill: !cleanQuery logical mutants
+test('filterNotesBySearch - empty query returns all notes (even missing fields)', () => {
     const result = filterNotesBySearch(notes, '', 'all');
-
-    // Assert: all 4 notes (including the field-less note 4) must be returned
     assert.strictEqual(result.length, 4);
 });
 
-// Kills: title-branch ConditionalExpression (false) and MethodExpression
-// (toLowerCase -> toUpperCase) mutants at lines 48-49
-test('filterNotesBySearch - kills title-match mutants: case-insensitive match via title only', () => {
-    // Arrange & Act — 'testing' only appears in the title field, not code/author
+// Kill: title match & toLowerCase() mutants
+test('filterNotesBySearch - case-insensitive match on title', () => {
     const result = filterNotesBySearch(notes, 'testing', 'all');
-
-    // Assert
     assert.strictEqual(result.length, 2);
     assert.deepStrictEqual(result.map(n => n.id).sort(), [1, 2]);
 });
 
-// Kills: code-branch MethodExpression (toLowerCase -> toUpperCase) mutant at line 50
-test('filterNotesBySearch - kills code-match mutant: case-insensitive match via code only', () => {
-    // Arrange & Act — lowercase query must still match the uppercase code
+// Kill: code match & toLowerCase() mutants
+test('filterNotesBySearch - case-insensitive match on code', () => {
     const result = filterNotesBySearch(notes, 'cs102', 'all');
-
-    // Assert
     assert.strictEqual(result.length, 1);
     assert.strictEqual(result[0].id, 2);
 });
 
-// Kills: author-branch ConditionalExpression (false) and MethodExpression
-// (toLowerCase -> toUpperCase) mutants at line 51
-test('filterNotesBySearch - kills author-match mutants: case-insensitive match via author only', () => {
-    // Arrange & Act
+// Kill: author match & toLowerCase() mutants
+test('filterNotesBySearch - case-insensitive match on author', () => {
     const result = filterNotesBySearch(notes, 'carol', 'all');
-
-    // Assert
     assert.strictEqual(result.length, 1);
     assert.strictEqual(result[0].id, 3);
 });
 
-// Kills: ArrayDeclaration and ConditionalExpression mutants on the
-// "!Array.isArray(notes)" guard at line 42
-test('filterNotesBySearch - kills Array.isArray guard mutants: non-array notes returns empty array', () => {
-    // Arrange & Act
+// Kill: Array.isArray() guard mutants
+test('filterNotesBySearch - returns empty array for invalid input type', () => {
     const result = filterNotesBySearch('not-an-array', 'anything', 'all');
-
-    // Assert
     assert.deepStrictEqual(result, []);
 });
 
-// Kills: StringLiteral default-parameter mutants for query/category at line 41
-test('filterNotesBySearch - kills default parameter mutants: called with only notes arg', () => {
-    // Arrange & Act — no query/category passed, must fall back to '' and 'all'
+// Kill: default parameters mutants (query = '', category = 'all')
+test('filterNotesBySearch - works normally without query and category arguments', () => {
     const result = filterNotesBySearch(notes);
-
-    // Assert: every note matches an empty query under the 'all' category
-    assert.strictEqual(result.length, notes.length);
+    assert.strictEqual(result.length, notes.length, 'Should fallback to default args and return all notes');
 });
 
-// Kills: StringLiteral mutant on ALLOWED_EXTENSIONS.join(', ') -> join('') at line 23
-test('validateUploadFile - kills join(", ") mutant: error message lists extensions comma-separated', () => {
-    // Arrange
-    const file = { name: 'script.exe', size: 1024 };
-
-    // Act
-    const result = validateUploadFile(file);
-
-    // Assert
+// Kill: ALLOWED_EXTENSIONS.join() mutant
+test('validateUploadFile - error message displays comma-separated extensions', () => {
+    const result = validateUploadFile({ name: 'script.exe', size: 1024 });
     assert.ok(result.error.includes(ALLOWED_EXTENSIONS.join(', ')));
+});
+
+// --- เก็บตก Surviving Mutants (เขียนสไตล์รวบรัด) ---
+
+// Kill: query.toLowerCase() removal mutant
+test('filterNotesBySearch - handles mixed-case query correctly', () => {
+    const result = filterNotesBySearch(notes, 'tEsTiNg', 'all');
+    assert.strictEqual(result.length, 2, 'Should find notes regardless of query case');
+});
+
+// Kill: category === 'all' mutation (e.g. changed to category !== 'all')
+test('filterNotesBySearch - returns empty if category does not match anything', () => {
+    const result = filterNotesBySearch(notes, '', 'UNKNOWN_CATEGORY');
+    assert.deepStrictEqual(result, []);
+});
+
+// Kill: size validation mutants (missed in original tests)
+test('validateUploadFile - fails on missing or negative file size', () => {
+    assert.strictEqual(validateUploadFile({ name: 'doc.pdf' }).isValid, false);
+    assert.strictEqual(validateUploadFile({ name: 'doc.pdf', size: -100 }).isValid, false);
 });
