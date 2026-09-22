@@ -3,11 +3,15 @@
  * Implemented via Red -> Green -> Refactor. See commit history.
  */
 
+function is_multiple(n, factor) {
+    return n % factor === 0;
+}
+
 function fizzbuzz(n) {
-    if (n % 15 === 0) return 'FizzBuzz';
-    if (n % 3 === 0) return 'Fizz';
-    if (n % 5 === 0) return 'Buzz';
+    if (is_multiple(n, 15)) return 'FizzBuzz';
+    if (is_multiple(n, 3)) return 'Fizz';
+    if (is_multiple(n, 5)) return 'Buzz';
     return String(n);
 }
 
-module.exports = { fizzbuzz };
+module.exports = { fizzbuzz, is_multiple };
