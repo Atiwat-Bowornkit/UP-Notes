@@ -4,7 +4,8 @@
  */
 
 function fizzbuzz(n) {
-    return 'Fizz';
+    if (n % 3 === 0) return 'Fizz';
+    return String(n);
 }
 
 module.exports = { fizzbuzz };
