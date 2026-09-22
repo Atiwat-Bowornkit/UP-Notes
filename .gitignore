@@ -15,6 +15,10 @@ node_modules/
 .next/
 dist/
 
+# Mutation testing (Stryker) artifacts — regenerate with `npx stryker run`
+.stryker-tmp/
+reports/
+
 # OS Header files
 .DS_Store
 Thumbs.db

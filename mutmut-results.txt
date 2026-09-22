@@ -1,0 +1,39 @@
+Lab 9 — Step 5B: Mutation Testing Results
+==========================================
+
+Note: this project is Node.js (not Python), so the JS-equivalent tool
+Stryker Mutator (@stryker-mutator/core) was used instead of mutmut, per
+Lab9.md §3 ("Node.js: ... อื่น ๆ ตาม stack"). Config: stryker.conf.json
+(mutate: src/fizzbuzz.js, src/utils/notesHelper.js — testRunner: command
+running `npm test`, coverageAnalysis: off).
+
+Run with: npx stryker run
+Full JSON report: reports/mutation/mutation.json (git-ignored, regenerate locally)
+
+Iteration history
+------------------
+1st run (before adding mutation-regression tests):
+  All files: 81.19% (82 killed / 19 survived) — notesHelper.js 77.65%, fizzbuzz.js 100.00%
+  19 survivors, all in filterNotesBySearch (category matching, query
+  trim, and case-insensitive title/code/author matching branches were
+  not independently exercised).
+
+2nd run (after tests/test_mutation_regression.test.js, first pass):
+  All files: 95.05% (96 killed / 5 survived) — notesHelper.js 94.12%, fizzbuzz.js 100.00%
+  5 remaining survivors: ALLOWED_EXTENSIONS.join(', ') string literal,
+  the !Array.isArray(notes) guard (ArrayDeclaration + ConditionalExpression),
+  and the query/category default-parameter StringLiteral mutants.
+
+3rd run (final, after killing the remaining 5):
+-----------------|------------------|----------|-----------|------------|----------|----------|
+                 | % Mutation score |          |           |            |          |          |
+File             |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+-----------------|--------|---------|----------|-----------|------------|----------|----------|
+All files        | 100.00 |  100.00 |      101 |         0 |          0 |        0 |        0 |
+ utils           | 100.00 |  100.00 |       85 |         0 |          0 |        0 |        0 |
+  notesHelper.js | 100.00 |  100.00 |       85 |         0 |          0 |        0 |        0 |
+ fizzbuzz.js     | 100.00 |  100.00 |       16 |         0 |          0 |        0 |        0 |
+-----------------|--------|---------|----------|-----------|------------|----------|----------|
+
+Final mutation score: 100% (101/101 mutants killed) — well above the
+> 80% "ship it" threshold (Lab9.md §5, Mutation Score Scale).

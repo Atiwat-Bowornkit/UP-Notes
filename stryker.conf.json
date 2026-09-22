@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "mutate": [
+    "src/fizzbuzz.js",
+    "src/utils/notesHelper.js"
+  ],
+  "testRunner": "command",
+  "commandRunner": {
+    "command": "npm test"
+  },
+  "coverageAnalysis": "off",
+  "reporters": ["clear-text", "progress", "json"],
+  "thresholds": {
+    "high": 80,
+    "low": 50,
+    "break": null
+  }
+}
