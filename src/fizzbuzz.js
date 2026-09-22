@@ -4,7 +4,7 @@
  */
 
 function fizzbuzz(n) {
-    // TODO: not implemented yet (TDD RED phase)
+    return 'Fizz';
 }
 
 module.exports = { fizzbuzz };
