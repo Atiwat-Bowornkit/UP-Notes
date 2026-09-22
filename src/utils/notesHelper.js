@@ -15,6 +15,9 @@ function validateUploadFile(file) {
     if (!file || !file.name) {
         return { isValid: false, error: 'กรุณาเลือกไฟล์เอกสารที่ต้องการอัปโหลด' };
     }
+    if (typeof file.size !== 'number' || file.size < 0) {
+        return { isValid: false, error: 'ขนาดไฟล์ไม่ถูกต้อง' };
+    }
 
     const extension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
     if (!ALLOWED_EXTENSIONS.includes(extension)) {
