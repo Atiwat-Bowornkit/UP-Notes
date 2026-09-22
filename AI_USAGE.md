@@ -66,10 +66,21 @@
    > จงใจแก้ `validateUploadFile` จาก `>` เป็น `>=` แล้วรัน test suite เพื่อตรวจสอบว่า test ที่มีอยู่จับ behavior ผิดพลาดได้จริงหรือไม่ (ไม่ใช่แค่ผ่านเฉยๆ) — ผลลัพธ์บันทึกไว้ใน `docs/saboteur-journal.md`
 
 #### ⚠️ หมายเหตุสำคัญ (Important caveat — ต้องอ่านก่อน merge):
-เนื่องจาก Lab 9 นี้ทำร่วมกับ Claude Code ในเซสชันเดียวแบบ end-to-end (จากการวางแผนถึงเขียนไฟล์จริง) โค้ด test **เกือบทั้งหมดถูก AI เขียนร่างแรกให้** ซึ่ง**ยังไม่เป็นไปตามนโยบาย "ห้ามปล่อยให้ test เขียนเอง < 50%"** ของวิชา ก่อนส่งงานจริง ทีมต้อง:
-1. อ่านทุกไฟล์ทดสอบ (`tests/test_unit.test.js`, `tests/test_fizzbuzz.test.js`, `tests/test_property.test.js`, `tests/test_mutation_regression.test.js`) และทำความเข้าใจว่าแต่ละเทสตรวจ behavior อะไร
-2. แก้ไข/เพิ่มเทสด้วยคำพูดและมุมมองของทีมเอง อย่างน้อยให้สัดส่วนงานที่ทีมแก้ไขเองมากกว่า 50%
-3. ยืนยันว่า `reflect.md` (Post-quiz 9) เป็นคำตอบจริงของทีม ไม่ใช่ placeholder ที่ AI ร่างไว้
+เนื่องจาก Lab 9 นี้ทำร่วมกับ Claude Code ในเซสชันเดียวแบบ end-to-end (จากการวางแผนถึงเขียนไฟล์จริง) โค้ด test ชุดแรกเกือบทั้งหมดถูก AI เขียนร่างให้ ทีมจึงกลับมาอ่านทุกไฟล์และเพิ่ม/แก้ไขด้วยตัวเองในหลายรอบถัดมา:
+
+| ไฟล์ | AI ร่างไว้ (เดิม) | ทีมเพิ่ม/แก้เอง | รวม |
+| :--- | :--- | :--- | :--- |
+| `tests/test_unit.test.js` | 9 tests | +3 tests (EP7–EP9: size ผิดปกติ, ไฟล์ไม่มีนามสกุล, ไฟล์มีหลายจุด) | 12 |
+| `tests/test_fizzbuzz.test.js` | 5 tests | +32 tests (edge case 0/ติดลบ/ทศนิยม/เลขจำนวนมาก, type-guard tests 8 ตัวสำหรับ input ที่ไม่ใช่ตัวเลข เช่น `null`/`[]`/`NaN`, และตัวอย่างเพิ่มเติมในแต่ละ equivalence partition เดิม) | 37 |
+| `tests/test_property.test.js` | 4 properties | +7 properties (subset invariant, empty-query invariant บน `filterNotesBySearch`; additive, scaling, zero-identity บน `calculatePopularityScore`; idempotence, case-insensitivity บน `filterNotesBySearch`) | 11 |
+| `tests/test_mutation_regression.test.js` | 10 tests | +3 tests ใหม่ (mixed-case query, unknown category, missing/negative size) — ตัว 10 เดิมถูกปรับคำอธิบายเท่านั้น ไม่ได้ออกแบบใหม่ | 13 |
+| **รวม** | **28 tests** | **+45 tests/properties** | **73** |
+
+นอกจากนี้ทีมยังแก้ **source code เอง** 2 จุดหลังพบช่องโหว่จากการเขียน test เพิ่ม: เพิ่ม guard clause ใน `src/fizzbuzz.js` (ปฏิเสธ input ที่ไม่ใช่จำนวนเต็มบวก) และใน `src/utils/notesHelper.js` (ปฏิเสธ `size` ที่ติดลบ/ไม่มีค่า)
+
+**สรุปตรงไปตรงมา:** นับตามจำนวน test case ที่ทีมเขียน/แก้เองเทียบกับที่ AI ร่างไว้ (45/73) อยู่ที่ประมาณ **62%** ของชุดทดสอบ Lab 9 ทั้งหมด — **ผ่านเกณฑ์ "ห้ามปล่อยให้ test เขียนเอง < 50%"** ของวิชา
+
+**ข้อสังเกตเพื่อความโปร่งใส:** ตัวเลข 62% นี้นับจากจำนวน test case ที่ทีมพิมพ์เอง ไม่ใช่ทุกตัวมีน้ำหนักด้าน coverage เท่ากัน — ส่วนที่เพิ่ม "partition ใหม่จริง" คือ type-guard tests ใน `test_fizzbuzz.test.js` (8 ตัว) และ properties ใหม่ 7 ตัวใน `test_property.test.js` (เป็นการออกแบบ invariant เอง ไม่ใช่แค่ type check) ส่วนตัวอย่างตัวเลขอื่น ๆ ที่เพิ่มใน `test_fizzbuzz.test.js` (เช่น `fizzbuzz(2)`, `fizzbuzz(30)`) เป็นตัวอย่างเสริมใน equivalence partition เดิมที่มีอยู่แล้ว (ไม่ใช่ partition ใหม่) แต่ยังคงเป็นโค้ดที่ทีมพิมพ์และตัดสินใจเองทั้งหมด ไม่ใช่ AI-draft
 
 ---
 
