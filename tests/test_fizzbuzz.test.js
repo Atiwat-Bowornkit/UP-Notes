@@ -1,0 +1,63 @@
+/**
+ * Lab 9 — Step 2: TDD Kata (FizzBuzz)
+ * Built test-first via Red -> Green -> Refactor.
+ */
+
+const test = require('node:test');
+const assert = require('node:assert');
+const { fizzbuzz } = require('../src/fizzbuzz');
+
+test('fizzbuzz(3) returns "Fizz"', () => {
+    // Arrange
+    const input = 3;
+
+    // Act
+    const result = fizzbuzz(input);
+
+    // Assert
+    assert.strictEqual(result, 'Fizz');
+});
+
+test('fizzbuzz(1) returns "1"', () => {
+    // Arrange
+    const input = 1;
+
+    // Act
+    const result = fizzbuzz(input);
+
+    // Assert
+    assert.strictEqual(result, '1');
+});
+
+test('fizzbuzz(5) returns "Buzz"', () => {
+    // Arrange
+    const input = 5;
+
+    // Act
+    const result = fizzbuzz(input);
+
+    // Assert
+    assert.strictEqual(result, 'Buzz');
+});
+
+test('fizzbuzz(15) returns "FizzBuzz"', () => {
+    // Arrange
+    const input = 15;
+
+    // Act
+    const result = fizzbuzz(input);
+
+    // Assert
+    assert.strictEqual(result, 'FizzBuzz');
+});
+
+test('fizzbuzz(7) returns "7"', () => {
+    // Arrange
+    const input = 7;
+
+    // Act
+    const result = fizzbuzz(input);
+
+    // Assert
+    assert.strictEqual(result, '7');
+});
