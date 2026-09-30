@@ -30,3 +30,30 @@
 ---
 
 *reflect.md นี้ merge เข้ามาพร้อมกับ PR `feature/lab9-testing` ตามข้อกำหนด §4.2 ของ Lab9.md*
+
+---
+---
+
+# 💭 Reflection Document (Post-quiz 12 Exit Ticket) — Lab 12B Safety Net Sprint
+
+> ⚠️ **ทีมต้องกรอกเอง** — คัดลอกคำถามและคำตอบจริงของ Post-quiz 12 (คาบบรรยาย W12) มาแทนที่ช่อง `TODO` ด้านล่าง
+> ตาม `Lab12.md` §6.3 ไฟล์นี้ต้อง merge เข้า PR `feature/safety-net` เดียวกัน · ห้ามให้ AI เขียนคำตอบแทน
+
+## 1. Safety Net ของทีม (§12.4)
+
+* **คำถาม:** TODO — คัดลอกคำถามจาก Post-quiz 12
+* **คำตอบของทีม:** TODO
+
+## 2. CI + Branch Protection
+
+* **คำถาม:** TODO
+* **คำตอบของทีม:** TODO
+
+## 3. สิ่งที่จะทำต่อ (Characterization Test → Refactor ใน W13)
+
+* **คำถาม:** TODO
+* **คำตอบของทีม:** TODO
+
+---
+
+*ส่วน Post-quiz 12 นี้ merge เข้ามาพร้อมกับ PR `feature/safety-net` ตามข้อกำหนด §6.3 ของ Lab12.md*
