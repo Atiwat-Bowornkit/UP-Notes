@@ -81,14 +81,14 @@
 
 ## 4. CI block อะไรบ้าง
 
-- **`test`** (`.github/workflows/test.yml`) — `npm ci` → `npm run test:coverage` (Node.js 20, ubuntu-latest)
-  รันทุก PR เข้า `main` และทุก push เข้า `main` — เขียวจริงบน PR [#56](../../pull/56)/[#58](../../pull/58) แล้ว
-- **`lint`** — **ยังไม่เพิ่มเป็น CI job แยกในรอบนี้โดยตั้งใจ**: `npm run lint` (`next lint`) ยัง error ทันที
-  ด้วย `Couldn't find any 'pages' or 'app' directory` เพราะโปรเจกต์ยังไม่มีโฟลเดอร์หน้าเว็บจริง (อยู่ขั้น
-  scaffold/architecture) — ถ้าใส่ job นี้ตอนนี้จะกลายเป็น CI แดงค้างที่ไม่เกี่ยวกับคุณภาพโค้ดจริง จะเพิ่ม job
-  `lint` เมื่อเริ่มมีโฟลเดอร์ `app/` จริงในสปรินต์ถัดไป
+Workflow: `.github/workflows/ci.yml` — รันทุก PR เข้า `main` และทุก push เข้า `main` (2 jobs รันขนานกัน)
+
+- **`lint`** (ESLint 9) — `npx --yes eslint@9 src tests` ตาม `eslint.config.js` — แดงเมื่อเจอตัวแปร/import
+  ที่ไม่ได้ใช้ (`no-unused-vars`), ตัวแปรที่ไม่ได้ประกาศ (`no-undef`), การเทียบด้วย `==` (`eqeqeq`) ฯลฯ
+  ไม่ใช้ `next lint` เพราะยัง error `Couldn't find any 'pages' or 'app' directory` (โปรเจกต์ยังไม่มีโฟลเดอร์หน้าเว็บ)
+- **`test`** — `npm ci` → `npm run test:coverage` (Node.js 20, ubuntu-latest) — แดงเมื่อเทสต์ตัวใดตัวหนึ่ง fail
 - **Branch Protection**: ⏳ **รอดำเนินการ** — ต้องตั้งใน Settings → Branches โดยเจ้าของ repo (ดูขั้น 5.7–5.8
-  ของ `Lab12.md`) ให้ require status check `test` + require PR review ก่อน merge เข้า `main`
+  ของ `Lab12.md`) ให้ require status checks `lint` + `test` + require PR review ก่อน merge เข้า `main`
 - **หลักฐาน "Merging is blocked"**: ⏳ **รอดำเนินการ** — จะแนบภาพหน้าจอหลังพิสูจน์ (แกล้งทำเทสต์พังชั่วคราว →
   push → แคปหน้า PR ตอนปุ่ม merge เป็นสีเทา → แก้กลับ)
 
