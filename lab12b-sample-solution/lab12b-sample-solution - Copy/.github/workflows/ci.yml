@@ -1,0 +1,36 @@
+# CI ของทีม — ตัวอย่างที่เขียวจริง (Lab12B Solution)
+# คัดลอกไฟล์นี้ไปใช้ได้เลย (หรือดูเฉลยในใบงานข้อ 5.2)
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'          # ไม่บังคับ — ทำให้ CI เร็วขึ้น
+      - run: pip install ruff
+      - run: ruff check .
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+      - run: pytest tests/ -v --cov=src --cov-report=term-missing
+
+# 📌 หลักฐาน Branch Protection (ทำในขั้น 5.7–5.8 ของใบงาน)
+#   Settings → Branches → Require status checks to pass → เลือก "lint" และ "test"
+#   พิสูจน์: แก้ assert ให้ผิดชั่วคราว → push → หน้า PR ต้องขึ้น "Merging is blocked"

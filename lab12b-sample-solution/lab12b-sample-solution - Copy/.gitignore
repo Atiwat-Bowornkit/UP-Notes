@@ -1,0 +1,7 @@
+# ไม่ commit ของที่สร้างอัตโนมัติ
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.coverage
+.env
