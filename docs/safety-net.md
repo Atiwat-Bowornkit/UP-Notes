@@ -87,10 +87,12 @@ Workflow: `.github/workflows/ci.yml` — รันทุก PR เข้า `mai
   ที่ไม่ได้ใช้ (`no-unused-vars`), ตัวแปรที่ไม่ได้ประกาศ (`no-undef`), การเทียบด้วย `==` (`eqeqeq`) ฯลฯ
   ไม่ใช้ `next lint` เพราะยัง error `Couldn't find any 'pages' or 'app' directory` (โปรเจกต์ยังไม่มีโฟลเดอร์หน้าเว็บ)
 - **`test`** — `npm ci` → `npm run test:coverage` (Node.js 20, ubuntu-latest) — แดงเมื่อเทสต์ตัวใดตัวหนึ่ง fail
-- **Branch Protection**: ⏳ **รอดำเนินการ** — ต้องตั้งใน Settings → Branches โดยเจ้าของ repo (ดูขั้น 5.7–5.8
-  ของ `Lab12.md`) ให้ require status checks `lint` + `test` + require PR review ก่อน merge เข้า `main`
-- **หลักฐาน "Merging is blocked"**: ⏳ **รอดำเนินการ** — จะแนบภาพหน้าจอหลังพิสูจน์ (แกล้งทำเทสต์พังชั่วคราว →
-  push → แคปหน้า PR ตอนปุ่ม merge เป็นสีเทา → แก้กลับ)
+- **Branch Protection**: ✅ **ตั้งแล้ว** — `main` require ทั้ง **status checks** (`lint` + `test`) และ
+  **อย่างน้อย 1 approving review** ก่อน merge ได้ (Settings → Branches)
+- **หลักฐาน "Merging is blocked"**: ✅ ดูภาพ [`docs/evidence/branch-protection-merging-blocked.png`](evidence/branch-protection-merging-blocked.png)
+  — ถ่ายจากหน้า PR จริงของ branch `feature/safety-net`: CI ทั้ง 2 jobs (`lint`, `test`) ขึ้น ✅ ผ่านหมดแล้ว
+  แต่ปุ่ม **Merge pull request เป็นสีเทากดไม่ได้** เพราะกฎ "Review required" ยังไม่มีใคร Approve — พิสูจน์ว่า
+  Branch Protection บล็อก merge จริงแม้ CI จะเขียวแล้วก็ตาม (คนละเงื่อนไขกับตอน CI แดง แต่เป็นกฎเดียวกันที่บังคับอยู่)
 
 ## 5. บทเรียนที่ได้ (Reflection จากสมาชิกในทีม)
 
