@@ -75,8 +75,9 @@ Admin Dashboard:https://excalidraw.com/#json=XdPyCNGxwbz37hamCW4fO,wf-8IQA2v-Vs0
 
 ### 📋 Prerequisites (สิ่งที่ต้องเตรียมไว้ก่อน)
 - **Git**
-- **Python 3.10+**
-- **Docker & Docker Compose**
+- **Node.js 20+** (พร้อม npm)
+- **Docker & Docker Compose** (ถ้าต้องการรันแบบ container)
+- บัญชี **Supabase** (สำหรับ Auth/Storage) — ขอ URL และ anon key จากหัวหน้าทีม
 
 ---
 
@@ -110,21 +111,45 @@ git push -u origin branch-name
 3. คลิก **Review changes**
 4. เลือก **Approve** แล้วกด **Submit**
 
-#### 2. Run the services:
-> [!NOTE]
-> หัวข้อนี้จะได้รับการอัปเดตเพิ่มเติมเมื่อเริ่มต้นใช้งาน Docker Compose ในช่วงสัปดาห์ถัดไป
-
-ตัวอย่างคำสั่งการ Build และ Run บริการแต่ละส่วน (เช่น `stats-service`):
+#### 2. ตั้งค่าและรันเว็บ UP-Notes (Next.js)
 ```bash
-# เดินทางไปยังโฟลเดอร์ของบริการที่ต้องการ
-cd services/stats-service
+# ติดตั้ง dependencies
+npm install
 
-# ทำการ Build Docker Image
-docker build -t your-team/stats-service .
+# สร้างไฟล์ค่าตั้งต้นของเครื่องตัวเอง แล้วแก้ค่าใน .env.local (ห้าม commit ไฟล์นี้)
+cp .env.example .env.local
 
-# สั่งรัน Container
-docker run -p 5001:5000 your-team/stats-service
+# สร้าง Prisma client จาก prisma/schema.prisma
+npm run db:generate
+
+# รันเว็บโหมดพัฒนา แล้วเปิด http://localhost:3000
+npm run dev
 ```
+
+คำสั่งที่ใช้ตรวจงานก่อนเปิด PR (เหมือนที่ CI รัน):
+```bash
+npm run lint        # ESLint (src, tests)
+npm run typecheck   # TypeScript strict
+npm test            # unit + property tests
+npm run build       # production build
+```
+
+#### 3. รันด้วย Docker Compose (เว็บ + PostgreSQL)
+```bash
+docker compose up --build
+# เว็บ: http://localhost:3000   ตรวจสถานะ: http://localhost:3000/api/health
+```
+
+#### 4. โครงสร้างโฟลเดอร์ (Modular Monolith ตาม ADR 0001)
+| โฟลเดอร์ | หน้าที่ |
+| :--- | :--- |
+| `app/` | หน้าเว็บและ API route (Next.js App Router) |
+| `components/` | UI ที่ใช้ร่วมกัน เช่น Navbar |
+| `modules/auth`, `modules/notes`, `modules/admin` | โค้ดตามโดเมน — แต่ละคนดูแลโมดูลของตัวเอง |
+| `lib/` | Supabase client, Prisma client, ตัวช่วยอ่านค่า env |
+| `prisma/schema.prisma` | โครงสร้างฐานข้อมูล (User, Note, Like, Report) |
+| `src/`, `tests/` | helper logic เดิม (JS) และเทสต์ — เรียกใช้จาก `modules/` ได้ |
+| `prototypes/`, `services/` | ต้นแบบ Sprint 1 และ stats-service เดิม (ไม่ได้ใช้ในเว็บจริง) |
 
 ---
 
