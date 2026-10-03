@@ -29,3 +29,7 @@ Lab*.md
 # Lab12B teacher-provided reference solution — personal practice copy,
 # must not be pushed into the team repo (Lab12.md §3 rule 1)
 lab12b-sample-solution/
+
+# Next.js / TypeScript generated
+next-env.d.ts
+*.tsbuildinfo
