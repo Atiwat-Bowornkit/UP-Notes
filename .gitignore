@@ -17,7 +17,7 @@ dist/
 
 # Mutation testing (Stryker) artifacts — regenerate with `npx stryker run`
 .stryker-tmp/
-reports/
+/reports/
 
 # OS Header files
 .DS_Store
