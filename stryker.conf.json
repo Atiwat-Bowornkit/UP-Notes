@@ -3,7 +3,8 @@
   "packageManager": "npm",
   "mutate": [
     "src/fizzbuzz.js",
-    "src/utils/notesHelper.js"
+    "src/utils/notesHelper.js",
+    "src/utils/reportHelper.js"
   ],
   "testRunner": "command",
   "commandRunner": {
