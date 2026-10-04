@@ -125,6 +125,9 @@ npm run db:generate
 # สร้างตารางใน Supabase (ทำครั้งเดียวต่อฐานข้อมูล — Prisma CLI อ่าน .env.local ผ่าน dotenv-cli)
 npm run db:push
 
+# ตั้งผู้ดูแลระบบ (Admin) ให้อีเมลหนึ่ง — ดูข้อมูลในตารางได้ด้วย npm run db:studio
+npm run db:make-admin -- someone@up.ac.th
+
 # รันเว็บโหมดพัฒนา แล้วเปิด http://localhost:3000
 npm run dev
 ```

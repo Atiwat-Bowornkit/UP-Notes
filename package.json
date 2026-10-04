@@ -14,7 +14,8 @@
     "test:mutation": "stryker run",
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
-    "db:studio": "dotenv -e .env.local -- prisma studio"
+    "db:studio": "dotenv -e .env.local -- prisma studio",
+    "db:make-admin": "dotenv -e .env.local -- node prisma/make-admin.js"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
