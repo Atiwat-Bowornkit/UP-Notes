@@ -11,7 +11,10 @@
     "db:generate": "prisma generate",
     "test": "node --test tests/*.test.js",
     "test:coverage": "node --test --experimental-test-coverage tests/*.test.js",
-    "test:mutation": "stryker run"
+    "test:mutation": "stryker run",
+    "db:push": "dotenv -e .env.local -- prisma db push",
+    "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
+    "db:studio": "dotenv -e .env.local -- prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
@@ -28,6 +31,7 @@
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.6.1",
+    "dotenv-cli": "^11.0.0",
     "fast-check": "^4.10.2",
     "postcss": "^8.5.28",
     "prisma": "^5.14.0",

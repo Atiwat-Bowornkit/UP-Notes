@@ -122,6 +122,9 @@ cp .env.example .env.local
 # สร้าง Prisma client จาก prisma/schema.prisma
 npm run db:generate
 
+# สร้างตารางใน Supabase (ทำครั้งเดียวต่อฐานข้อมูล — Prisma CLI อ่าน .env.local ผ่าน dotenv-cli)
+npm run db:push
+
 # รันเว็บโหมดพัฒนา แล้วเปิด http://localhost:3000
 npm run dev
 ```
