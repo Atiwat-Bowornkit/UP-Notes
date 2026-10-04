@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum NoteStatus {
+  PUBLISHED
+  PENDING_REVIEW
+}
+
+enum NoteCategory {
+  GE
+  MAJOR_REQUIRED
+  ELECTIVE
+}
+
+enum ReportReason {
+  COPYRIGHT
+  EXAM_LEAK
+  INACCURATE
+  OTHER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+
+  notes   Note[]
+  likes   Like[]
+  reports Report[]
+}
+
+model Note {
+  id            String       @id @default(uuid())
+  title         String
+  courseCode    String
+  category      NoteCategory
+  description   String?
+  filePath      String
+  fileName      String
+  fileSizeBytes Int
+  status        NoteStatus   @default(PUBLISHED)
+  downloadCount Int          @default(0)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  authorId String
+  author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes    Like[]
+  reports  Report[]
+
+  @@index([courseCode])
+  @@index([status])
+}
+
+model Like {
+  userId    String
+  noteId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@id([userId, noteId])
+}
+
+model Report {
+  id         String       @id @default(uuid())
+  reason     ReportReason
+  detail     String?
+  resolved   Boolean      @default(false)
+  createdAt  DateTime     @default(now())
+
+  noteId     String
+  reporterId String
+  note       Note         @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  reporter   User         @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@unique([noteId, reporterId])
+  @@index([noteId])
+}
