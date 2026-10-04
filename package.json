@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "npx --yes eslint@9 src tests",
     "test": "node --test tests/*.test.js",
     "test:coverage": "node --test --experimental-test-coverage tests/*.test.js",
     "test:mutation": "stryker run"
