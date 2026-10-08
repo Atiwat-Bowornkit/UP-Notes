@@ -96,6 +96,10 @@ test('filterNotesBySearch - returns empty if category does not match anything', 
 
 // Kill: size validation mutants (missed in original tests)
 test('validateUploadFile - fails on missing or negative file size', () => {
-    assert.strictEqual(validateUploadFile({ name: 'doc.pdf' }).isValid, false);
-    assert.strictEqual(validateUploadFile({ name: 'doc.pdf', size: -100 }).isValid, false);
-});
+    const res1 = validateUploadFile({ name: 'doc.pdf' });
+    assert.strictEqual(res1.isValid, false);
+    assert.strictEqual(res1.error, 'ขนาดไฟล์ไม่ถูกต้อง');
+    const res2 = validateUploadFile({ name: 'doc.pdf', size: -100 });
+    assert.strictEqual(res2.isValid, false);
+    assert.strictEqual(res2.error, 'ขนาดไฟล์ไม่ถูกต้อง');
+});

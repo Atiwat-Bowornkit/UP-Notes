@@ -1,7 +1,4 @@
-/**
- * UP-Notes Helper Utility Module
- * Refactored clean code module replacing duplicated inline logic (DRY Principle)
- */
+const browseHelper = require('./browseHelper');
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_EXTENSIONS = ['.pdf', '.png', '.jpg', '.jpeg'];
@@ -34,43 +31,11 @@ function validateUploadFile(file) {
     return { isValid: true };
 }
 
-/**
- * Filter notes array by search query and category (Pure Function)
- * @param {Array} notes - List of note objects
- * @param {string} query - Search keyword or course code
- * @param {string} category - Category or course filter
- * @returns {Array} Filtered list of notes
- */
-function filterNotesBySearch(notes, query = '', category = 'all') {
-    if (!Array.isArray(notes)) return [];
-    
-    const cleanQuery = query.trim().toLowerCase();
-    
-    return notes.filter(note => {
-        const matchesCategory = (category === 'all' || note.category === category || note.code === category);
-        const matchesQuery = !cleanQuery || 
-            (note.title && note.title.toLowerCase().includes(cleanQuery)) ||
-            (note.code && note.code.toLowerCase().includes(cleanQuery)) ||
-            (note.author && note.author.toLowerCase().includes(cleanQuery));
-
-        return matchesCategory && matchesQuery;
-    });
-}
-
-/**
- * Calculate popularity score for sorting
- * @param {number} likes 
- * @param {number} downloads 
- * @returns {number} Score
- */
-function calculatePopularityScore(likes = 0, downloads = 0) {
-    return (likes * 2) + downloads;
-}
-
 module.exports = {
     validateUploadFile,
-    filterNotesBySearch,
-    calculatePopularityScore,
+    filterNotesBySearch: browseHelper.filterNotesBySearch,
+    calculatePopularityScore: browseHelper.calculatePopularityScore,
     MAX_FILE_SIZE_BYTES,
     ALLOWED_EXTENSIONS
 };
+
