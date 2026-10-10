@@ -1,28 +1,23 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
+import { getCurrentUser } from '@/lib/session';
 
 export async function GET() {
-  const supabase = createClient();
-
   try {
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
+    const user = await getCurrentUser();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized: กรุณาล็อกอิน' }, { status: 401 });
     }
 
     // ดึงเฉพาะโน้ตของตนเอง (authorId === user.id) ตามโจทย์ US-07
     const notes = await prisma.note.findMany({
-      where: {
-        authorId: user.id,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      where: { authorId: user.id },
+      orderBy: { createdAt: 'desc' },
     });
 
     return NextResponse.json({ notes });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('[my-notes] failed:', error);
+    return NextResponse.json({ error: 'เกิดข้อผิดพลาดของเซิร์ฟเวอร์' }, { status: 500 });
   }
 }

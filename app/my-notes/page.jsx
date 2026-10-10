@@ -157,14 +157,14 @@ export default function MyNotesPage() {
                   className="w-full border p-2 rounded-md"
                 >
                   <option value="GE">GE</option>
-                  <option value="วิชาเอกบังคับ">วิชาเอกบังคับ</option>
-                  <option value="วิชาเลือก">วิชาเลือก</option>
+                  <option value="MAJOR_REQUIRED">วิชาเอกบังคับ</option>
+                  <option value="ELECTIVE">วิชาเลือก</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">คำอธิบาย</label>
                 <textarea 
-                  value={editingNote.description} 
+                  value={editingNote.description ?? ""} 
                   onChange={e => setEditingNote({...editingNote, description: e.target.value})} 
                   className="w-full border p-2 rounded-md" 
                   rows={3} 

@@ -4,14 +4,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateUploadFile, validateCourseCode } from '@/src/utils/uploadHelper';
 
-const CATEGORIES = ['GE', 'วิชาเอกบังคับ', 'วิชาเลือก'];
+const CATEGORIES = [
+  { value: 'GE', label: 'GE' },
+  { value: 'MAJOR_REQUIRED', label: 'วิชาเอกบังคับ' },
+  { value: 'ELECTIVE', label: 'วิชาเลือก' },
+];
 
 export default function UploadNotePage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     courseCode: '',
-    category: CATEGORIES[0],
+    category: CATEGORIES[0].value,
     description: ''
   });
   const [file, setFile] = useState(null);
@@ -127,7 +131,7 @@ export default function UploadNotePage() {
             style={{ backgroundColor: 'white', color: 'black', border: '1px solid #cbd5e1' }}
           >
             {CATEGORIES.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
+              <option key={cat.value} value={cat.value}>{cat.label}</option>
             ))}
           </select>
         </div>

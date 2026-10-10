@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '20'
 
-      # ใช้ eslint.config.js ที่ root — ไม่ต้องพึ่ง `next lint` (ยังไม่มีโฟลเดอร์ app/)
+      # ใช้ eslint.config.js ที่ root — ไม่ต้องพึ่ง `next lint`
       - name: Run ESLint
         run: npx --yes eslint@9 src tests
 

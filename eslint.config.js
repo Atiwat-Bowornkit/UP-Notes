@@ -26,6 +26,7 @@ module.exports = [
     },
     {
         files: ['src/**/*.js', 'tests/**/*.js', 'eslint.config.js'],
+        ignores: ['src/utils/uploadHelper.js'],
         languageOptions: {
             ecmaVersion: 2022,
             sourceType: 'commonjs',
@@ -38,6 +39,20 @@ module.exports = [
             'no-dupe-keys': 'error',
             'no-unreachable': 'error',
             'no-const-assign': 'error',
+            'eqeqeq': 'error',
+        },
+    },
+    {
+        // ไฟล์นี้ถูก import จาก Next.js (ESM) จึงใช้ import/export
+        files: ['src/utils/uploadHelper.js'],
+        languageOptions: {
+            ecmaVersion: 2022,
+            sourceType: 'module',
+            globals: nodeGlobals,
+        },
+        rules: {
+            'no-unused-vars': 'error',
+            'no-undef': 'error',
             'eqeqeq': 'error',
         },
     },
