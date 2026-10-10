@@ -5,7 +5,7 @@
  * Optimizes queries for response times under 1.5s (NFR-01).
  */
 
-const { filterNotesBySearch, calculatePopularityScore } = require('./browseHelper');
+const { filterNotesBySearch } = require('./browseHelper');
 
 // Category mapping helper between UI labels and Prisma enum
 const CATEGORY_MAP = {
@@ -157,7 +157,7 @@ async function getPublishedNotes(options = {}) {
         hasPrevPage: validPage > 1,
       },
     };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       error: 'เกิดข้อผิดพลาดในการดึงข้อมูลโน้ตย่อ กรุณาลองใหม่อีกครั้ง',

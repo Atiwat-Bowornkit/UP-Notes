@@ -25,7 +25,7 @@ jobs:
 
       # ใช้ eslint.config.js ที่ root — ไม่ต้องพึ่ง `next lint`
       - name: Run ESLint
-        run: npx --yes eslint@9 src tests
+        run: npx --yes eslint@9 src modules tests
 
   test:
     name: test

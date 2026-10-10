@@ -83,7 +83,7 @@
 
 Workflow: `.github/workflows/ci.yml` — รันทุก PR เข้า `main` และทุก push เข้า `main` (2 jobs รันขนานกัน)
 
-- **`lint`** (ESLint 9) — `npx --yes eslint@9 src tests` ตาม `eslint.config.js` — แดงเมื่อเจอตัวแปร/import
+- **`lint`** (ESLint 9) — `npx --yes eslint@9 src modules tests` ตาม `eslint.config.js` — แดงเมื่อเจอตัวแปร/import
   ที่ไม่ได้ใช้ (`no-unused-vars`), ตัวแปรที่ไม่ได้ประกาศ (`no-undef`), การเทียบด้วย `==` (`eqeqeq`) ฯลฯ
   ไม่ใช้ `next lint` เพราะยัง error `Couldn't find any 'pages' or 'app' directory` (โปรเจกต์ยังไม่มีโฟลเดอร์หน้าเว็บ)
 - **`test`** — `npm ci` → `npm run test:coverage` (Node.js 20, ubuntu-latest) — แดงเมื่อเทสต์ตัวใดตัวหนึ่ง fail

@@ -25,7 +25,7 @@ module.exports = [
         ],
     },
     {
-        files: ['src/**/*.js', 'tests/**/*.js', 'eslint.config.js'],
+        files: ['src/**/*.js', 'modules/**/*.js', 'tests/**/*.js', 'eslint.config.js'],
         ignores: ['src/utils/uploadHelper.js'],
         languageOptions: {
             ecmaVersion: 2022,

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "npx --yes eslint@9 src tests",
+    "lint": "npx --yes eslint@9 src modules tests",
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
     "test": "node --test tests/*.test.js",
