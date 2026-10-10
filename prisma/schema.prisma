@@ -16,6 +16,7 @@ enum Role {
 enum NoteStatus {
   PUBLISHED
   PENDING_REVIEW
+  HIDDEN
 }
 
 enum NoteCategory {

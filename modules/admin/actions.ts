@@ -59,9 +59,10 @@ export async function submitReport(
       where: { noteId, resolved: false },
     });
     if (shouldHideNote(openReports)) {
-      await tx.note.update({
-        where: { id: noteId },
-        data: { status: NoteStatus.PENDING_REVIEW },
+      // Only hide published notes; a note still awaiting first review stays PENDING_REVIEW.
+      await tx.note.updateMany({
+        where: { id: noteId, status: NoteStatus.PUBLISHED },
+        data: { status: NoteStatus.HIDDEN },
       });
     }
   });
@@ -85,13 +86,12 @@ export async function approvePendingNote(noteId: string): Promise<ActionState> {
   const user = await getCurrentUser();
   if (!isAdmin(user)) return NOT_ADMIN;
 
-  // Only touch notes that are still awaiting review (never un-hide a reported note by accident).
   const result = await prisma.note.updateMany({
-    where: { id: noteId, status: NoteStatus.PENDING_REVIEW, reports: { none: { resolved: false } } },
+    where: { id: noteId, status: NoteStatus.PENDING_REVIEW },
     data: { status: NoteStatus.PUBLISHED },
   });
   if (result.count === 0) {
-    return { ok: false, message: "ไม่พบโน้ตที่รออนุมัติ หรือโน้ตนี้ถูกรายงานอยู่" };
+    return { ok: false, message: "ไม่พบโน้ตที่รออนุมัติ (อาจถูกอนุมัติหรือลบไปแล้ว)" };
   }
 
   revalidatePath("/admin/pending");
@@ -144,8 +144,9 @@ export async function dismissReports(noteId: string): Promise<ActionState> {
       where: { noteId, resolved: false },
       data: { resolved: true },
     }),
-    prisma.note.update({
-      where: { id: noteId },
+    // Un-hide only notes hidden by reports; never publish a note still awaiting review.
+    prisma.note.updateMany({
+      where: { id: noteId, status: NoteStatus.HIDDEN },
       data: { status: NoteStatus.PUBLISHED },
     }),
   ]);

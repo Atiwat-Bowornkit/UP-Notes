@@ -64,7 +64,9 @@ export default async function NoteDetailPage({ params }: { params: { id: string 
           <p className="text-sm font-medium text-accent">{note.courseCode}</p>
           {note.status !== NoteStatus.PUBLISHED && (
             <span className="rounded bg-yellow-500/20 px-2.5 py-0.5 text-xs font-medium text-yellow-400 border border-yellow-500/30">
-              รอการตรวจสอบ (PENDING_REVIEW)
+              {note.status === NoteStatus.HIDDEN
+                ? "ถูกซ่อนเนื่องจากมีการรายงาน (HIDDEN)"
+                : "รอการตรวจสอบ (PENDING_REVIEW)"}
             </span>
           )}
         </div>

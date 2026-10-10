@@ -26,9 +26,9 @@ export default async function AdminPendingPage() {
     );
   }
 
-  // Notes hidden because of reports are handled on /admin/reports, not here.
+  // Notes hidden because of reports (HIDDEN) are handled on /admin/reports, not here.
   const notes = await prisma.note.findMany({
-    where: { status: NoteStatus.PENDING_REVIEW, reports: { none: { resolved: false } } },
+    where: { status: NoteStatus.PENDING_REVIEW },
     include: { author: { select: { name: true, email: true } } },
     orderBy: { createdAt: "asc" },
   });

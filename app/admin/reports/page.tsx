@@ -42,7 +42,7 @@ export default async function AdminReportsPage() {
       <header>
         <h1 className="text-2xl font-semibold">รายงานปัญหาโน้ตย่อ</h1>
         <p className="text-sm text-gray-400">
-          โน้ตที่ถูกรายงานเกิน 3 ครั้งจะถูกซ่อนจากการค้นหาอัตโนมัติ (Pending Review)
+          โน้ตที่ถูกรายงานเกิน 3 ครั้งจะถูกซ่อนจากการค้นหาอัตโนมัติ (Hidden)
         </p>
       </header>
 
@@ -66,12 +66,16 @@ export default async function AdminReportsPage() {
                   </span>
                   <span
                     className={
-                      note.status === "PENDING_REVIEW"
-                        ? "rounded-full bg-danger/15 px-3 py-1 text-danger"
-                        : "rounded-full bg-success/15 px-3 py-1 text-success"
+                      note.status === "PUBLISHED"
+                        ? "rounded-full bg-success/15 px-3 py-1 text-success"
+                        : "rounded-full bg-danger/15 px-3 py-1 text-danger"
                     }
                   >
-                    {note.status === "PENDING_REVIEW" ? "Pending Review (ซ่อนอยู่)" : "แสดงอยู่"}
+                    {note.status === "HIDDEN"
+                      ? "ซ่อนอยู่ (Hidden)"
+                      : note.status === "PENDING_REVIEW"
+                        ? "รออนุมัติ (ยังไม่เผยแพร่)"
+                        : "แสดงอยู่"}
                   </span>
                 </div>
               </div>
