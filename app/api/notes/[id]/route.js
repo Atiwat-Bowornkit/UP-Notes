@@ -3,8 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/session';
 import { NOTES_BUCKET } from '@/lib/constants';
-
-const CATEGORIES = ['GE', 'MAJOR_REQUIRED', 'ELECTIVE'];
+import { validateNoteFields } from '@/src/utils/noteInputHelper';
 
 // ตรวจสิทธิ์: เจ้าของโน้ตเท่านั้นที่จัดการได้
 async function verifyOwnership(noteId, userId) {
@@ -72,18 +71,14 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ error: 'รูปแบบข้อมูลไม่ถูกต้อง' }, { status: 400 });
     }
 
-    const title = typeof body?.title === 'string' ? body.title.trim() : '';
-    if (!title) {
-      return NextResponse.json({ error: 'กรุณากรอกชื่อเรื่อง' }, { status: 400 });
+    const fields = validateNoteFields(body, { requireCourseCode: false });
+    if (!fields.valid) {
+      return NextResponse.json({ error: fields.error }, { status: 400 });
     }
-    if (!CATEGORIES.includes(body.category)) {
-      return NextResponse.json({ error: 'หมวดหมู่ไม่ถูกต้อง' }, { status: 400 });
-    }
-    const description = typeof body.description === 'string' ? body.description.trim() : '';
 
     const updatedNote = await prisma.note.update({
       where: { id: params.id },
-      data: { title, description: description || null, category: body.category },
+      data: fields.data,
     });
 
     return NextResponse.json({ success: true, note: updatedNote });

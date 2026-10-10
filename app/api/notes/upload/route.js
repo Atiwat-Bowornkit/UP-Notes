@@ -4,9 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/session';
 import { NOTES_BUCKET } from '@/lib/constants';
-import { validateUploadFile, validateCourseCode, sanitizeFileName } from '@/src/utils/uploadHelper';
-
-const CATEGORIES = ['GE', 'MAJOR_REQUIRED', 'ELECTIVE'];
+import { validateUploadFile, sanitizeFileName } from '@/src/utils/uploadHelper';
+import { validateNoteFields } from '@/src/utils/noteInputHelper';
 
 export async function POST(req) {
   let uploadedFilePath = null;
@@ -20,21 +19,17 @@ export async function POST(req) {
     }
 
     const formData = await req.formData();
-    const title = String(formData.get('title') ?? '').trim();
-    const courseCode = String(formData.get('courseCode') ?? '').trim();
-    const category = String(formData.get('category') ?? '');
-    const description = String(formData.get('description') ?? '').trim();
     const file = formData.get('file');
 
     // 2. ตรวจซ้ำที่ server (ห้ามเชื่อ client อย่างเดียว)
-    if (!title) {
-      return NextResponse.json({ error: 'กรุณากรอกชื่อเรื่อง' }, { status: 400 });
-    }
-    if (!validateCourseCode(courseCode)) {
-      return NextResponse.json({ error: 'รหัสวิชาต้องเป็นตัวเลข 6 หลัก' }, { status: 400 });
-    }
-    if (!CATEGORIES.includes(category)) {
-      return NextResponse.json({ error: 'หมวดหมู่ไม่ถูกต้อง' }, { status: 400 });
+    const fields = validateNoteFields({
+      title: formData.get('title'),
+      courseCode: formData.get('courseCode'),
+      category: formData.get('category'),
+      description: formData.get('description'),
+    });
+    if (!fields.valid) {
+      return NextResponse.json({ error: fields.error }, { status: 400 });
     }
     const validation = validateUploadFile(file);
     if (!validation.valid) {
@@ -59,10 +54,7 @@ export async function POST(req) {
     // 5. สร้างแถว Note (ตาม schema: filePath, fileName, fileSizeBytes)
     const note = await prisma.note.create({
       data: {
-        title,
-        courseCode,
-        category,
-        description: description || null,
+        ...fields.data,
         filePath: fileKey,
         fileName: cleanName,
         fileSizeBytes: file.size,
