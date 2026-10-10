@@ -72,6 +72,34 @@ export async function submitReport(
 
 /** US-10 AC2: admin deletes the note (file in Storage + row in DB). */
 export async function deleteReportedNote(noteId: string): Promise<ActionState> {
+  return removeNote(noteId, "ลบโน้ตย่อเรียบร้อยแล้ว");
+}
+
+/** Admin rejects a freshly uploaded note: same removal as a reported note. */
+export async function rejectPendingNote(noteId: string): Promise<ActionState> {
+  return removeNote(noteId, "ปฏิเสธและลบโน้ตย่อเรียบร้อยแล้ว");
+}
+
+/** Admin approves a freshly uploaded note so it appears in search. */
+export async function approvePendingNote(noteId: string): Promise<ActionState> {
+  const user = await getCurrentUser();
+  if (!isAdmin(user)) return NOT_ADMIN;
+
+  // Only touch notes that are still awaiting review (never un-hide a reported note by accident).
+  const result = await prisma.note.updateMany({
+    where: { id: noteId, status: NoteStatus.PENDING_REVIEW, reports: { none: { resolved: false } } },
+    data: { status: NoteStatus.PUBLISHED },
+  });
+  if (result.count === 0) {
+    return { ok: false, message: "ไม่พบโน้ตที่รออนุมัติ หรือโน้ตนี้ถูกรายงานอยู่" };
+  }
+
+  revalidatePath("/admin/pending");
+  revalidatePath("/notes");
+  return { ok: true, message: "อนุมัติโน้ตย่อแล้ว โน้ตจะแสดงในหน้าค้นหา" };
+}
+
+async function removeNote(noteId: string, successMessage: string): Promise<ActionState> {
   const user = await getCurrentUser();
   if (!isAdmin(user)) return NOT_ADMIN;
 
@@ -94,7 +122,8 @@ export async function deleteReportedNote(noteId: string): Promise<ActionState> {
   await prisma.note.delete({ where: { id: noteId } });
 
   revalidatePath("/admin/reports");
-  return { ok: true, message: "ลบโน้ตย่อเรียบร้อยแล้ว" };
+  revalidatePath("/admin/pending");
+  return { ok: true, message: successMessage };
 }
 
 /** US-10 AC3: admin dismisses false reports and the note becomes visible again. */
