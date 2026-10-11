@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NoteStatus, Role } from "@prisma/client";
 import ReportNoteForm from "@/modules/admin/components/ReportNoteForm";
+import authHelper from "@/src/utils/authHelper";
 import NoteEngagement from "@/modules/notes/components/NoteEngagement";
 import PdfPreview from "@/modules/notes/components/PdfPreview";
 import { NOTES_BUCKET } from "@/lib/constants";
@@ -15,7 +16,7 @@ export default async function NoteDetailPage({ params }: { params: { id: string 
     prisma.note.findUnique({
       where: { id: params.id },
       include: {
-        author: { select: { id: true, name: true } },
+        author: { select: { id: true, name: true, email: true } },
         _count: { select: { likes: true } },
       },
     }),
@@ -77,7 +78,7 @@ export default async function NoteDetailPage({ params }: { params: { id: string 
         </div>
         <h1 className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-3xl">{note.title}</h1>
         <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400">
-          <span>โดย {note.author.name ?? "ไม่ระบุชื่อ"}</span>
+          <span>โดย {authHelper.displayName(note.author)}</span>
           <time dateTime={note.createdAt.toISOString()}>
             {note.createdAt.toLocaleDateString("th-TH", { dateStyle: "long" })}
           </time>

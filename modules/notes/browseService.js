@@ -6,6 +6,7 @@
  */
 
 const { filterNotesBySearch } = require('./browseHelper');
+const { displayName } = require('../../src/utils/authHelper');
 
 // Category mapping helper between UI labels and Prisma enum
 const CATEGORY_MAP = {
@@ -126,7 +127,7 @@ async function getPublishedNotes(options = {}) {
         skip: (validPage - 1) * validPageSize,
         take: validPageSize,
         include: {
-          author: { select: { id: true, name: true } },
+          author: { select: { id: true, name: true, email: true } },
           _count: { select: { likes: true } },
         },
       }),
@@ -138,7 +139,7 @@ async function getPublishedNotes(options = {}) {
       ...n,
       likes: n._count?.likes ?? 0,
       downloads: n.downloadCount ?? 0,
-      author: n.author?.name ?? 'ไม่ระบุชื่อ',
+      author: displayName(n.author),
       code: n.courseCode,
     }));
 
@@ -195,7 +196,7 @@ async function getPublishedNoteById(noteId, prismaClient = null) {
         status: 'PUBLISHED', // Mandatory check for PUBLISHED status
       },
       include: {
-        author: { select: { id: true, name: true } },
+        author: { select: { id: true, name: true, email: true } },
         _count: { select: { likes: true } },
       },
     });

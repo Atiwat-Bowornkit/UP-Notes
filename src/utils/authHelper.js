@@ -39,4 +39,15 @@ function validateUsername(username) {
   return { valid: true, name };
 }
 
-module.exports = { validateUpEmail, validatePassword, validateUsername };
+/**
+ * Name shown publicly for a user. Falls back to the part of the email before "@"
+ * (never the full address) for accounts created before usernames existed.
+ */
+function displayName(user) {
+  const name = typeof user?.name === "string" ? user.name.trim() : "";
+  if (name) return name;
+  const local = typeof user?.email === "string" ? user.email.split("@")[0] : "";
+  return local || "ไม่ระบุชื่อ";
+}
+
+module.exports = { validateUpEmail, validatePassword, validateUsername, displayName };
