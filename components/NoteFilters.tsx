@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import * as facultyData from "@/src/utils/facultyData";
 import { SearchIcon } from "@/components/Icons";
+import ProgramOptions from "@/components/ProgramOptions";
 
 type Props = {
   query: string;
@@ -14,14 +15,12 @@ type Props = {
 };
 
 /**
- * Search form for /notes. Plain GET form (works without JS for the basics); the program select
- * is client-side dependent on the faculty and stays disabled until a faculty is chosen.
+ * Search form for /notes. Plain GET form. Faculty and program can be chosen in either order:
+ * picking a program fills in its faculty, picking a faculty narrows the program list.
  */
 export default function NoteFilters({ query, category, sort, faculty: initialFaculty, program: initialProgram }: Props) {
-  const [faculty, setFaculty] = useState(facultyData.isValidFaculty(initialFaculty) ? initialFaculty : "");
-  const [program, setProgram] = useState(
-    facultyData.isValidProgram(initialFaculty, initialProgram) ? initialProgram : "",
-  );
+  const [selection, setSelection] = useState(() => facultyData.normalizeFilter(initialFaculty, initialProgram));
+  const { faculty, program } = selection;
 
   const programs = facultyData.getPrograms(faculty);
   const hasFilters =
@@ -66,10 +65,7 @@ export default function NoteFilters({ query, category, sort, faculty: initialFac
             id="note-faculty"
             name="faculty"
             value={faculty}
-            onChange={(e) => {
-              setFaculty(e.target.value);
-              setProgram(""); // the old program belongs to the previous faculty
-            }}
+            onChange={(e) => setSelection(facultyData.applyFacultyChange(selection, e.target.value))}
             className="input"
           >
             <option value="">ทุกคณะ</option>
@@ -86,23 +82,14 @@ export default function NoteFilters({ query, category, sort, faculty: initialFac
             id="note-program"
             name="program"
             value={program}
-            onChange={(e) => setProgram(e.target.value)}
-            disabled={!faculty || programs.length === 0}
+            onChange={(e) => setSelection(facultyData.applyProgramChange(selection, e.target.value))}
+            disabled={Boolean(faculty) && programs.length === 0}
             className="input"
-            title={!faculty ? "เลือกคณะก่อน จึงจะเลือกสาขาได้" : undefined}
           >
             <option value="">
-              {!faculty
-                ? "เลือกคณะก่อนเพื่อเลือกสาขา"
-                : programs.length === 0
-                  ? "คณะนี้ยังไม่มีรายการสาขา"
-                  : "ทุกสาขา"}
+              {faculty && programs.length === 0 ? "คณะนี้ยังไม่มีรายการสาขา" : "ทุกสาขา"}
             </option>
-            {programs.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
+            <ProgramOptions faculty={faculty} />
           </select>
         </div>
         <div className="flex gap-2">

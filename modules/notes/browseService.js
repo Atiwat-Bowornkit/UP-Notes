@@ -7,7 +7,7 @@
 
 const { filterNotesBySearch } = require('./browseHelper');
 const { displayName } = require('../../src/utils/authHelper');
-const { isValidFaculty, isValidProgram } = require('../../src/utils/facultyData');
+const { normalizeFilter } = require('../../src/utils/facultyData');
 
 // Category mapping helper between UI labels and Prisma enum
 const CATEGORY_MAP = {
@@ -25,7 +25,7 @@ const CATEGORY_MAP = {
  * @param {string} [options.searchQuery=''] - Search term for course code or title
  * @param {string} [options.category='ทั้งหมด'] - Category filter
  * @param {string} [options.faculty=''] - Faculty key filter (see src/utils/facultyData.js)
- * @param {string} [options.program=''] - Program key filter; only applied together with a faculty
+ * @param {string} [options.program=''] - Program key filter (implies its faculty)
  * @param {string} [options.sortBy='ล่าสุด'] - Sorting option ('ล่าสุด' or 'ยอดนิยมสูงสุด')
  * @param {number} [options.page=1] - Current page number
  * @param {number} [options.pageSize=12] - Number of items per page
@@ -46,9 +46,9 @@ async function getPublishedNotes(options = {}) {
     prismaClient = null,
   } = options;
 
-  // A program only makes sense inside its faculty; unknown values are ignored instead of matching nothing.
-  const facultyFilter = isValidFaculty(faculty) ? faculty : '';
-  const programFilter = facultyFilter && isValidProgram(facultyFilter, program) ? program : '';
+  // Faculty and program can each be used alone; a program implies its faculty, unknown or
+  // contradicting values are ignored instead of matching nothing.
+  const { faculty: facultyFilter, program: programFilter } = normalizeFilter(faculty, program);
 
   const validPage = Math.max(1, parseInt(page, 10) || 1);
   const validPageSize = Math.max(1, Math.min(100, parseInt(pageSize, 10) || 12));

@@ -84,7 +84,55 @@ function isValidProgram(facultyValue, programValue) {
   return getPrograms(facultyValue).some((p) => p.value === programValue);
 }
 
+/** Every program of every faculty, each tagged with its faculty (program keys are unique overall). */
+function getAllPrograms() {
+  return FACULTIES.flatMap((f) =>
+    getPrograms(f.value).map((p) => ({ ...p, faculty: f.value, facultyLabel: f.label })),
+  );
+}
+
+/** Faculty key a program belongs to, or '' when the program is unknown. */
+function getFacultyOfProgram(programValue) {
+  return getAllPrograms().find((p) => p.value === programValue)?.faculty ?? '';
+}
+
+/**
+ * Faculty and program can be picked in either order:
+ * - choosing a faculty drops a program that belongs to another faculty
+ * - choosing a program fills in its faculty
+ * - clearing the faculty also clears the program
+ */
+function applyFacultyChange(current, faculty) {
+  const keep = faculty && current.program && getFacultyOfProgram(current.program) === faculty;
+  return { faculty: faculty || '', program: keep ? current.program : '' };
+}
+
+function applyProgramChange(current, program) {
+  if (!program) return { faculty: current.faculty, program: '' };
+  return { faculty: getFacultyOfProgram(program) || current.faculty, program };
+}
+
+/**
+ * Sanitise filter values coming from a URL: unknown values are dropped, a program fills in its
+ * faculty, and a program that contradicts the chosen faculty is ignored (the faculty wins).
+ */
+function normalizeFilter(faculty, program) {
+  let nextFaculty = isValidFaculty(faculty) ? faculty : '';
+  let nextProgram = '';
+  const owner = getFacultyOfProgram(program);
+  if (owner && (!nextFaculty || nextFaculty === owner)) {
+    nextProgram = program;
+    nextFaculty = owner;
+  }
+  return { faculty: nextFaculty, program: nextProgram };
+}
+
 module.exports = {
+  getAllPrograms,
+  getFacultyOfProgram,
+  applyFacultyChange,
+  applyProgramChange,
+  normalizeFilter,
   FACULTIES,
   PROGRAMS,
   getFaculty,

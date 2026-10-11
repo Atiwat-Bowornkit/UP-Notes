@@ -1,6 +1,7 @@
 "use client";
 
 import * as facultyData from "@/src/utils/facultyData";
+import ProgramOptions from "@/components/ProgramOptions";
 
 type Props = {
   faculty: string;
@@ -26,9 +27,11 @@ export default function FacultyProgramFields({
   const programs = facultyData.getPrograms(faculty);
   const hasPrograms = programs.length > 0;
 
+  // A faculty with no program list cannot offer any program; otherwise either field can be picked first.
+  const programLocked = Boolean(faculty) && !hasPrograms;
   let programHint = "";
-  if (!faculty) programHint = "เลือกคณะก่อน จึงจะเลือกสาขาได้";
-  else if (!hasPrograms) programHint = "คณะนี้ยังไม่มีรายการสาขา ไม่ต้องเลือก";
+  if (programLocked) programHint = "คณะนี้ยังไม่มีรายการสาขา ไม่ต้องเลือก";
+  else if (!faculty) programHint = "เลือกสาขาก่อนก็ได้ ระบบจะเลือกคณะให้อัตโนมัติ";
 
   return (
     <div className="grid gap-6 sm:grid-cols-2">
@@ -40,7 +43,7 @@ export default function FacultyProgramFields({
           id={`${idPrefix}-faculty`}
           name="faculty"
           value={faculty}
-          onChange={(e) => onChange({ faculty: e.target.value, program: "" })}
+          onChange={(e) => onChange(facultyData.applyFacultyChange({ faculty, program }, e.target.value))}
           className={`input ${facultyError ? "input-error" : ""}`}
           aria-invalid={!!facultyError}
         >
@@ -56,23 +59,19 @@ export default function FacultyProgramFields({
 
       <div>
         <label htmlFor={`${idPrefix}-program`} className="label">
-          สาขาวิชา {required && hasPrograms && <span className="text-danger">*</span>}
+          สาขาวิชา {required && (hasPrograms || !faculty) && <span className="text-danger">*</span>}
         </label>
         <select
           id={`${idPrefix}-program`}
           name="program"
           value={program}
-          onChange={(e) => onChange({ faculty, program: e.target.value })}
-          disabled={!faculty || !hasPrograms}
+          onChange={(e) => onChange(facultyData.applyProgramChange({ faculty, program }, e.target.value))}
+          disabled={programLocked}
           className={`input ${programError ? "input-error" : ""}`}
           aria-invalid={!!programError}
         >
           <option value="">{faculty && hasPrograms ? "-- เลือกสาขา --" : "-- สาขาวิชา --"}</option>
-          {programs.map((p) => (
-            <option key={p.value} value={p.value}>
-              {p.label}
-            </option>
-          ))}
+          <ProgramOptions faculty={faculty} />
         </select>
         {programError ? <p className="field-error">{programError}</p> : programHint && <p className="hint">{programHint}</p>}
       </div>

@@ -24,12 +24,12 @@ export default async function NotesPage({
   const query = (searchParams.q ?? "").trim();
   const selectedCategory = searchParams.category ?? "all";
   const sort = searchParams.sort === "popular" ? "popular" : "latest";
-  // A program is only meaningful inside a (valid) faculty
-  const selectedFaculty = facultyData.isValidFaculty(searchParams.faculty ?? "") ? (searchParams.faculty as string) : "";
-  const selectedProgram = facultyData.isValidProgram(selectedFaculty, searchParams.program ?? "")
-    ? (searchParams.program as string)
-    : "";
   const page = Math.max(1, Number.parseInt(searchParams.page ?? "1", 10) || 1);
+  // Either filter works alone; a program implies its faculty and invalid values are dropped
+  const { faculty: selectedFaculty, program: selectedProgram } = facultyData.normalizeFilter(
+    searchParams.faculty,
+    searchParams.program,
+  );
 
   // Fetch published notes via browseService (enforces status = 'PUBLISHED' and NFR-01 optimization)
   const result = await getPublishedNotes({

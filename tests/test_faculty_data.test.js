@@ -44,3 +44,52 @@ test('facultyData - label lookups', () => {
   assert.strictEqual(getFacultyLabel('nope'), '');
   assert.strictEqual(getProgramLabel('ict', 'nope'), '');
 });
+
+// ---- picking faculty and program in either order ----
+const {
+  getAllPrograms, getFacultyOfProgram, applyFacultyChange, applyProgramChange, normalizeFilter,
+} = require('../src/utils/facultyData');
+
+test('facultyData - program keys are unique across all faculties', () => {
+  const all = getAllPrograms();
+  assert.strictEqual(new Set(all.map((p) => p.value)).size, all.length);
+  assert.strictEqual(all.length, 21);
+  assert.ok(all.every((p) => getFacultyOfProgram(p.value) === p.faculty));
+});
+
+test('facultyData - getFacultyOfProgram', () => {
+  assert.strictEqual(getFacultyOfProgram('accounting'), 'business-communication');
+  assert.strictEqual(getFacultyOfProgram('food-safety'), 'agriculture');
+  assert.strictEqual(getFacultyOfProgram('nope'), '');
+  assert.strictEqual(getFacultyOfProgram(''), '');
+});
+
+test('facultyData - choosing a program first fills in its faculty', () => {
+  assert.deepStrictEqual(applyProgramChange({ faculty: '', program: '' }, 'accounting'),
+    { faculty: 'business-communication', program: 'accounting' });
+  // choosing a program of another faculty switches the faculty too
+  assert.deepStrictEqual(applyProgramChange({ faculty: 'ict', program: 'computer-science' }, 'accounting'),
+    { faculty: 'business-communication', program: 'accounting' });
+});
+
+test('facultyData - clearing the program keeps the faculty', () => {
+  assert.deepStrictEqual(applyProgramChange({ faculty: 'ict', program: 'computer-science' }, ''),
+    { faculty: 'ict', program: '' });
+});
+
+test('facultyData - changing the faculty drops a program of another faculty but keeps a matching one', () => {
+  assert.deepStrictEqual(applyFacultyChange({ faculty: 'ict', program: 'computer-science' }, 'law'),
+    { faculty: 'law', program: '' });
+  assert.deepStrictEqual(applyFacultyChange({ faculty: '', program: 'computer-science' }, 'ict'),
+    { faculty: 'ict', program: 'computer-science' });
+  assert.deepStrictEqual(applyFacultyChange({ faculty: 'ict', program: 'computer-science' }, ''),
+    { faculty: '', program: '' });
+});
+
+test('facultyData - normalizeFilter cleans values coming from a URL', () => {
+  assert.deepStrictEqual(normalizeFilter('ict', 'computer-science'), { faculty: 'ict', program: 'computer-science' });
+  assert.deepStrictEqual(normalizeFilter(undefined, 'accounting'), { faculty: 'business-communication', program: 'accounting' });
+  assert.deepStrictEqual(normalizeFilter('ict', 'accounting'), { faculty: 'ict', program: '' });
+  assert.deepStrictEqual(normalizeFilter('hogwarts', 'quidditch'), { faculty: '', program: '' });
+  assert.deepStrictEqual(normalizeFilter(undefined, undefined), { faculty: '', program: '' });
+});

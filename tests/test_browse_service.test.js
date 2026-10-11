@@ -91,12 +91,19 @@ test('browseService - program filter narrows within the faculty', async () => {
     assert.deepStrictEqual(result.data.map((n) => n.id), ['2']);
 });
 
-test('browseService - a program is ignored without its faculty', async () => {
-    const noFaculty = await getPublishedNotes({ notes: facultyNotes, program: 'accounting' });
-    assert.strictEqual(noFaculty.pagination.totalCount, 5);
+test('browseService - a program works alone and implies its faculty', async () => {
+    const result = await getPublishedNotes({ notes: facultyNotes, program: 'accounting' });
+    assert.deepStrictEqual(result.data.map((n) => n.id), ['3']);
+});
 
-    const wrongFaculty = await getPublishedNotes({ notes: facultyNotes, faculty: 'ict', program: 'accounting' });
-    assert.deepStrictEqual(wrongFaculty.data.map((n) => n.id).sort(), ['1', '2']);
+test('browseService - a program that contradicts the chosen faculty is ignored (faculty wins)', async () => {
+    const result = await getPublishedNotes({ notes: facultyNotes, faculty: 'ict', program: 'accounting' });
+    assert.deepStrictEqual(result.data.map((n) => n.id).sort(), ['1', '2']);
+});
+
+test('browseService - unknown program is ignored', async () => {
+    const result = await getPublishedNotes({ notes: facultyNotes, program: 'quidditch' });
+    assert.strictEqual(result.pagination.totalCount, 5);
 });
 
 test('browseService - unknown faculty is ignored instead of matching nothing', async () => {
@@ -122,7 +129,12 @@ test('browseService - database mode passes faculty/program into the Prisma where
     assert.strictEqual(seenWhere.faculty, 'ict');
     assert.strictEqual(seenWhere.program, 'software-engineering');
 
-    await getPublishedNotes({ prismaClient, faculty: '', program: 'software-engineering' });
+    // program alone: the faculty is derived from it
+    await getPublishedNotes({ prismaClient, program: 'software-engineering' });
+    assert.strictEqual(seenWhere.faculty, 'ict');
+    assert.strictEqual(seenWhere.program, 'software-engineering');
+
+    await getPublishedNotes({ prismaClient, faculty: '', program: 'quidditch' });
     assert.strictEqual('faculty' in seenWhere, false);
     assert.strictEqual('program' in seenWhere, false);
 });
