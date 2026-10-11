@@ -4,6 +4,8 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateUploadFile, validateCourseCode } from '@/src/utils/uploadHelper';
 import { CheckIcon, CloseIcon, FileIcon, UploadIcon } from '@/components/Icons';
+import FacultyProgramFields from '@/components/FacultyProgramFields';
+import * as facultyData from '@/src/utils/facultyData';
 
 const CATEGORIES = [
   { value: 'GE', label: 'GE' },
@@ -24,6 +26,8 @@ export default function UploadNotePage() {
     title: '',
     courseCode: '',
     category: CATEGORIES[0].value,
+    faculty: '',
+    program: '',
     description: ''
   });
   const [file, setFile] = useState(null);
@@ -82,6 +86,11 @@ export default function UploadNotePage() {
       errors.courseCode = 'กรุณากรอกรหัสวิชา';
     } else if (!validateCourseCode(formData.courseCode)) {
       errors.courseCode = 'รหัสวิชาต้องเป็นตัวเลข 6 หลัก (เช่น 225311)';
+    }
+    if (!formData.faculty) {
+      errors.faculty = 'กรุณาเลือกคณะ';
+    } else if (facultyData.getPrograms(formData.faculty).length > 0 && !formData.program) {
+      errors.program = 'กรุณาเลือกสาขา';
     }
     if (!formData.description.trim()) errors.description = 'กรุณากรอกคำอธิบาย';
     if (!file) errors.file = fileError || 'กรุณาเลือกไฟล์';
@@ -174,6 +183,19 @@ export default function UploadNotePage() {
             </select>
           </div>
         </div>
+
+        <FacultyProgramFields
+          required
+          idPrefix="upload"
+          faculty={formData.faculty}
+          program={formData.program}
+          facultyError={fieldErrors.faculty}
+          programError={fieldErrors.program}
+          onChange={({ faculty, program }) => {
+            setFormData(prev => ({ ...prev, faculty, program }));
+            setFieldErrors(prev => ({ ...prev, faculty: '', program: '' }));
+          }}
+        />
 
         <div>
           <label htmlFor="description" className="label">คำอธิบาย <span className="text-danger">*</span></label>

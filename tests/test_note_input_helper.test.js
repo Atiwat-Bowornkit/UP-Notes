@@ -53,3 +53,48 @@ test('validateNoteFields - non-object input is rejected without throwing', () =>
 test('isValidCourseCode - non-string input is false', () => {
   assert.strictEqual(isValidCourseCode(225311), false);
 });
+
+// ---- faculty / program ----
+test('validateNoteFields - faculty is optional unless requireFaculty is set', () => {
+  assert.strictEqual(validateNoteFields(ok).valid, true);
+  assert.strictEqual('faculty' in validateNoteFields(ok).data, false);
+  assert.strictEqual(validateNoteFields(ok, { requireFaculty: true }).valid, false);
+  assert.strictEqual(validateNoteFields(ok, { requireFaculty: true }).error, 'กรุณาเลือกคณะ');
+});
+
+test('validateNoteFields - requireFaculty needs a program when the faculty has a program list', () => {
+  const noProgram = validateNoteFields({ ...ok, faculty: 'ict' }, { requireFaculty: true });
+  assert.strictEqual(noProgram.valid, false);
+  assert.strictEqual(noProgram.error, 'กรุณาเลือกสาขา');
+
+  const full = validateNoteFields({ ...ok, faculty: 'ict', program: 'software-engineering' }, { requireFaculty: true });
+  assert.strictEqual(full.valid, true);
+  assert.strictEqual(full.data.faculty, 'ict');
+  assert.strictEqual(full.data.program, 'software-engineering');
+});
+
+test('validateNoteFields - faculty without a program list needs no program', () => {
+  const r = validateNoteFields({ ...ok, faculty: 'law' }, { requireFaculty: true });
+  assert.strictEqual(r.valid, true);
+  assert.strictEqual(r.data.program, null);
+});
+
+test('validateNoteFields - rejects unknown faculty and a program of another faculty', () => {
+  assert.strictEqual(validateNoteFields({ ...ok, faculty: 'hogwarts' }).valid, false);
+  const wrong = validateNoteFields({ ...ok, faculty: 'ict', program: 'accounting' });
+  assert.strictEqual(wrong.valid, false);
+  assert.strictEqual(wrong.error, 'สาขาไม่ตรงกับคณะที่เลือก');
+});
+
+test('validateNoteFields - a program cannot be chosen without a faculty', () => {
+  const r = validateNoteFields({ ...ok, program: 'accounting' });
+  assert.strictEqual(r.valid, false);
+  assert.strictEqual(r.error, 'กรุณาเลือกคณะก่อนเลือกสาขา');
+});
+
+test('validateNoteFields - edit flow: faculty keys are only returned when sent', () => {
+  assert.strictEqual('faculty' in validateNoteFields({ title: 'x', category: 'GE' }, { requireCourseCode: false }).data, false);
+  const cleared = validateNoteFields({ title: 'x', category: 'GE', faculty: null, program: null }, { requireCourseCode: false });
+  assert.strictEqual(cleared.valid, true);
+  assert.strictEqual(cleared.data.faculty, null);
+});

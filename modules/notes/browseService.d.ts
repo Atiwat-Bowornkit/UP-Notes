@@ -10,6 +10,8 @@ export interface PaginationMetadata {
 export interface PublishedNotesOptions {
   searchQuery?: string;
   category?: string;
+  faculty?: string;
+  program?: string;
   sortBy?: string;
   page?: number;
   pageSize?: number;

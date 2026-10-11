@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import CategoryBadge from '@/components/CategoryBadge';
+import FacultyProgramFields from '@/components/FacultyProgramFields';
+import * as facultyData from '@/src/utils/facultyData';
 import { DownloadIcon, FileIcon, HeartIcon, UploadIcon } from '@/components/Icons';
 
 const STATUS_BADGES = {
@@ -157,6 +159,12 @@ export default function MyNotesPage() {
                     <CategoryBadge category={note.category} />
                   </div>
                   <h3 className="mt-3 line-clamp-2 text-lg font-semibold text-white">{note.title}</h3>
+                  {note.faculty && (
+                    <p className="mt-2 line-clamp-1 text-xs text-gray-500">
+                      {facultyData.getFacultyLabel(note.faculty)}
+                      {note.program && ` · ${facultyData.getProgramLabel(note.faculty, note.program)}`}
+                    </p>
+                  )}
                   <p className="mt-2 line-clamp-2 min-h-10 text-sm text-gray-400">
                     {note.description || 'ไม่มีคำอธิบาย'}
                   </p>
@@ -194,7 +202,7 @@ export default function MyNotesPage() {
           aria-labelledby="edit-title"
           onKeyDown={(e) => e.key === 'Escape' && setEditingNote(null)}
         >
-          <div className="card w-full max-w-md animate-pop-in p-6 shadow-2xl">
+          <div className="card max-h-[90vh] w-full max-w-xl animate-pop-in overflow-y-auto p-6 shadow-2xl">
             <h2 id="edit-title" className="text-xl font-semibold text-white">แก้ไขข้อมูลโน้ต</h2>
             <form onSubmit={handleUpdate} className="mt-5 space-y-4">
               <div>
@@ -222,6 +230,12 @@ export default function MyNotesPage() {
                   <option value="ELECTIVE">วิชาเลือก</option>
                 </select>
               </div>
+              <FacultyProgramFields
+                idPrefix="edit"
+                faculty={editingNote.faculty ?? ''}
+                program={editingNote.program ?? ''}
+                onChange={({ faculty, program }) => setEditingNote({ ...editingNote, faculty, program })}
+              />
               <div>
                 <label htmlFor="edit-note-description" className="label">คำอธิบาย</label>
                 <textarea

@@ -4,6 +4,7 @@ import { NoteStatus, Role } from "@prisma/client";
 import ReportNoteForm from "@/modules/admin/components/ReportNoteForm";
 import authHelper from "@/src/utils/authHelper";
 import CategoryBadge from "@/components/CategoryBadge";
+import * as facultyData from "@/src/utils/facultyData";
 import { ArrowLeftIcon, FileIcon, UserIcon } from "@/components/Icons";
 import NoteEngagement from "@/modules/notes/components/NoteEngagement";
 import PdfPreview from "@/modules/notes/components/PdfPreview";
@@ -81,6 +82,12 @@ export default async function NoteDetailPage({ params }: { params: { id: string 
           {statusBadge}
         </div>
         <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl">{note.title}</h1>
+        {note.faculty && (
+          <p className="text-sm text-gray-300">
+            {facultyData.getFacultyLabel(note.faculty)}
+            {note.program && <span className="text-gray-400"> · สาขา{facultyData.getProgramLabel(note.faculty, note.program)}</span>}
+          </p>
+        )}
         <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400">
           <span className="flex items-center gap-1.5">
             <UserIcon size={15} /> {authHelper.displayName(note.author)}

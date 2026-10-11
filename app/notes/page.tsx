@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getPublishedNotes } from "@/modules/notes/browseService";
 import CategoryBadge from "@/components/CategoryBadge";
+import NoteFilters from "@/components/NoteFilters";
+import * as facultyData from "@/src/utils/facultyData";
 import { ArrowRightIcon, DownloadIcon, HeartIcon, InboxIcon, SearchIcon, UploadIcon, UserIcon } from "@/components/Icons";
 
 const PAGE_SIZE = 12;
@@ -8,6 +10,8 @@ const PAGE_SIZE = 12;
 type SearchParams = {
   q?: string;
   category?: string;
+  faculty?: string;
+  program?: string;
   sort?: string;
   page?: string;
 };
@@ -20,12 +24,19 @@ export default async function NotesPage({
   const query = (searchParams.q ?? "").trim();
   const selectedCategory = searchParams.category ?? "all";
   const sort = searchParams.sort === "popular" ? "popular" : "latest";
+  // A program is only meaningful inside a (valid) faculty
+  const selectedFaculty = facultyData.isValidFaculty(searchParams.faculty ?? "") ? (searchParams.faculty as string) : "";
+  const selectedProgram = facultyData.isValidProgram(selectedFaculty, searchParams.program ?? "")
+    ? (searchParams.program as string)
+    : "";
   const page = Math.max(1, Number.parseInt(searchParams.page ?? "1", 10) || 1);
 
   // Fetch published notes via browseService (enforces status = 'PUBLISHED' and NFR-01 optimization)
   const result = await getPublishedNotes({
     searchQuery: query,
     category: selectedCategory,
+    faculty: selectedFaculty,
+    program: selectedProgram,
     sortBy: sort,
     page,
     pageSize: PAGE_SIZE,
@@ -40,6 +51,8 @@ export default async function NotesPage({
     if (selectedCategory !== "all" && selectedCategory !== "ทั้งหมด") {
       params.set("category", selectedCategory);
     }
+    if (selectedFaculty) params.set("faculty", selectedFaculty);
+    if (selectedProgram) params.set("program", selectedProgram);
     if (sort !== "latest") {
       params.set("sort", sort);
     }
@@ -48,7 +61,11 @@ export default async function NotesPage({
     return `/notes?${params.toString()}`;
   };
 
-  const hasFilters = Boolean(query) || (selectedCategory !== "all" && selectedCategory !== "ทั้งหมด") || sort !== "latest";
+  const hasFilters =
+    Boolean(query) ||
+    (selectedCategory !== "all" && selectedCategory !== "ทั้งหมด") ||
+    sort !== "latest" ||
+    Boolean(selectedFaculty);
 
   return (
     <div className="space-y-6">
@@ -63,47 +80,22 @@ export default async function NotesPage({
         </Link>
       </header>
 
-      {/* Search and filters */}
-      <form
-        action="/notes"
-        method="get"
-        className="card grid gap-3 p-4 md:grid-cols-[minmax(0,1fr)_200px_180px_auto]"
-        role="search"
-      >
-        <div className="relative">
-          <label className="sr-only" htmlFor="note-search">รหัสวิชาหรือชื่อวิชา</label>
-          <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
-          <input
-            id="note-search"
-            name="q"
-            defaultValue={query}
-            placeholder="รหัสวิชา / ชื่อวิชา เช่น 225311"
-            className="input pl-11"
-          />
-        </div>
-        <div>
-          <label className="sr-only" htmlFor="note-category">หมวดหมู่</label>
-          <select id="note-category" name="category" defaultValue={selectedCategory} className="input">
-            <option value="all">ทุกหมวดหมู่</option>
-            <option value="GE">GE</option>
-            <option value="MAJOR_REQUIRED">วิชาเอกบังคับ</option>
-            <option value="ELECTIVE">วิชาเลือก</option>
-          </select>
-        </div>
-        <div>
-          <label className="sr-only" htmlFor="note-sort">เรียงลำดับ</label>
-          <select id="note-sort" name="sort" defaultValue={sort} className="input">
-            <option value="latest">ล่าสุด</option>
-            <option value="popular">ยอดนิยมสูงสุด</option>
-          </select>
-        </div>
-        <div className="flex gap-2">
-          <button className="btn-primary flex-1 md:flex-none" type="submit">ค้นหา</button>
-          {hasFilters && (
-            <Link href="/notes" className="btn-ghost flex-1 md:flex-none">ล้าง</Link>
+      <NoteFilters
+        query={query}
+        category={selectedCategory}
+        sort={sort}
+        faculty={selectedFaculty}
+        program={selectedProgram}
+      />
+
+      {selectedFaculty && (
+        <ul className="flex flex-wrap items-center gap-2 text-sm" aria-label="ตัวกรองที่ใช้อยู่">
+          <li className="badge-accent">{facultyData.getFacultyLabel(selectedFaculty)}</li>
+          {selectedProgram && (
+            <li className="badge-accent">{facultyData.getProgramLabel(selectedFaculty, selectedProgram)}</li>
           )}
-        </div>
-      </form>
+        </ul>
+      )}
 
       <p className="text-sm text-gray-400" aria-live="polite">
         พบ <span className="font-semibold text-white">{totalCount.toLocaleString("th-TH")}</span> รายการ
@@ -149,6 +141,12 @@ export default async function NotesPage({
                   <p className="mt-2 flex items-center gap-1.5 text-sm text-gray-400">
                     <UserIcon size={14} /> {authorName}
                   </p>
+                  {note.faculty && (
+                    <p className="mt-2 line-clamp-2 text-xs text-gray-500">
+                      {facultyData.getFacultyLabel(note.faculty)}
+                      {note.program && ` · ${facultyData.getProgramLabel(note.faculty, note.program)}`}
+                    </p>
+                  )}
                   <div className="mt-auto flex items-center justify-between pt-5 text-sm text-gray-400">
                     <span className="flex items-center gap-4">
                       <span className="flex items-center gap-1.5"><HeartIcon size={15} /> {likesCount}</span>

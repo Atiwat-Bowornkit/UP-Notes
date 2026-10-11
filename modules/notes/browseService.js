@@ -7,6 +7,7 @@
 
 const { filterNotesBySearch } = require('./browseHelper');
 const { displayName } = require('../../src/utils/authHelper');
+const { isValidFaculty, isValidProgram } = require('../../src/utils/facultyData');
 
 // Category mapping helper between UI labels and Prisma enum
 const CATEGORY_MAP = {
@@ -23,6 +24,8 @@ const CATEGORY_MAP = {
  * @param {Object} options
  * @param {string} [options.searchQuery=''] - Search term for course code or title
  * @param {string} [options.category='ทั้งหมด'] - Category filter
+ * @param {string} [options.faculty=''] - Faculty key filter (see src/utils/facultyData.js)
+ * @param {string} [options.program=''] - Program key filter; only applied together with a faculty
  * @param {string} [options.sortBy='ล่าสุด'] - Sorting option ('ล่าสุด' or 'ยอดนิยมสูงสุด')
  * @param {number} [options.page=1] - Current page number
  * @param {number} [options.pageSize=12] - Number of items per page
@@ -34,12 +37,18 @@ async function getPublishedNotes(options = {}) {
   const {
     searchQuery = '',
     category = 'ทั้งหมด',
+    faculty = '',
+    program = '',
     sortBy = 'ล่าสุด',
     page = 1,
     pageSize = 12,
     notes = null,
     prismaClient = null,
   } = options;
+
+  // A program only makes sense inside its faculty; unknown values are ignored instead of matching nothing.
+  const facultyFilter = isValidFaculty(faculty) ? faculty : '';
+  const programFilter = facultyFilter && isValidProgram(facultyFilter, program) ? program : '';
 
   const validPage = Math.max(1, parseInt(page, 10) || 1);
   const validPageSize = Math.max(1, Math.min(100, parseInt(pageSize, 10) || 12));
@@ -49,7 +58,12 @@ async function getPublishedNotes(options = {}) {
     if (Array.isArray(notes)) {
       // Always enforce status === 'PUBLISHED'
       const publishedNotes = notes.filter(n => !n.status || n.status === 'PUBLISHED');
-      const filtered = filterNotesBySearch(publishedNotes, searchQuery, category, sortBy);
+      const scoped = publishedNotes.filter(
+        (n) =>
+          (!facultyFilter || n.faculty === facultyFilter) &&
+          (!programFilter || n.program === programFilter),
+      );
+      const filtered = filterNotesBySearch(scoped, searchQuery, category, sortBy);
       
       const totalCount = filtered.length;
       const totalPages = Math.ceil(totalCount / validPageSize) || 1;
@@ -98,6 +112,10 @@ async function getPublishedNotes(options = {}) {
     if (mappedCategory) {
       where.category = mappedCategory;
     }
+
+    // Faculty / program filters
+    if (facultyFilter) where.faculty = facultyFilter;
+    if (programFilter) where.program = programFilter;
 
     // Search query filter
     const cleanQuery = searchQuery.trim();

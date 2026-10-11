@@ -50,6 +50,8 @@ model Note {
   courseCode    String
   category      NoteCategory
   description   String?
+  faculty       String?
+  program       String?
   filePath      String
   fileName      String
   fileSizeBytes Int
@@ -65,6 +67,7 @@ model Note {
 
   @@index([courseCode])
   @@index([status])
+  @@index([faculty, program])
 }
 
 model Like {

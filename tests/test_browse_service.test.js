@@ -70,3 +70,59 @@ test('browseService - getPublishedNoteById handles missing or unpublished notes'
     assert.strictEqual(await getPublishedNoteById(null), null);
     assert.strictEqual(await getPublishedNoteById('non-existent'), null);
 });
+
+// ---- faculty / program filters ----
+const facultyNotes = [
+    { id: '1', title: 'SE', status: 'PUBLISHED', faculty: 'ict', program: 'software-engineering' },
+    { id: '2', title: 'CS', status: 'PUBLISHED', faculty: 'ict', program: 'computer-science' },
+    { id: '3', title: 'Acc', status: 'PUBLISHED', faculty: 'business-communication', program: 'accounting' },
+    { id: '4', title: 'Law', status: 'PUBLISHED', faculty: 'law', program: null },
+    { id: '5', title: 'Old note', status: 'PUBLISHED' },
+    { id: '6', title: 'Hidden ICT', status: 'HIDDEN', faculty: 'ict', program: 'software-engineering' },
+];
+
+test('browseService - faculty filter keeps only that faculty (and never hidden notes)', async () => {
+    const result = await getPublishedNotes({ notes: facultyNotes, faculty: 'ict' });
+    assert.deepStrictEqual(result.data.map((n) => n.id).sort(), ['1', '2']);
+});
+
+test('browseService - program filter narrows within the faculty', async () => {
+    const result = await getPublishedNotes({ notes: facultyNotes, faculty: 'ict', program: 'computer-science' });
+    assert.deepStrictEqual(result.data.map((n) => n.id), ['2']);
+});
+
+test('browseService - a program is ignored without its faculty', async () => {
+    const noFaculty = await getPublishedNotes({ notes: facultyNotes, program: 'accounting' });
+    assert.strictEqual(noFaculty.pagination.totalCount, 5);
+
+    const wrongFaculty = await getPublishedNotes({ notes: facultyNotes, faculty: 'ict', program: 'accounting' });
+    assert.deepStrictEqual(wrongFaculty.data.map((n) => n.id).sort(), ['1', '2']);
+});
+
+test('browseService - unknown faculty is ignored instead of matching nothing', async () => {
+    const result = await getPublishedNotes({ notes: facultyNotes, faculty: 'hogwarts' });
+    assert.strictEqual(result.pagination.totalCount, 5);
+});
+
+test('browseService - faculty filter combines with search', async () => {
+    const result = await getPublishedNotes({ notes: facultyNotes, faculty: 'ict', searchQuery: 'SE' });
+    assert.deepStrictEqual(result.data.map((n) => n.id), ['1']);
+});
+
+test('browseService - database mode passes faculty/program into the Prisma where clause', async () => {
+    let seenWhere;
+    const prismaClient = {
+        note: {
+            findMany: async ({ where }) => { seenWhere = where; return []; },
+            count: async () => 0,
+        },
+    };
+    await getPublishedNotes({ prismaClient, faculty: 'ict', program: 'software-engineering' });
+    assert.strictEqual(seenWhere.status, 'PUBLISHED');
+    assert.strictEqual(seenWhere.faculty, 'ict');
+    assert.strictEqual(seenWhere.program, 'software-engineering');
+
+    await getPublishedNotes({ prismaClient, faculty: '', program: 'software-engineering' });
+    assert.strictEqual('faculty' in seenWhere, false);
+    assert.strictEqual('program' in seenWhere, false);
+});

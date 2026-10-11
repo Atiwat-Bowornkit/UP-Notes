@@ -24,12 +24,17 @@ export async function POST(req) {
     const file = formData.get('file');
 
     // 2. ตรวจซ้ำที่ server (ห้ามเชื่อ client อย่างเดียว)
-    const fields = validateNoteFields({
-      title: formData.get('title'),
-      courseCode: formData.get('courseCode'),
-      category: formData.get('category'),
-      description: formData.get('description'),
-    });
+    const fields = validateNoteFields(
+      {
+        title: formData.get('title'),
+        courseCode: formData.get('courseCode'),
+        category: formData.get('category'),
+        description: formData.get('description'),
+        faculty: formData.get('faculty'),
+        program: formData.get('program'),
+      },
+      { requireFaculty: true },
+    );
     if (!fields.valid) {
       return NextResponse.json({ error: fields.error }, { status: 400 });
     }
