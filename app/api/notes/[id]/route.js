@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/session';
 import { NOTES_BUCKET } from '@/lib/constants';
@@ -33,7 +33,7 @@ export async function DELETE(req, { params }) {
 
     // ลบไฟล์ก่อน ถ้าล้มเหลวให้หยุด จะได้ไม่เหลือแถว DB ที่ไม่มีไฟล์
     if (note.filePath) {
-      const { error: storageError } = await createClient()
+      const { error: storageError } = await createAdminClient()
         .storage.from(NOTES_BUCKET)
         .remove([note.filePath]);
       if (storageError) {

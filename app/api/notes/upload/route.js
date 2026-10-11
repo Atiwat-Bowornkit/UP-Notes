@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { randomUUID } from 'node:crypto';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/session';
 import { NOTES_BUCKET } from '@/lib/constants';
@@ -9,7 +9,9 @@ import { validateNoteFields } from '@/src/utils/noteInputHelper';
 
 export async function POST(req) {
   let uploadedFilePath = null;
-  const supabase = createClient();
+  // Storage writes go through the service role after the user is authenticated above,
+  // so uploads do not depend on per-user Storage RLS policies.
+  const supabase = createAdminClient();
 
   try {
     // 1. ตรวจสอบสถานะการล็อกอิน (ใช้ id ของตาราง User ใน Prisma ไม่ใช่ id ของ Supabase Auth)
@@ -36,9 +38,10 @@ export async function POST(req) {
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    // 3. path: userId/uuid-ชื่อไฟล์
+    // 3. path: userId/uuid.ext — Storage keys must be ASCII, so Thai file names live in the DB only
     const cleanName = sanitizeFileName(file.name);
-    const fileKey = `${user.id}/${randomUUID()}-${cleanName}`;
+    const ext = (file.name.slice(file.name.lastIndexOf('.')) || '').toLowerCase();
+    const fileKey = `${user.id}/${randomUUID()}${ext}`;
     const fileBuffer = Buffer.from(await file.arrayBuffer());
 
     // 4. อัปโหลดไป bucket บน Supabase Storage

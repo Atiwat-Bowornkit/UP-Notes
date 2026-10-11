@@ -49,7 +49,12 @@ export default function RegisterPage() {
   }
 
   if (success) {
-    return <main className="mx-auto max-w-md p-6">ส่งลิงก์ยืนยันไปที่อีเมลแล้ว</main>;
+    return (
+      <main className="mx-auto max-w-md space-y-4 p-6">
+        <p role="status">สมัครสมาชิกสำเร็จ สามารถเข้าสู่ระบบได้ทันที</p>
+        <Link href="/login" className="btn-primary inline-block">เข้าสู่ระบบ</Link>
+      </main>
+    );
   }
 
   return (

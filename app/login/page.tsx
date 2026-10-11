@@ -12,6 +12,7 @@ function safeNext(value: string | null) {
 export default function LoginPage() {
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
+  const confirmationFailed = searchParams.get("error") === "confirmation";
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -44,6 +45,11 @@ export default function LoginPage() {
 />
         <input name="password" type="password" required placeholder="รหัสผ่าน" className="w-full rounded bg-white p-3 text-gray-900 caret-gray-900 placeholder:text-gray-500"
 />
+        {confirmationFailed && !error && (
+          <p role="status" className="text-yellow-400">
+            ลิงก์ยืนยันอีเมลใช้ไม่ได้ในเบราว์เซอร์นี้หรือหมดอายุ หากเคยกดยืนยันแล้ว ให้เข้าสู่ระบบได้เลย
+          </p>
+        )}
         {error && <p role="alert" className="text-red-500">{error}</p>}
         <button className="btn-primary w-full" type="submit">เข้าสู่ระบบ</button>
       </form>
