@@ -33,3 +33,6 @@ lab12b-sample-solution/
 # Next.js / TypeScript generated
 next-env.d.ts
 *.tsbuildinfo
+
+# Extra dev/test build outputs (NEXT_DIST_DIR)
+.next-*/

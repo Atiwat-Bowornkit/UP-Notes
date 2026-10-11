@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateUploadFile, validateCourseCode } from '@/src/utils/uploadHelper';
+import { createClient } from '@/lib/supabase/client';
 import { CheckIcon, CloseIcon, FileIcon, UploadIcon } from '@/components/Icons';
 import FacultyProgramFields from '@/components/FacultyProgramFields';
 import * as facultyData from '@/src/utils/facultyData';
@@ -12,6 +13,31 @@ const CATEGORIES = [
   { value: 'MAJOR_REQUIRED', label: 'วิชาเอกบังคับ' },
   { value: 'ELECTIVE', label: 'วิชาเลือก' },
 ];
+
+// Never assume an error response is JSON (a proxy may answer with plain text, e.g. "Request Entity Too Large")
+async function readJson(res) {
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {
+      error: res.status === 413
+        ? 'ไฟล์ใหญ่เกินกว่าที่เซิร์ฟเวอร์รับได้'
+        : `เซิร์ฟเวอร์ตอบกลับผิดรูปแบบ (${res.status})`,
+    };
+  }
+}
+
+async function postJson(url, payload) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const data = await readJson(res);
+  if (!res.ok) throw new Error(data.error || 'อัปโหลดไม่สำเร็จ');
+  return data;
+}
 
 function formatSize(bytes) {
   return bytes >= 1024 * 1024
@@ -103,17 +129,29 @@ export default function UploadNotePage() {
     setIsSubmitting(true);
 
     try {
-      const data = new FormData();
-      Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-      data.append('file', file);
+      const metadata = { ...formData };
 
-      const res = await fetch('/api/notes/upload', {
-        method: 'POST',
-        body: data,
+      // 1) server checks who/what and returns a one-time signed upload URL
+      const { path, token } = await postJson('/api/notes/upload/init', {
+        ...metadata,
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
       });
 
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || 'อัปโหลดไม่สำเร็จ');
+      // 2) the file goes straight to Storage (it never passes through the serverless function,
+      //    so the platform's request-size limit does not apply)
+      const { error: uploadError } = await createClient()
+        .storage.from('notes')
+        .uploadToSignedUrl(path, token, file, { contentType: file.type || undefined });
+      if (uploadError) throw new Error('อัปโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+
+      // 3) server verifies the stored file and creates the note
+      const result = await postJson('/api/notes/upload/complete', {
+        ...metadata,
+        path,
+        fileName: file.name,
+      });
 
       router.push(`/notes/${result.note.id}`);
     } catch (err) {
