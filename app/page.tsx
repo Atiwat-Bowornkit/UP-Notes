@@ -1,4 +1,6 @@
 import Link from "next/link";
+import NoteCard from "@/components/NoteCard";
+import { getPublishedNotes } from "@/modules/notes/browseService";
 import {
   ArrowRightIcon,
   BookIcon,
@@ -32,7 +34,21 @@ const steps = [
   { n: "3", title: "ผู้ดูแลอนุมัติ", text: "เมื่อผ่านแล้ว โน้ตจะแสดงในหน้าค้นหาให้เพื่อนๆ ใช้" },
 ];
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+async function getPopularNotes() {
+  // The landing page must never fail because of the database: no notes simply hides the section.
+  try {
+    const result = await getPublishedNotes({ sortBy: "popular", pageSize: 3 });
+    return result.success ? (result.data ?? []) : [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const popularNotes = await getPopularNotes();
+
   return (
     <div className="space-y-20">
       {/* Hero */}
@@ -62,6 +78,28 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Popular notes */}
+      {popularNotes.length > 0 && (
+        <section aria-labelledby="popular-heading" className="space-y-6">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="page-eyebrow">ยอดนิยม</p>
+              <h2 id="popular-heading" className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
+                โน้ตที่เพื่อนๆ ถูกใจมากที่สุด
+              </h2>
+            </div>
+            <Link href="/notes?sort=popular" className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-soft hover:text-white">
+              ดูทั้งหมด <ArrowRightIcon size={16} />
+            </Link>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {popularNotes.map((note) => (
+              <NoteCard key={note.id} note={note} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Features */}
       <section aria-labelledby="features-heading">

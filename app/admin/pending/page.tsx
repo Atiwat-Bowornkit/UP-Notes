@@ -9,6 +9,7 @@ import authHelper from "@/src/utils/authHelper";
 import CategoryBadge from "@/components/CategoryBadge";
 import { CheckIcon, FileIcon } from "@/components/Icons";
 
+export const metadata = { title: "โน้ตรออนุมัติ" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminPendingPage() {

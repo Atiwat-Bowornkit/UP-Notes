@@ -12,6 +12,7 @@ import {
 import authHelper from "@/src/utils/authHelper";
 import { CheckIcon } from "@/components/Icons";
 
+export const metadata = { title: "รายงานปัญหา" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminReportsPage() {
