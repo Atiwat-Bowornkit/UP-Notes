@@ -19,4 +19,24 @@ function validatePassword(password) {
   return PASSWORD_RULES.filter((rule) => !rule.test(value)).map((rule) => rule.message);
 }
 
-module.exports = { validateUpEmail, validatePassword };
+const USERNAME_MIN_LENGTH = 2;
+const USERNAME_MAX_LENGTH = 30;
+
+/**
+ * Validate the display name shown in the navbar and on notes.
+ * @returns {{valid: true, name: string} | {valid: false, error: string}}
+ */
+function validateUsername(username) {
+  const name = String(username ?? "").trim().replace(/\s+/g, " ");
+
+  if (name.length < USERNAME_MIN_LENGTH || name.length > USERNAME_MAX_LENGTH) {
+    return {
+      valid: false,
+      error: `ชื่อผู้ใช้ต้องมี ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} ตัวอักษร`,
+    };
+  }
+
+  return { valid: true, name };
+}
+
+module.exports = { validateUpEmail, validatePassword, validateUsername };

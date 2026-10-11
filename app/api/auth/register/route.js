@@ -5,7 +5,7 @@ import authHelper from "@/src/utils/authHelper";
 
 export async function POST(request) {
   try {
-    const { email, password } = await request.json();
+    const { email, password, username } = await request.json();
     const normalizedEmail = String(email ?? "").trim().toLowerCase();
 
     if (!authHelper.validateUpEmail(normalizedEmail)) {
@@ -13,6 +13,11 @@ export async function POST(request) {
         { error: "กรุณาใช้อีเมลมหาวิทยาลัยพะเยาเท่านั้น" },
         { status: 400 },
       );
+    }
+
+    const usernameCheck = authHelper.validateUsername(username);
+    if (!usernameCheck.valid) {
+      return NextResponse.json({ error: usernameCheck.error }, { status: 400 });
     }
 
     const passwordErrors = authHelper.validatePassword(password);
@@ -26,6 +31,7 @@ export async function POST(request) {
       email: normalizedEmail,
       password,
       email_confirm: true,
+      user_metadata: { name: usernameCheck.name },
     });
 
     if (error) {
@@ -46,7 +52,7 @@ export async function POST(request) {
 
     await prisma.user.upsert({
       where: { email: normalizedEmail },
-      create: { id: data.user.id, email: normalizedEmail },
+      create: { id: data.user.id, email: normalizedEmail, name: usernameCheck.name },
       update: {},
     });
 

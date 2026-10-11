@@ -13,9 +13,16 @@ export default function RegisterPage() {
     setError("");
 
     const form = new FormData(event.currentTarget);
+    const username = String(form.get("username") ?? "");
     const email = String(form.get("email") ?? "").trim();
     const password = String(form.get("password") ?? "");
     const confirmPassword = String(form.get("confirmPassword") ?? "");
+
+    const usernameCheck = authHelper.validateUsername(username);
+    if (!usernameCheck.valid) {
+      setError(usernameCheck.error);
+      return;
+    }
 
     if (!authHelper.validateUpEmail(email)) {
       setError("กรุณาใช้อีเมลมหาวิทยาลัยพะเยาเท่านั้น");
@@ -36,7 +43,7 @@ export default function RegisterPage() {
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, email, password }),
     });
     const result = await response.json();
 
@@ -61,6 +68,8 @@ export default function RegisterPage() {
     <main className="mx-auto max-w-md p-6">
       <h1 className="mb-4 text-2xl font-semibold">สมัครสมาชิก</h1>
       <form onSubmit={submit} className="space-y-4">
+        <input name="username" type="text" required maxLength={30} autoComplete="nickname" placeholder="ชื่อผู้ใช้" className="w-full rounded bg-white p-3 text-gray-900 caret-gray-900 placeholder:text-gray-500"
+/>
         <input name="email" type="email" required placeholder="อีเมล" className="w-full rounded bg-white p-3 text-gray-900 caret-gray-900 placeholder:text-gray-500"
 />
         <input name="password" type="password" required placeholder="รหัสผ่าน" className="w-full rounded bg-white p-3 text-gray-900 caret-gray-900 placeholder:text-gray-500"
