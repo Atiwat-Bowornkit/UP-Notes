@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { NoteStatus, Role } from "@prisma/client";
 import ReportNoteForm from "@/modules/admin/components/ReportNoteForm";
 import authHelper from "@/src/utils/authHelper";
+import CategoryBadge from "@/components/CategoryBadge";
+import { ArrowLeftIcon, FileIcon, UserIcon } from "@/components/Icons";
 import NoteEngagement from "@/modules/notes/components/NoteEngagement";
 import PdfPreview from "@/modules/notes/components/PdfPreview";
 import { NOTES_BUCKET } from "@/lib/constants";
@@ -58,67 +60,44 @@ export default async function NoteDetailPage({ params }: { params: { id: string 
   const extension = note.fileName.split(".").pop()?.toLowerCase();
   const isImage = extension === "png" || extension === "jpg" || extension === "jpeg";
 
+  const statusBadge =
+    note.status === NoteStatus.HIDDEN ? (
+      <span className="badge-danger">ถูกซ่อนเนื่องจากมีการรายงาน</span>
+    ) : note.status !== NoteStatus.PUBLISHED ? (
+      <span className="badge-warning">รอผู้ดูแลอนุมัติ</span>
+    ) : null;
+
   return (
-    <div className="mx-auto max-w-4xl space-y-7 px-4 py-6 sm:px-6">
-      <Link href="/notes" className="inline-flex items-center text-sm text-gray-400 hover:text-white transition">
-        ← กลับไปค้นหาโน้ต
+    <div className="mx-auto max-w-4xl space-y-6">
+      <Link href="/notes" className="inline-flex items-center gap-1.5 text-sm text-gray-400 transition hover:text-white">
+        <ArrowLeftIcon size={16} /> กลับไปค้นหาโน้ต
       </Link>
 
-      {/* 1. Header Information */}
-      <header className="border-b border-white/10 pb-6">
-        <div className="flex items-center gap-3">
-          <p className="text-sm font-medium text-accent">{note.courseCode}</p>
-          {note.status !== NoteStatus.PUBLISHED && (
-            <span className="rounded bg-yellow-500/20 px-2.5 py-0.5 text-xs font-medium text-yellow-400 border border-yellow-500/30">
-              {note.status === NoteStatus.HIDDEN
-                ? "ถูกซ่อนเนื่องจากมีการรายงาน (HIDDEN)"
-                : "รอการตรวจสอบ (PENDING_REVIEW)"}
-            </span>
-          )}
+      {/* Header information */}
+      <header className="card space-y-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="badge-accent font-mono">{note.courseCode}</span>
+          <CategoryBadge category={note.category} />
+          {statusBadge}
         </div>
-        <h1 className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-3xl">{note.title}</h1>
-        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400">
-          <span>โดย {authHelper.displayName(note.author)}</span>
+        <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl">{note.title}</h1>
+        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400">
+          <span className="flex items-center gap-1.5">
+            <UserIcon size={15} /> {authHelper.displayName(note.author)}
+          </span>
           <time dateTime={note.createdAt.toISOString()}>
             {note.createdAt.toLocaleDateString("th-TH", { dateStyle: "long" })}
           </time>
         </div>
         {note.description && (
-          <p className="mt-5 whitespace-pre-wrap leading-relaxed text-gray-300">{note.description}</p>
+          <p className="whitespace-pre-wrap border-t border-white/10 pt-4 leading-relaxed text-gray-300">
+            {note.description}
+          </p>
         )}
       </header>
 
-      {/* 1. File Preview Section */}
-      <section aria-labelledby="preview-heading" className="space-y-3">
-        <div className="flex items-center justify-between gap-3">
-          <h2 id="preview-heading" className="text-lg font-semibold text-white">พรีวิวเอกสาร</h2>
-          <span className="truncate text-sm text-gray-400 max-w-[200px] sm:max-w-xs">{note.fileName}</span>
-        </div>
-        {fileUrl ? (
-          isImage ? (
-            <div className="flex min-h-64 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black/20 p-2">
-              <img
-                src={fileUrl}
-                alt={`พรีวิว ${note.title}`}
-                className="max-h-[75vh] w-auto max-w-full object-contain rounded"
-              />
-            </div>
-          ) : extension === "pdf" ? (
-            <PdfPreview url={fileUrl} />
-          ) : (
-            <p role="alert" className="rounded-lg border border-white/10 p-6 text-center text-sm text-gray-400">
-              ไม่สามารถแสดงพรีวิวไฟล์นี้ได้
-            </p>
-          )
-        ) : (
-          <p role="alert" className="rounded-lg border border-white/10 p-6 text-center text-sm text-gray-400">
-            ไม่สามารถโหลดพรีวิวไฟล์ได้ในขณะนี้
-          </p>
-        )}
-      </section>
-
-      {/* 2. Like Button & 3. Download Button */}
-      <section className="border-y border-white/10 py-5">
+      {/* Like / download */}
+      <section aria-label="การดำเนินการ" className="card py-4">
         <NoteEngagement
           noteId={note.id}
           initialLikes={note._count.likes}
@@ -127,7 +106,34 @@ export default async function NoteDetailPage({ params }: { params: { id: string 
         />
       </section>
 
-      {/* 4. Report Problem Form */}
+      {/* File preview */}
+      <section aria-labelledby="preview-heading" className="space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="preview-heading" className="text-lg font-semibold text-white">พรีวิวเอกสาร</h2>
+          <span className="flex max-w-[200px] items-center gap-1.5 truncate text-sm text-gray-400 sm:max-w-xs">
+            <FileIcon size={15} /> <span className="truncate">{note.fileName}</span>
+          </span>
+        </div>
+        {fileUrl ? (
+          isImage ? (
+            <div className="flex min-h-64 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/20 p-2">
+              <img
+                src={fileUrl}
+                alt={`พรีวิว ${note.title}`}
+                className="max-h-[75vh] w-auto max-w-full rounded-lg object-contain"
+              />
+            </div>
+          ) : extension === "pdf" ? (
+            <PdfPreview url={fileUrl} />
+          ) : (
+            <p role="alert" className="alert-warning text-center">ไม่สามารถแสดงพรีวิวไฟล์นี้ได้</p>
+          )
+        ) : (
+          <p role="alert" className="alert-warning text-center">ไม่สามารถโหลดพรีวิวไฟล์ได้ในขณะนี้</p>
+        )}
+      </section>
+
+      {/* Report a problem */}
       <ReportNoteForm noteId={note.id} />
     </div>
   );

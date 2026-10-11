@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import ReportActions from "@/modules/admin/components/ReportActions";
 import { prisma } from "@/lib/prisma";
@@ -8,6 +9,8 @@ import {
   isAdmin,
   summarizeReasons,
 } from "@/src/utils/reportHelper";
+import authHelper from "@/src/utils/authHelper";
+import { CheckIcon } from "@/components/Icons";
 
 export const dynamic = "force-dynamic";
 
@@ -17,9 +20,10 @@ export default async function AdminReportsPage() {
 
   if (!isAdmin(user)) {
     return (
-      <section className="card text-center">
-        <h1 className="text-2xl font-semibold text-danger">403 Forbidden</h1>
-        <p className="mt-2 text-gray-400">คุณไม่มีสิทธิ์เข้าถึงหน้านี้</p>
+      <section className="card mx-auto max-w-md space-y-2 py-12 text-center">
+        <p className="text-5xl font-bold text-danger/80">403</p>
+        <h1 className="text-xl font-semibold text-white">ไม่มีสิทธิ์เข้าถึง</h1>
+        <p className="text-sm text-gray-400">หน้านี้สำหรับผู้ดูแลระบบเท่านั้น</p>
       </section>
     );
   }
@@ -39,64 +43,79 @@ export default async function AdminReportsPage() {
 
   return (
     <section className="space-y-6">
-      <header>
-        <h1 className="text-2xl font-semibold">รายงานปัญหาโน้ตย่อ</h1>
-        <p className="text-sm text-gray-400">
-          โน้ตที่ถูกรายงานเกิน 3 ครั้งจะถูกซ่อนจากการค้นหาอัตโนมัติ (Hidden)
-        </p>
+      <header className="page-header mb-0 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="page-eyebrow">ผู้ดูแลระบบ</p>
+          <h1 className="page-title">รายงานปัญหาโน้ตย่อ</h1>
+          <p className="page-subtitle">
+            โน้ตที่ถูกรายงานเกิน 3 ครั้งจะถูกซ่อนจากการค้นหาอัตโนมัติ (Hidden)
+          </p>
+        </div>
+        <span className="badge-danger text-sm">{notes.length} โน้ตถูกรายงาน</span>
       </header>
 
       {notes.length === 0 ? (
-        <div className="card text-center text-gray-400">ไม่มีรายงานที่รอตรวจสอบ</div>
+        <div className="card flex flex-col items-center gap-3 py-14 text-center">
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-success/15 text-success">
+            <CheckIcon size={24} />
+          </span>
+          <p className="font-medium text-white">ไม่มีรายงานที่รอตรวจสอบ</p>
+          <p className="text-sm text-gray-400">ทุกอย่างเรียบร้อยดี</p>
+        </div>
       ) : (
         notes.map((note) => {
           const summary = summarizeReasons(note.reports);
           return (
             <article key={note.id} className="card space-y-4">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div>
-                  <h2 className="text-lg font-semibold">{note.title}</h2>
-                  <p className="text-sm text-gray-400">
-                    วิชา {note.courseCode} · โดย {note.author.name ?? note.author.email}
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h2 className="text-lg font-semibold text-white">{note.title}</h2>
+                  <p className="mt-1 text-sm text-gray-400">
+                    วิชา {note.courseCode} · โดย {authHelper.displayName(note.author)}
                   </p>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="rounded-full bg-warning/15 px-3 py-1 text-warning">
-                    {note.reports.length} รายงาน
-                  </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="badge-warning">{note.reports.length} รายงาน</span>
                   <span
                     className={
                       note.status === "PUBLISHED"
-                        ? "rounded-full bg-success/15 px-3 py-1 text-success"
-                        : "rounded-full bg-danger/15 px-3 py-1 text-danger"
+                        ? "badge-success"
+                        : note.status === "HIDDEN"
+                          ? "badge-danger"
+                          : "badge-warning"
                     }
                   >
                     {note.status === "HIDDEN"
-                      ? "ซ่อนอยู่ (Hidden)"
+                      ? "ซ่อนอยู่"
                       : note.status === "PENDING_REVIEW"
-                        ? "รออนุมัติ (ยังไม่เผยแพร่)"
+                        ? "รออนุมัติ"
                         : "แสดงอยู่"}
                   </span>
+                  <Link href={`/notes/${note.id}`} className="btn-ghost btn-sm">ดูโน้ต</Link>
                 </div>
               </div>
 
-              <ul className="flex flex-wrap gap-2 text-xs text-gray-300">
+              <ul className="flex flex-wrap gap-2">
                 {REPORT_REASONS.filter((reason) => summary[reason] > 0).map((reason) => (
-                  <li key={reason} className="rounded-full border border-white/10 px-3 py-1">
+                  <li key={reason} className="badge-neutral">
                     {REPORT_REASON_LABELS[reason]} × {summary[reason]}
                   </li>
                 ))}
               </ul>
 
-              <ul className="space-y-1 text-sm text-gray-400">
-                {note.reports
-                  .filter((report) => report.detail)
-                  .map((report) => (
-                    <li key={report.id}>“{report.detail}”</li>
-                  ))}
-              </ul>
+              {note.reports.some((report) => report.detail) && (
+                <ul className="space-y-1.5 rounded-xl bg-white/[0.03] p-3 text-sm text-gray-300">
+                  {note.reports
+                    .filter((report) => report.detail)
+                    .map((report) => (
+                      <li key={report.id}>“{report.detail}”</li>
+                    ))}
+                </ul>
+              )}
 
-              <ReportActions noteId={note.id} />
+              <div className="border-t border-white/10 pt-4">
+                <ReportActions noteId={note.id} />
+              </div>
             </article>
           );
         })

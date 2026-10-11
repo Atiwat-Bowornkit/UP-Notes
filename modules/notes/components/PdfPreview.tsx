@@ -10,9 +10,9 @@ export default function PdfPreview({ url }: PdfPreviewProps) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div className="relative w-full overflow-hidden rounded-lg border border-white/10 bg-black/30">
+    <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-black/30">
       {loading && (
-        <div className="flex h-64 w-full items-center justify-center text-sm text-gray-400">
+        <div className="skeleton flex h-64 w-full items-center justify-center rounded-none text-sm text-gray-400">
           กำลังโหลดพรีวิวเอกสาร...
         </div>
       )}

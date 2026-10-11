@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { DownloadIcon, HeartIcon } from "@/components/Icons";
 
 interface NoteEngagementProps {
   noteId: string;
@@ -56,6 +57,11 @@ export default function NoteEngagement({
         method: "POST",
       });
 
+      if (res.status === 401) {
+        setShowLoginModal(true);
+        return;
+      }
+
       if (!res.ok) {
         setDownloadError("ไม่สามารถดาวน์โหลดไฟล์ได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง");
         return;
@@ -82,51 +88,53 @@ export default function NoteEngagement({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-4">
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-3">
         <button
           onClick={handleLikeToggle}
           disabled={isLiking}
-          className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition ${
+          aria-pressed={liked}
+          className={`btn border ${
             liked
-              ? "border-red-500 bg-red-500/10 text-red-500 hover:bg-red-500/20"
-              : "border-white/20 bg-panel text-white hover:border-white/40"
+              ? "border-red-400/50 bg-red-500/15 text-red-300 hover:bg-red-500/25"
+              : "border-white/15 bg-white/[0.03] text-gray-200 hover:border-white/30 hover:bg-white/[0.07]"
           }`}
         >
-          <span className={liked ? "text-red-500" : "text-gray-400"}>
-            {liked ? "♥" : "♡"}
-          </span>
+          <HeartIcon filled={liked} size={17} />
           <span>{liked ? "ถูกใจแล้ว" : "ถูกใจ"}</span>
-          <span className="ml-1 rounded bg-white/10 px-2 py-0.5 text-xs">{likes}</span>
+          <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs">{likes}</span>
         </button>
 
         <button
           onClick={handleDownload}
           disabled={isDownloading}
-          className="flex items-center gap-2 rounded-lg border border-accent bg-accent/10 px-4 py-2 text-sm font-medium text-accent hover:bg-accent/20"
+          className="btn-primary"
         >
-          <span>↓</span>
-          <span>ดาวน์โหลด</span>
-          <span className="ml-1 rounded bg-white/10 px-2 py-0.5 text-xs">{downloads}</span>
+          <DownloadIcon size={17} />
+          <span>{isDownloading ? "กำลังเตรียมไฟล์..." : "ดาวน์โหลด"}</span>
+          <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs">{downloads}</span>
         </button>
       </div>
 
       {downloadError && (
-        <p role="alert" className="text-sm text-red-400">
+        <p role="alert" className="alert-error">
           {downloadError}
         </p>
       )}
 
       {showLoginModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-xl border border-white/10 bg-panel p-6 shadow-2xl text-center">
-            <h3 className="text-lg font-semibold text-white">กรุณาเข้าสู่ระบบ</h3>
-            <p className="mt-2 text-sm text-gray-300">กรุณาเข้าสู่ระบบก่อนกดถูกใจ</p>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="login-modal-title"
+          onKeyDown={(e) => e.key === "Escape" && setShowLoginModal(false)}
+        >
+          <div className="card w-full max-w-sm animate-pop-in p-6 text-center shadow-2xl">
+            <h3 id="login-modal-title" className="text-lg font-semibold text-white">กรุณาเข้าสู่ระบบ</h3>
+            <p className="mt-2 text-sm text-gray-300">เข้าสู่ระบบก่อนกดถูกใจหรือดาวน์โหลดโน้ต</p>
             <div className="mt-6 flex justify-center gap-3">
-              <button
-                onClick={() => setShowLoginModal(false)}
-                className="btn-ghost"
-              >
+              <button onClick={() => setShowLoginModal(false)} className="btn-ghost" autoFocus>
                 ปิด
               </button>
               <a href="/login" className="btn-primary">

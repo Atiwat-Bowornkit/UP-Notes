@@ -20,7 +20,7 @@ export default function ReportActions({ noteId }: { noteId: string }) {
 
   return (
     <div className="space-y-2">
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
           className="btn-ghost"
@@ -31,7 +31,7 @@ export default function ReportActions({ noteId }: { noteId: string }) {
         </button>
         <button
           type="button"
-          className="btn bg-danger text-white hover:opacity-90"
+          className="btn-danger"
           disabled={pending}
           onClick={() =>
             run(deleteReportedNote, "ลบโน้ตย่อนี้ถาวร (ทั้งไฟล์และข้อมูล) ใช่หรือไม่?")
@@ -41,7 +41,7 @@ export default function ReportActions({ noteId }: { noteId: string }) {
         </button>
       </div>
       {result && (
-        <p role="status" className={result.ok ? "text-sm text-success" : "text-sm text-danger"}>
+        <p role="status" className={result.ok ? "alert-success" : "alert-error"}>
           {result.message}
         </p>
       )}

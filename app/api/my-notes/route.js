@@ -12,10 +12,18 @@ export async function GET() {
     }
 
     // ดึงเฉพาะโน้ตของตนเอง (authorId === user.id) ตามโจทย์ US-07
-    const notes = await prisma.note.findMany({
+    const rows = await prisma.note.findMany({
       where: { authorId: user.id },
       orderBy: { createdAt: 'desc' },
+      include: { _count: { select: { likes: true } } },
     });
+
+    // Flatten the counters the page displays (it expects likesCount / downloadsCount)
+    const notes = rows.map(({ _count, ...note }) => ({
+      ...note,
+      likesCount: _count.likes,
+      downloadsCount: note.downloadCount,
+    }));
 
     return NextResponse.json({ notes });
   } catch (error) {
