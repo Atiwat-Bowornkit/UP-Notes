@@ -39,6 +39,26 @@ async function postJson(url, payload) {
   return data;
 }
 
+const CATEGORY_HINTS = {
+  GE: 'วิชาศึกษาทั่วไป',
+  MAJOR_REQUIRED: 'วิชาบังคับของสาขา',
+  ELECTIVE: 'วิชาเลือกเสรี/เลือกสาขา',
+};
+
+const STAGES = ['เตรียมการ', 'อัปโหลดไฟล์', 'บันทึกโน้ต'];
+
+function SectionTitle({ n, title, text }) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/20 text-sm font-semibold text-accent-soft">{n}</span>
+      <div>
+        <h2 className="font-semibold text-white">{title}</h2>
+        {text && <p className="mt-0.5 text-sm text-gray-400">{text}</p>}
+      </div>
+    </div>
+  );
+}
+
 function formatSize(bytes) {
   return bytes >= 1024 * 1024
     ? `${(bytes / (1024 * 1024)).toFixed(2)} MB`
@@ -61,6 +81,7 @@ export default function UploadNotePage() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [stage, setStage] = useState(0); // 0 idle, 1 preparing, 2 uploading file, 3 saving note
   const [isDragging, setIsDragging] = useState(false);
 
   const handleInputChange = (e) => {
@@ -127,6 +148,7 @@ export default function UploadNotePage() {
     }
 
     setIsSubmitting(true);
+    setStage(1);
 
     try {
       const metadata = { ...formData };
@@ -139,6 +161,7 @@ export default function UploadNotePage() {
         fileType: file.type,
       });
 
+      setStage(2);
       // 2) the file goes straight to Storage (it never passes through the serverless function,
       //    so the platform's request-size limit does not apply)
       const { error: uploadError } = await createClient()
@@ -146,6 +169,7 @@ export default function UploadNotePage() {
         .uploadToSignedUrl(path, token, file, { contentType: file.type || undefined });
       if (uploadError) throw new Error('อัปโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
 
+      setStage(3);
       // 3) server verifies the stored file and creates the note
       const result = await postJson('/api/notes/upload/complete', {
         ...metadata,
@@ -157,6 +181,7 @@ export default function UploadNotePage() {
     } catch (err) {
       setSubmitError(err.message);
       setIsSubmitting(false);
+      setStage(0);
     }
   };
 
@@ -172,23 +197,26 @@ export default function UploadNotePage() {
         </p>
       </header>
 
-      <form onSubmit={handleSubmit} className="card space-y-6 p-6 sm:p-8" noValidate>
-        <div>
-          <label htmlFor="title" className="label">ชื่อเรื่อง <span className="text-danger">*</span></label>
-          <input
-            id="title"
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleInputChange}
-            className={`input ${fieldErrors.title ? 'input-error' : ''}`}
-            placeholder="เช่น สรุป Software Engineering กลางภาค"
-            aria-invalid={!!fieldErrors.title}
-          />
-          {fieldErrors.title && <p className="field-error">{fieldErrors.title}</p>}
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+        {/* 1. Note info */}
+        <section className="card space-y-5 p-6 sm:p-8">
+          <SectionTitle n="1" title="ข้อมูลโน้ต" />
 
-        <div className="grid gap-6 sm:grid-cols-2">
+          <div>
+            <label htmlFor="title" className="label">ชื่อเรื่อง <span className="text-danger">*</span></label>
+            <input
+              id="title"
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              className={`input ${fieldErrors.title ? 'input-error' : ''}`}
+              placeholder="เช่น สรุป Software Engineering กลางภาค"
+              aria-invalid={!!fieldErrors.title}
+            />
+            {fieldErrors.title && <p className="field-error">{fieldErrors.title}</p>}
+          </div>
+
           <div>
             <label htmlFor="courseCode" className="label">รหัสวิชา (6 หลัก) <span className="text-danger">*</span></label>
             <input
@@ -199,125 +227,177 @@ export default function UploadNotePage() {
               maxLength={6}
               value={formData.courseCode}
               onChange={handleInputChange}
-              className={`input font-mono ${fieldErrors.courseCode ? 'input-error' : ''}`}
+              className={`input font-mono sm:max-w-48 ${fieldErrors.courseCode ? 'input-error' : ''}`}
               placeholder="225311"
               aria-invalid={!!fieldErrors.courseCode}
             />
             {fieldErrors.courseCode && <p className="field-error">{fieldErrors.courseCode}</p>}
           </div>
 
-          <div>
-            <label htmlFor="category" className="label">หมวดหมู่ <span className="text-danger">*</span></label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              className="input"
-            >
-              {CATEGORIES.map(cat => (
-                <option key={cat.value} value={cat.value}>{cat.label}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <FacultyProgramFields
-          required
-          idPrefix="upload"
-          faculty={formData.faculty}
-          program={formData.program}
-          facultyError={fieldErrors.faculty}
-          programError={fieldErrors.program}
-          onChange={({ faculty, program }) => {
-            setFormData(prev => ({ ...prev, faculty, program }));
-            setFieldErrors(prev => ({ ...prev, faculty: '', program: '' }));
-          }}
-        />
-
-        <div>
-          <label htmlFor="description" className="label">คำอธิบาย <span className="text-danger">*</span></label>
-          <textarea
-            id="description"
-            name="description"
-            rows={4}
-            value={formData.description}
-            onChange={handleInputChange}
-            className={`input resize-y ${fieldErrors.description ? 'input-error' : ''}`}
-            placeholder="อธิบายเนื้อหาคร่าวๆ เช่น บทที่ครอบคลุม จุดที่ควรรู้"
-            aria-invalid={!!fieldErrors.description}
-          />
-          {fieldErrors.description && <p className="field-error">{fieldErrors.description}</p>}
-        </div>
-
-        <div>
-          <span className="label">ไฟล์โน้ต <span className="text-danger">*</span></span>
-
-          {file ? (
-            <div className="flex items-center gap-3 rounded-xl border border-success/30 bg-success/10 p-4">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-success/20 text-emerald-300">
-                <FileIcon />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-white">{file.name}</p>
-                <p className="flex items-center gap-1 text-xs text-emerald-300">
-                  <CheckIcon size={13} /> พร้อมอัปโหลด · {formatSize(file.size)}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={clearFile}
-                className="btn-ghost btn-sm px-2"
-                aria-label="ลบไฟล์ที่เลือก"
-              >
-                <CloseIcon size={16} />
-              </button>
+          <fieldset>
+            <legend className="label">หมวดหมู่ <span className="text-danger">*</span></legend>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {CATEGORIES.map(cat => {
+                const selected = formData.category === cat.value;
+                return (
+                  <label
+                    key={cat.value}
+                    className={`cursor-pointer rounded-xl border p-3 transition focus-within:ring-2 focus-within:ring-accent/60 ${
+                      selected
+                        ? 'border-accent bg-accent/10'
+                        : 'border-white/10 bg-white/[0.02] hover:border-white/25'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="category"
+                      value={cat.value}
+                      checked={selected}
+                      onChange={handleInputChange}
+                      className="sr-only"
+                    />
+                    <span className="flex items-center justify-between gap-2 text-sm font-medium text-white">
+                      {cat.label}
+                      {selected && <CheckIcon size={16} className="text-accent-soft" />}
+                    </span>
+                    <span className="mt-1 block text-xs text-gray-400">{CATEGORY_HINTS[cat.value]}</span>
+                  </label>
+                );
+              })}
             </div>
-          ) : (
-            <label
-              htmlFor="file"
-              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={handleDrop}
-              className={`flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed px-4 py-10 text-center transition ${
-                isDragging
-                  ? 'border-accent bg-accent/10'
-                  : fieldErrors.file || fileError
-                    ? 'border-danger/60 bg-danger/5'
-                    : 'border-white/15 bg-white/[0.02] hover:border-accent/50 hover:bg-white/[0.04]'
-              }`}
-            >
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-accent/15 text-accent-soft">
-                <UploadIcon size={22} />
-              </span>
-              <span className="text-sm font-medium text-white">
-                คลิกเพื่อเลือกไฟล์ หรือลากมาวางที่นี่
-              </span>
-              <span className="text-xs text-gray-400">PDF, PNG, JPG ขนาดไม่เกิน 10 MB</span>
-            </label>
-          )}
+          </fieldset>
 
-          <input
-            id="file"
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf,.png,.jpg,.jpeg"
-            onChange={handleFileChange}
-            className="sr-only"
+          <div>
+            <label htmlFor="description" className="label">คำอธิบาย <span className="text-danger">*</span></label>
+            <textarea
+              id="description"
+              name="description"
+              rows={4}
+              value={formData.description}
+              onChange={handleInputChange}
+              className={`input resize-y ${fieldErrors.description ? 'input-error' : ''}`}
+              placeholder="อธิบายเนื้อหาคร่าวๆ เช่น บทที่ครอบคลุม จุดที่ควรรู้"
+              aria-invalid={!!fieldErrors.description}
+            />
+            {fieldErrors.description && <p className="field-error">{fieldErrors.description}</p>}
+          </div>
+        </section>
+
+        {/* 2. Faculty / program */}
+        <section className="card space-y-5 p-6 sm:p-8">
+          <SectionTitle
+            n="2"
+            title="คณะและสาขา"
+            text="เลือกคณะหรือสาขาก่อนก็ได้ ระบบจะเติมอีกช่องให้อัตโนมัติ เพื่อให้เพื่อนๆ ค้นหาโน้ตเจอง่ายขึ้น"
           />
-          {fileError && <p className="field-error">{fileError}</p>}
-          {fieldErrors.file && !fileError && <p className="field-error">{fieldErrors.file}</p>}
-        </div>
+          <FacultyProgramFields
+            required
+            idPrefix="upload"
+            faculty={formData.faculty}
+            program={formData.program}
+            facultyError={fieldErrors.faculty}
+            programError={fieldErrors.program}
+            onChange={({ faculty, program }) => {
+              setFormData(prev => ({ ...prev, faculty, program }));
+              setFieldErrors(prev => ({ ...prev, faculty: '', program: '' }));
+            }}
+          />
+        </section>
+
+        {/* 3. File */}
+        <section className="card space-y-5 p-6 sm:p-8">
+          <SectionTitle n="3" title="ไฟล์โน้ต" text="รองรับ PDF, PNG, JPG ขนาดไม่เกิน 10 MB" />
+
+          <div>
+            {file ? (
+              <div className="flex items-center gap-3 rounded-xl border border-success/30 bg-success/10 p-4">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-success/20 text-emerald-300">
+                  <FileIcon />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-white">{file.name}</p>
+                  <p className="flex items-center gap-1 text-xs text-emerald-300">
+                    <CheckIcon size={13} /> พร้อมอัปโหลด · {formatSize(file.size)}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={clearFile}
+                  disabled={isSubmitting}
+                  className="btn-ghost btn-sm px-2"
+                  aria-label="ลบไฟล์ที่เลือก"
+                >
+                  <CloseIcon size={16} />
+                </button>
+              </div>
+            ) : (
+              <label
+                htmlFor="file"
+                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={handleDrop}
+                className={`flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed px-4 py-10 text-center transition ${
+                  isDragging
+                    ? 'border-accent bg-accent/10'
+                    : fieldErrors.file || fileError
+                      ? 'border-danger/60 bg-danger/5'
+                      : 'border-white/15 bg-white/[0.02] hover:border-accent/50 hover:bg-white/[0.04]'
+                }`}
+              >
+                <span className="grid h-12 w-12 place-items-center rounded-full bg-accent/15 text-accent-soft">
+                  <UploadIcon size={22} />
+                </span>
+                <span className="text-sm font-medium text-white">
+                  คลิกเพื่อเลือกไฟล์ หรือลากมาวางที่นี่
+                </span>
+                <span className="text-xs text-gray-400">PDF, PNG, JPG ขนาดไม่เกิน 10 MB</span>
+              </label>
+            )}
+
+            <input
+              id="file"
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,.png,.jpg,.jpeg"
+              onChange={handleFileChange}
+              className="sr-only"
+            />
+            {fileError && <p className="field-error">{fileError}</p>}
+            {fieldErrors.file && !fileError && <p className="field-error">{fieldErrors.file}</p>}
+          </div>
+        </section>
 
         {submitError && (
           <p role="alert" className="alert-error">เกิดข้อผิดพลาด: {submitError}</p>
         )}
 
-        <div className="flex flex-col-reverse gap-3 border-t border-white/10 pt-6 sm:flex-row sm:justify-end">
+        {isSubmitting && (
+          <ol className="card flex flex-wrap items-center gap-x-6 gap-y-2 p-4 text-sm" aria-live="polite" aria-label="ความคืบหน้าการอัปโหลด">
+            {STAGES.map((label, i) => {
+              const n = i + 1;
+              const done = stage > n;
+              const active = stage === n;
+              return (
+                <li key={label} className={`flex items-center gap-2 ${done ? 'text-emerald-300' : active ? 'text-white' : 'text-gray-500'}`}>
+                  <span
+                    className={`grid h-6 w-6 place-items-center rounded-full border text-xs ${
+                      done ? 'border-success bg-success/20' : active ? 'animate-pulse border-accent bg-accent/20' : 'border-white/15'
+                    }`}
+                  >
+                    {done ? <CheckIcon size={13} /> : n}
+                  </span>
+                  {label}
+                </li>
+              );
+            })}
+          </ol>
+        )}
+
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button type="button" onClick={() => router.back()} className="btn-ghost" disabled={isSubmitting}>
             ยกเลิก
           </button>
-          <button type="submit" disabled={!canSubmit} className="btn-primary sm:min-w-40">
+          <button type="submit" disabled={!canSubmit} className="btn-primary sm:min-w-44">
             {isSubmitting ? 'กำลังอัปโหลด...' : 'ส่งโน้ตเพื่อตรวจสอบ'}
           </button>
         </div>
