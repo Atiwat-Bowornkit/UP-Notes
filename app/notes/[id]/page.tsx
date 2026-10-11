@@ -34,11 +34,16 @@ export default async function NoteDetailPage({ params }: { params: { id: string 
   }
 
   // 1. Short-lived signed URL for file preview (expires in 60s)
-  const signedFile = await createAdminClient()
-    .storage.from(NOTES_BUCKET)
-    .createSignedUrl(note.filePath, 60);
-
-  const fileUrl = signedFile.error ? null : signedFile.data?.signedUrl ?? null;
+  // Storage being unreachable or unconfigured must not take the whole page down.
+  let fileUrl: string | null = null;
+  try {
+    const signedFile = await createAdminClient()
+      .storage.from(NOTES_BUCKET)
+      .createSignedUrl(note.filePath, 60);
+    fileUrl = signedFile.error ? null : signedFile.data?.signedUrl ?? null;
+  } catch (error) {
+    console.error("[note detail] could not create signed URL:", error);
+  }
 
   const liked = user
     ? Boolean(
