@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getPublishedNotes } from "@/modules/notes/browseService";
+import { prisma } from "@/lib/prisma";
 import NoteCard from "@/components/NoteCard";
 import NoteFilters from "@/components/NoteFilters";
 import * as facultyData from "@/src/utils/facultyData";
@@ -35,6 +36,8 @@ export default async function NotesPage({
 
   // Fetch published notes via browseService (enforces status = 'PUBLISHED' and NFR-01 optimization)
   const result = await getPublishedNotes({
+    // Pass the client explicitly: globalThis.prisma is only set outside production (lib/prisma.ts)
+    prismaClient: prisma,
     searchQuery: query,
     category: selectedCategory,
     faculty: selectedFaculty,
@@ -97,6 +100,12 @@ export default async function NotesPage({
             <li className="badge-accent">{facultyData.getProgramLabel(selectedFaculty, selectedProgram)}</li>
           )}
         </ul>
+      )}
+
+      {result.success === false && (
+        <p role="alert" className="alert-error">
+          โหลดรายการโน้ตไม่สำเร็จ กรุณารีเฟรชหน้านี้หรือลองใหม่อีกครั้งภายหลัง
+        </p>
       )}
 
       <p className="text-sm text-gray-400" aria-live="polite">

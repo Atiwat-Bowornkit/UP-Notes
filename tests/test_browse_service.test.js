@@ -138,3 +138,47 @@ test('browseService - database mode passes faculty/program into the Prisma where
     assert.strictEqual('faculty' in seenWhere, false);
     assert.strictEqual('program' in seenWhere, false);
 });
+
+// ---- production regression: the list must not silently be empty ----
+const fs = require('node:fs');
+const path = require('node:path');
+
+test('browseService - callers in app/ pass prismaClient (globalThis.prisma is unset in production)', () => {
+    // lib/prisma.ts only sets globalThis.prisma outside production, so a caller that relies on it
+    // shows an empty list on the deployed site while working in `next dev`.
+    for (const file of ['app/notes/page.tsx', 'app/page.tsx']) {
+        const source = fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
+        assert.match(source, /getPublishedNotes\(\{[^}]*prismaClient/s, `${file} must pass prismaClient`);
+    }
+});
+
+test('browseService - database mode without a client is reported in the logs, not silent', async () => {
+    const original = console.error;
+    const logged = [];
+    console.error = (...args) => logged.push(args.join(' '));
+    try {
+        const result = await getPublishedNotes({});
+        assert.deepStrictEqual(result.data, []);
+        assert.ok(logged.some((line) => line.includes('no Prisma client')));
+    } finally {
+        console.error = original;
+    }
+});
+
+test('browseService - a failing query returns success:false so the page can show an error', async () => {
+    const original = console.error;
+    console.error = () => {};
+    try {
+        const prismaClient = {
+            note: {
+                findMany: async () => { throw new Error('connection refused'); },
+                count: async () => 0,
+            },
+        };
+        const result = await getPublishedNotes({ prismaClient });
+        assert.strictEqual(result.success, false);
+        assert.deepStrictEqual(result.data, []);
+    } finally {
+        console.error = original;
+    }
+});

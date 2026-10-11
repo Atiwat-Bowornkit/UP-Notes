@@ -1,6 +1,7 @@
 import Link from "next/link";
 import NoteCard from "@/components/NoteCard";
 import { getPublishedNotes } from "@/modules/notes/browseService";
+import { prisma } from "@/lib/prisma";
 import {
   ArrowRightIcon,
   BookIcon,
@@ -39,7 +40,7 @@ export const dynamic = "force-dynamic";
 async function getPopularNotes() {
   // The landing page must never fail because of the database: no notes simply hides the section.
   try {
-    const result = await getPublishedNotes({ sortBy: "popular", pageSize: 3 });
+    const result = await getPublishedNotes({ prismaClient: prisma, sortBy: "popular", pageSize: 3 });
     return result.success ? (result.data ?? []) : [];
   } catch {
     return [];

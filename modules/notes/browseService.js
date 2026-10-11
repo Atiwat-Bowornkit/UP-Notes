@@ -88,6 +88,9 @@ async function getPublishedNotes(options = {}) {
     const client = prismaClient || (typeof globalThis !== 'undefined' && globalThis.prisma) || null;
 
     if (!client) {
+      // Reaching this in the app means a caller forgot to pass prismaClient: the list would look
+      // empty without any error, so make it visible in the server logs.
+      console.error('[browseService] getPublishedNotes: no Prisma client available (pass prismaClient)');
       return {
         success: true,
         data: [],
@@ -176,7 +179,8 @@ async function getPublishedNotes(options = {}) {
         hasPrevPage: validPage > 1,
       },
     };
-  } catch {
+  } catch (error) {
+    console.error('[browseService] getPublishedNotes failed:', error);
     return {
       success: false,
       error: 'เกิดข้อผิดพลาดในการดึงข้อมูลโน้ตย่อ กรุณาลองใหม่อีกครั้ง',
