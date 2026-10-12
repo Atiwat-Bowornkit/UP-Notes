@@ -12,6 +12,7 @@ const links: NavItem[] = [
 ];
 
 const adminLinks: NavItem[] = [
+  { href: "/admin/dashboard", label: "แดชบอร์ด", admin: true },
   { href: "/admin/pending", label: "รออนุมัติ", admin: true },
   { href: "/admin/reports", label: "รายงานปัญหา", admin: true },
 ];
