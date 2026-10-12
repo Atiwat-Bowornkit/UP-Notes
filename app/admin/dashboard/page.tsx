@@ -5,6 +5,7 @@ import { getDashboardData, type DashboardData } from "@/lib/dashboard";
 import { isAdmin } from "@/src/utils/reportHelper";
 import { formatBytes } from "@/src/utils/dashboardStats";
 import { DailyBars, ShareBars, StatCard } from "@/components/DashboardCharts";
+import DeleteNoteButton from "@/modules/admin/components/DeleteNoteButton";
 import {
   AlertIcon,
   ArrowRightIcon,
@@ -157,20 +158,21 @@ export default async function AdminDashboardPage() {
 
       <section className="card p-5" aria-label="โน้ตล่าสุด">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="font-semibold text-white">โน้ตที่อัปโหลดล่าสุด</h3>
+          <h3 className="font-semibold text-white">โน้ตที่อัปโหลดล่าสุด (จัดการ/ลบได้)</h3>
           <Link href="/admin/pending" className="text-sm text-accent-soft hover:text-white">ไปหน้ารออนุมัติ</Link>
         </div>
         {data.recentNotes.length === 0 ? (
           <p className="mt-4 text-sm text-gray-400">ยังไม่มีโน้ต</p>
         ) : (
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[32rem] text-left text-sm">
+            <table className="w-full min-w-[36rem] text-left text-sm">
               <thead className="text-xs text-gray-500">
                 <tr>
                   <th className="pb-2 font-medium">โน้ต</th>
                   <th className="pb-2 font-medium">ผู้อัปโหลด</th>
                   <th className="pb-2 font-medium">สถานะ</th>
                   <th className="pb-2 text-right font-medium">วันที่</th>
+                  <th className="pb-2 pl-3 text-right font-medium">จัดการ</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -186,6 +188,9 @@ export default async function AdminDashboardPage() {
                     </td>
                     <td className="py-2.5 text-right text-gray-400">
                       {note.createdAt.toLocaleDateString("th-TH", { dateStyle: "medium", timeZone: "Asia/Bangkok" })}
+                    </td>
+                    <td className="py-2.5 pl-3 text-right">
+                      <DeleteNoteButton noteId={note.id} title={note.title} />
                     </td>
                   </tr>
                 ))}

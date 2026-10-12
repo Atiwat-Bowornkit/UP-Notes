@@ -76,6 +76,11 @@ export async function deleteReportedNote(noteId: string): Promise<ActionState> {
   return removeNote(noteId, "ลบโน้ตย่อเรียบร้อยแล้ว");
 }
 
+/** Admin deletes any note from the dashboard (file in Storage + row in DB). */
+export async function deleteNoteAsAdmin(noteId: string): Promise<ActionState> {
+  return removeNote(noteId, "ลบโน้ตเรียบร้อยแล้ว");
+}
+
 /** Admin rejects a freshly uploaded note: same removal as a reported note. */
 export async function rejectPendingNote(noteId: string): Promise<ActionState> {
   return removeNote(noteId, "ปฏิเสธและลบโน้ตย่อเรียบร้อยแล้ว");
@@ -108,6 +113,10 @@ async function removeNote(noteId: string, successMessage: string): Promise<Actio
     select: { filePath: true },
   });
   if (!note) {
+    // Already deleted (e.g. by another admin): re-sync every page that may still list it
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/reports");
+    revalidatePath("/admin/pending");
     return { ok: false, message: "ไม่พบโน้ตย่อนี้แล้ว" };
   }
 
@@ -119,10 +128,18 @@ async function removeNote(noteId: string, successMessage: string): Promise<Actio
     return { ok: false, message: "ลบไฟล์จาก Storage ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง" };
   }
 
-  await prisma.note.delete({ where: { id: noteId } });
+  try {
+    await prisma.note.delete({ where: { id: noteId } });
+  } catch (error) {
+    // Most likely someone deleted the same note a moment ago (P2025); the file is already gone either way.
+    console.error("[removeNote] database delete failed:", error);
+    revalidatePath("/admin/dashboard");
+    return { ok: false, message: "ลบข้อมูลโน้ตไม่สำเร็จ หรือโน้ตนี้ถูกลบไปแล้ว กรุณารีเฟรชหน้า" };
+  }
 
-  revalidatePath("/admin/reports");
-  revalidatePath("/admin/pending");
+  for (const path of ["/admin/dashboard", "/admin/reports", "/admin/pending", "/notes", "/"]) {
+    revalidatePath(path);
+  }
   return { ok: true, message: successMessage };
 }
 

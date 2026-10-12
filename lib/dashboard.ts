@@ -115,7 +115,7 @@ export async function getDashboardData(now = Date.now()) {
     }),
     prisma.note.findMany({
       orderBy: { createdAt: "desc" },
-      take: 6,
+      take: 10,
       select: {
         id: true, title: true, courseCode: true, status: true, createdAt: true,
         author: { select: { name: true, email: true } },
